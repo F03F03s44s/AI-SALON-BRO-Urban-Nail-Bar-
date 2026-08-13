@@ -1,0 +1,55 @@
+AI SALON PRO — HOW TO START
+===========================
+
+ONE-CLICK (any OS)
+------------------
+Windows 11:
+  Double-click START-SALON.bat   (or START-SALON.vbs)
+
+macOS High Sierra / Big Sur:
+  Double-click START-SALON.command  (in this root folder)
+  OR open the matching package and double-click its START-SALON.command:
+    Urban Nail Bar (macOS High Sierra)
+    Urban Nail Bar (macOS Big Sur)
+
+If macOS blocks: right-click → Open → Open
+
+
+WHAT ONE-CLICK DOES
+-------------------
+1) Backup shared data → _shared-salon-data/backups/
+2) Sync appointments + clients to ALL 3 OS packages
+3) Mirror pages/UI/server code (newest file wins) so calendars match
+4) Start the salon server (ports 3001 + 3002)
+5) Open the staff home page
+
+Keep the Salon Server window open while you work.
+
+
+AFTER START
+-----------
+  Staff / Scheduler:  http://localhost:3001/index.html
+  Online Booking:     http://localhost:3002/
+
+Main pages (all share the same live data):
+  Scheduler · Staff · Manager · Admin · Booking
+
+
+SHARED DATA (do not delete)
+---------------------------
+  _shared-salon-data/data-store.json   ← live hub
+  _shared-salon-data/backups/          ← automatic backups
+  _sync/MIRROR-ALL-THREE.js            ← full sync engine
+
+
+MANUAL FULL SYNC (no server start)
+----------------------------------
+  Windows:  _sync\MIRROR-ALL-THREE.bat
+  macOS:    _sync/MIRROR-ALL-THREE.command
+
+
+HIGH SIERRA NOTES
+-----------------
+  Use Node.js 14.21.3 (safest) or 16.20.2
+  https://nodejs.org/download/release/v14.21.3/
+  Primary package: Urban Nail Bar (macOS High Sierra)
