@@ -4,7 +4,10 @@
  * Keep Windows 11 / macOS High Sierra / macOS Big Sur identical:
  *   1) Backup shared data-store
  *   2) Sync appointment/client data (newest/richest wins)
- *   3) Mirror UI + server code (newest file mtime wins across packages)
+ *   3) Mirror UI + server code FROM High Sierra → Big Sur + Windows 11
+ *
+ * Windows 11 is DONE — never use it as a UI source; only receive sync copies.
+ * Active edit package: Urban Nail Bar (macOS High Sierra).
  *
  * Safe skips: node_modules, .git, data stores, logs, OS-specific starters.
  * Run from START-SALON on any OS, or manually:
@@ -232,45 +235,66 @@ function collectFiles(pkgDir, relBase, outMap) {
   }
 }
 
-function mirrorUiNewestWins(root) {
-  const pkgs = existingPackages(root);
-  if (pkgs.length < 2) {
-    console.log('[ui] Need at least 2 packages to mirror — found ' + pkgs.length);
+function findSourcePackage(root) {
+  // High Sierra is the only UI/code source. Legacy "macOS Sierra" folder is fallback.
+  const preferred = [
+    'Urban Nail Bar (macOS High Sierra)',
+    'Urban Nail Bar (macOS Sierra)',
+  ];
+  for (const name of preferred) {
+    const dir = path.join(root, name);
+    if (fs.existsSync(path.join(dir, 'server', 'salon-server.js'))) {
+      return { name, dir };
+    }
+  }
+  return null;
+}
+
+/** One-way UI mirror: High Sierra → Big Sur + Windows 11 (Windows is never a source). */
+function mirrorUiFromHighSierra(root) {
+  const src = findSourcePackage(root);
+  if (!src) {
+    console.log('[ui] ERROR: High Sierra package not found — skip UI mirror');
     return { copied: 0 };
   }
 
-  const winners = new Map();
-  pkgs.forEach((p) => {
-    MIRROR_DIRS.forEach((dir) => collectFiles(p.dir, dir, winners));
-    MIRROR_ROOT_FILES.forEach((file) => collectFiles(p.dir, file, winners));
-    // Server code (not data / node_modules)
-    collectFiles(p.dir, 'server', winners);
+  const destPkgs = existingPackages(root).filter((p) => {
+    return path.resolve(p.dir) !== path.resolve(src.dir);
   });
+  if (!destPkgs.length) {
+    console.log('[ui] No destination packages to update');
+    return { copied: 0 };
+  }
+
+  console.log('[ui] SOURCE (edit here):', src.name);
+  console.log('[ui] DEST (sync only):', destPkgs.map((p) => p.name).join(' | '));
+
+  const winners = new Map();
+  MIRROR_DIRS.forEach((dir) => collectFiles(src.dir, dir, winners));
+  MIRROR_ROOT_FILES.forEach((file) => collectFiles(src.dir, file, winners));
+  collectFiles(src.dir, 'server', winners);
 
   let copied = 0;
   let skippedSame = 0;
-  winners.forEach((src, rel) => {
-    pkgs.forEach((p) => {
-      if (path.resolve(p.dir) === path.resolve(src.pkgDir)) return;
+  winners.forEach((fileSrc, rel) => {
+    destPkgs.forEach((p) => {
       const dest = path.join(p.dir, rel);
       try {
         if (fs.existsSync(dest)) {
           const dstSt = fs.statSync(dest);
-          if (dstSt.size === src.size && Math.abs((dstSt.mtimeMs || 0) - src.mtime) < 2) {
-            skippedSame += 1;
-            return;
-          }
-          // If dest is newer, leave it (another winner pass will prefer it next run)
-          if ((dstSt.mtimeMs || 0) > src.mtime) {
-            skippedSame += 1;
-            return;
+          if (dstSt.size === fileSrc.size) {
+            // Same size — still copy if content may differ; cheap check via mtime+size
+            if (Math.abs((dstSt.mtimeMs || 0) - fileSrc.mtime) < 2) {
+              skippedSame += 1;
+              return;
+            }
           }
         }
         ensureDir(path.dirname(dest));
-        fs.copyFileSync(src.abs, dest);
+        fs.copyFileSync(fileSrc.abs, dest);
         try {
           const fd = fs.openSync(dest, 'r+');
-          fs.futimesSync(fd, new Date(src.mtime), new Date(src.mtime));
+          fs.futimesSync(fd, new Date(fileSrc.mtime), new Date(fileSrc.mtime));
           fs.closeSync(fd);
         } catch (e) { /* ignore mtime restore */ }
         copied += 1;
@@ -280,7 +304,7 @@ function mirrorUiNewestWins(root) {
     });
   });
 
-  console.log('[ui] Winner files tracked:', winners.size);
+  console.log('[ui] Source files tracked:', winners.size);
   console.log('[ui] Copied:', copied, '  already-in-sync skips:', skippedSame);
   return { copied, tracked: winners.size };
 }
@@ -304,11 +328,11 @@ function main() {
   syncDataStores(root);
   console.log('');
 
-  console.log('--- 3/3 UI + server mirror (newest wins) ---');
-  mirrorUiNewestWins(root);
+  console.log('--- 3/3 UI + server mirror (High Sierra → Big Sur + Windows) ---');
+  mirrorUiFromHighSierra(root);
   console.log('');
 
-  console.log('Done. All OS packages share the same calendar data and matching pages.');
+  console.log('Done. High Sierra is source; Big Sur + Windows stay synced (data + pages).');
 }
 
 main();

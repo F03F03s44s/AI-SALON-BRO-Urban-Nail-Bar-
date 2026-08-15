@@ -1,0 +1,14 @@
+---
+description: Windows 11 is frozen — only High Sierra / Big Sur are edited; Win11 syncs only
+alwaysApply: true
+---
+
+# OS package workflow
+
+- **Never edit** `Urban Nail Bar (Windows 11)/` by hand. It is finished.
+- Windows 11 may **only** receive automated sync (data + UI) from macOS.
+- **Active edit package:** `Urban Nail Bar (macOS High Sierra)/` (macOS Sierra work happens here).
+- Keep `Urban Nail Bar (macOS Big Sur)/` matching via `_sync/MIRROR-ALL-THREE.js`.
+- UI mirror: **High Sierra → Big Sur + Windows 11** (Windows is never a UI source).
+- Live data hub: `_shared-salon-data/` for all three OS packages.
+- Do not reinvent features inside the Windows 11 folder.

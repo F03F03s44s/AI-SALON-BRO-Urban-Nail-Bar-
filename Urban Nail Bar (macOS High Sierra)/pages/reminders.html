@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Reminders — Urban Nail Bar</title>
+    <link rel="stylesheet" href="../shared/styles.css?v=20260815brand3">
+    <link href="../shared/vendor/fontawesome/css/all.min.css" rel="stylesheet">
+    <script>document.documentElement.classList.add('salon-auth-locked');</script>
+    <style>html.salon-auth-locked body{visibility:hidden!important;}</style>
+    <style>
+        .rm-wrap { max-width: 860px; margin: 0 auto; padding: 16px 14px 80px; }
+        .rm-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+        .rm-head h1 { color: var(--text-primary); font-size: 1.25rem; margin: 0; }
+        .rm-head h1 i { color: var(--primary); }
+        .rm-datenav { display: flex; align-items: center; gap: 6px; }
+        .rm-datenav button, .rm-datenav input { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; padding: 8px 12px; font-size: 0.82rem; font-weight: 700; cursor: pointer; }
+        .rm-datenav button:hover { border-color: var(--primary); color: var(--primary); }
+        .rm-tomorrow { color: var(--primary) !important; border-color: var(--primary) !important; }
+
+        .rm-stats { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+        .rm-chip { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 8px 14px; font-size: 0.78rem; color: var(--text-secondary); }
+        .rm-chip b { color: var(--primary); font-size: 0.95rem; }
+
+        .rm-row { display: flex; align-items: center; gap: 12px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 12px 14px; margin-bottom: 8px; }
+        .rm-row.reminded { opacity: 0.5; }
+        .rm-time { flex: 0 0 84px; text-align: center; }
+        .rm-time .t { color: var(--primary); font-weight: 800; font-size: 1rem; }
+        .rm-time .d { color: var(--text-muted); font-size: 0.62rem; text-transform: uppercase; }
+        .rm-who { flex: 1; min-width: 0; }
+        .rm-who .nm { color: var(--text-primary); font-weight: 700; font-size: 0.9rem; }
+        .rm-who .svc { color: var(--text-secondary); font-size: 0.75rem; }
+        .rm-who .ph { color: var(--text-muted); font-size: 0.72rem; }
+        .rm-who .tech { color: var(--primary); font-size: 0.7rem; font-weight: 700; }
+        .rm-send { background: linear-gradient(135deg,#fbbf24,#f59e0b); color: #000; border: none; border-radius: 8px; padding: 9px 14px; font-weight: 800; font-size: 0.75rem; cursor: pointer; text-decoration: none; white-space: nowrap; }
+        .rm-nophone { color: var(--text-muted); font-size: 0.7rem; font-style: italic; white-space: nowrap; }
+        .rm-empty { text-align: center; color: var(--text-muted); padding: 50px 20px; }
+        .rm-empty .big { font-size: 2.4rem; margin-bottom: 10px; }
+        .rm-msg-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 14px; }
+        .rm-msg-card h3 { color: var(--primary); font-size: 0.85rem; margin-bottom: 8px; }
+        .rm-msg-card textarea { min-height: 90px; }
+        .rm-msg-card .vars { color: var(--text-muted); font-size: 0.68rem; margin-top: 6px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <div class="rm-wrap">
+        <div class="page-brand" style="display:flex;align-items:center;gap:12px;margin-bottom:14px;padding:12px 14px;background:linear-gradient(135deg,rgba(251,191,36,0.1),rgba(20,20,20,0.9));border:1px solid rgba(251,191,36,0.3);border-radius:12px;">
+            <img class="salon-logo" src="../assets/images/logo.png" alt="Urban Nail Bar"
+                 onerror="this.onerror=null;this.src='../assets/brand/logo.png'">
+            <div style="min-width:0;">
+                <div class="brand-salon-name" style="font-size:1.42rem;font-weight:800;color:#fbbf24;text-transform:uppercase;">Urban Nail Bar</div>
+                <span class="brand-tagline" style="font-size:0.84rem;font-weight:600;color:#ffffff;letter-spacing:0.04em;display:flex;flex-direction:column;gap:1px;"><span class="brand-ai-line">AI INTEGRATION</span><span class="brand-powered-line">Powered By <strong class="brand-gold">AI Salon Pro</strong></span></span>
+            </div>
+        </div>
+        <div class="rm-head">
+            <h1><i class="fas fa-bell"></i> Appointment Reminders</h1>
+            <div class="rm-datenav">
+                <button onclick="rmNav(-1)"><i class="fas fa-chevron-left"></i></button>
+                <button class="rm-tomorrow" onclick="rmTomorrow()">Tomorrow</button>
+                <div class="gold-date-wrap" style="display:inline-block; min-width:160px;"><input type="date" id="rmDate" class="gold-date" onchange="rmPick(this.value)"><i class="fas fa-calendar-alt gold-date-icon"></i></div>
+                <button onclick="rmNav(1)"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+
+        <div class="rm-msg-card">
+            <h3><i class="fas fa-pen"></i> Reminder text (personalized per client)</h3>
+            <textarea class="form-textarea" id="rmTemplate">Hi {name}! This is Urban Nail Bar 💅 Reminder: your {service} appointment is {date} at {time} with {tech}. Reply C to confirm, or call (480) 291-5440 to reschedule. See you soon!</textarea>
+            <div class="vars">Available: {name} · {service} · {date} · {time} · {tech} — leave the rest to us.</div>
+        </div>
+
+        <div class="rm-stats">
+            <div class="rm-chip"><b id="rmTotal">0</b> appointments</div>
+            <div class="rm-chip"><b id="rmWithPhone">0</b> textable</div>
+            <div class="rm-chip"><b id="rmSent">0</b> reminded</div>
+        </div>
+
+        <div id="rmList"></div>
+        <div class="rm-empty" id="rmEmpty" style="display:none;">
+            <div class="big">🌴</div>
+            <div>No appointments for this date.<br>Pick another day above.</div>
+        </div>
+    </div>
+
+    <script src="../shared/legacy-compat.js?v=20260805sierra3"></script>
+<script src="../shared/data-manager.js?v=20260815menu3"></script>
+<script src="../shared/live-sync.js?v=20260815perf1"></script>
+    <script src="../shared/utils.js?v=20260815menu3"></script>
+    <script src="../shared/auth.js?v=20260731rbac"></script>
+    <script>
+    // Staff-only: front desk, manager, or admin (client phone numbers are private).
+    SalonAuth.guardPage(['admin', 'manager', 'receptionist'], { pageName: 'Appointment Reminders', onUnlock: initRm });
+
+    let rmDate = null;
+
+    function tomorrowStr() {
+        const d = new Date();
+        d.setDate(d.getDate() + 1);
+        return d.toISOString().split('T')[0];
+    }
+
+    function initRm() {
+        rmDate = tomorrowStr();
+        document.getElementById('rmDate').value = rmDate;
+        render();
+        DataManager.addListener((type) => { if (type === 'data') render(); });
+    }
+
+    function rmNav(delta) {
+        const d = new Date(rmDate + 'T12:00:00');
+        d.setDate(d.getDate() + delta);
+        rmDate = d.toISOString().split('T')[0];
+        document.getElementById('rmDate').value = rmDate;
+        render();
+    }
+    function rmTomorrow() { rmDate = tomorrowStr(); document.getElementById('rmDate').value = rmDate; render(); }
+    function rmPick(v) { if (v) { rmDate = v; render(); } }
+
+    function sentKey() { return 'rmSent_' + rmDate; }
+    function getSent() { return new Set(JSON.parse(localStorage.getItem(sentKey()) || '[]')); }
+    function markSent(id, el) {
+        const s = getSent(); s.add(id);
+        localStorage.setItem(sentKey(), JSON.stringify([...s]));
+        el.closest('.rm-row').classList.add('reminded');
+        el.outerHTML = '<span style="color:#22c55e; font-weight:800; font-size:0.75rem;">✓ sent</span>';
+        document.getElementById('rmSent').textContent = getSent().size;
+    }
+
+    function clientFor(a) {
+        const clients = DataManager.getClients() || [];
+        if (a.clientId) {
+            const c = clients.find(x => x.id === a.clientId);
+            if (c) return { name: ((c.firstName || '') + ' ' + (c.lastName || '')).trim() || 'Client', phone: c.phone || '' };
+        }
+        return { name: a.clientName || 'Client', phone: a.clientPhone || a.phone || '' };
+    }
+
+    function reminderText(a, client, service, tech) {
+        const tpl = document.getElementById('rmTemplate').value;
+        const d = new Date(a.date + 'T12:00:00');
+        const isTomorrow = a.date === tomorrowStr();
+        const dateWord = isTomorrow ? 'tomorrow' : d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+        return tpl
+            .split('{name}').join((client.name.split(' ')[0]) || 'there')
+            .split('{service}').join(service)
+            .split('{date}').join(dateWord)
+            .split('{time}').join(Utils.formatTime(a.time))
+            .split('{tech}').join(tech.split(' ')[0]);
+    }
+
+    function render() {
+        const sent = getSent();
+        const appts = (DataManager.getAppointments(rmDate) || [])
+            .filter(a => a.status !== 'cancelled' && a.status !== 'noshow')
+            .sort((x, y) => String(x.time).localeCompare(String(y.time)));
+
+        const rows = appts.map(a => {
+            const client = clientFor(a);
+            const svc = DataManager.getServices().find(s => s.id === a.serviceId);
+            const stf = DataManager.getStaff(a.staffId);
+            const service = a.serviceName || (svc && svc.name) || 'Service';
+            const tech = (stf && stf.name) || 'First available';
+            return { a, client, service, tech };
+        });
+
+        const textable = rows.filter(r => r.client.phone).length;
+        document.getElementById('rmTotal').textContent = rows.length;
+        document.getElementById('rmWithPhone').textContent = textable;
+        document.getElementById('rmSent').textContent = sent.size;
+
+        document.getElementById('rmEmpty').style.display = rows.length ? 'none' : 'block';
+        document.getElementById('rmList').innerHTML = rows.map(({ a, client, service, tech }) => {
+            const done = sent.has(a.id);
+            const msg = reminderText(a, client, service, tech);
+            const phoneClean = (client.phone || '').replace(/[^\d+]/g, '');
+            return `
+            <div class="rm-row ${done ? 'reminded' : ''}">
+                <div class="rm-time"><div class="t">${Utils.formatTime(a.time)}</div><div class="d">${a.duration || 30} min</div></div>
+                <div class="rm-who">
+                    <div class="nm">${client.name}</div>
+                    <div class="svc">${service} · <span class="tech">${tech}</span></div>
+                    <div class="ph">${client.phone ? Utils.formatPhone(client.phone) : 'no phone on file'}</div>
+                </div>
+                ${done
+                    ? '<span style="color:#22c55e; font-weight:800; font-size:0.75rem;">✓ sent</span>'
+                    : client.phone
+                        ? `<a class="rm-send" href="sms:${phoneClean}?body=${encodeURIComponent(msg)}" onclick="markSent(${a.id}, this)"><i class="fas fa-comment-sms"></i> Remind</a>`
+                        : '<span class="rm-nophone">add phone to text</span>'}
+            </div>`;
+        }).join('');
+    }
+    </script>
+</body>
+</html>

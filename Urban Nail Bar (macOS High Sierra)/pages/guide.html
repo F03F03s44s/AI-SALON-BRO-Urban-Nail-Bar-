@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="salon-os" content="all-os" />
+<title>How to Start &amp; Use ï¿½ macOS High Sierra ï¿½ Urban Nail Bar</title>
+<link rel="stylesheet" href="../shared/styles.css?v=20260815brand3" />
+<link rel="stylesheet" href="../shared/vendor/fontawesome/css/all.min.css" />
+<style>
+  :root { --guide-accent: #b45309; }
+  .guide-wrap { max-width: 920px; margin: 0 auto; padding: 16px 16px 96px; }
+  .guide-hero {
+    background: linear-gradient(145deg, rgba(255,229,102,0.14), rgba(20,20,20,0.95) 42%, #121212);
+    border: 1px solid rgba(255,229,102,0.4);
+    border-radius: 16px;
+    padding: 22px 22px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+  }
+  .guide-hero .eyebrow {
+    font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--primary, #ffe566); margin-bottom: 8px;
+  }
+  .guide-hero h1 {
+    margin: 0 0 8px; font-size: clamp(1.55rem, 3vw, 2rem); color: #fff; text-transform: none; font-weight: 800;
+  }
+  .guide-hero p { margin: 0; color: #d1d5db; text-transform: none; font-weight: 600; line-height: 1.55; max-width: 40rem; }
+  .os-badge {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 14px;
+    padding: 6px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 800;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); color: #fff;
+  }
+  .os-badge i { width: 9px; height: 9px; border-radius: 50%; background: var(--guide-accent); display: inline-block; }
+  .guide-toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 18px; }
+  .guide-toc a {
+    text-decoration: none; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.04em;
+    padding: 7px 12px; border-radius: 999px; border: 1px solid #2a2a2a; color: #e5e7eb; background: #141414;
+  }
+  .guide-toc a:hover { border-color: var(--primary, #ffe566); color: var(--primary, #ffe566); }
+  .g-card {
+    background: #141414; border: 1px solid #2a2a2a; border-radius: 14px; padding: 16px 18px; margin: 0 0 14px;
+  }
+  .g-card.gold { border-color: rgba(255,229,102,0.4); background: linear-gradient(160deg, rgba(255,229,102,0.1), #141414 55%); }
+  .g-card.warn { border-color: rgba(251,146,60,0.45); background: rgba(154,52,18,0.18); }
+  .g-card h2 {
+    margin: 0 0 10px; font-size: 1.15rem; color: var(--primary, #ffe566); text-transform: none; font-weight: 800;
+  }
+  .g-card h3 { margin: 14px 0 8px; font-size: 0.98rem; color: #fff; text-transform: none; font-weight: 800; }
+  .g-card p, .g-card li { color: #d1d5db; text-transform: none; font-weight: 600; line-height: 1.55; }
+  .g-card ol, .g-card ul { margin: 0; padding-left: 1.2rem; }
+  .g-card li { margin: 0.4rem 0; }
+  .file-pill {
+    display: inline-block; font-family: ui-monospace, Consolas, monospace; font-size: 0.9rem; font-weight: 800;
+    background: rgba(255,229,102,0.12); border: 1px solid rgba(255,229,102,0.45); color: #ffe566;
+    padding: 6px 10px; border-radius: 8px; margin: 6px 0 10px;
+  }
+  .url {
+    font-family: ui-monospace, Consolas, monospace; font-size: 0.82rem; background: #0b0b0b; color: #fde68a;
+    border: 1px solid #2a2a2a; border-radius: 10px; padding: 10px 12px; margin: 8px 0; word-break: break-all;
+  }
+  table.g-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 8px; }
+  table.g-table th, table.g-table td {
+    text-align: left; padding: 9px 10px; border-bottom: 1px solid #2a2a2a; color: #d1d5db; text-transform: none; font-weight: 600; vertical-align: top;
+  }
+  table.g-table th { color: #9ca3af; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 800; }
+  .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0 4px; }
+  @media (max-width: 720px) { .flow { grid-template-columns: 1fr 1fr; } }
+  .flow div {
+    text-align: center; background: #0b0b0b; border: 1px solid #2a2a2a; border-radius: 12px; padding: 12px 8px;
+  }
+  .flow b { display: block; color: #ffe566; font-size: 1.25rem; margin-bottom: 4px; }
+  .flow span { color: #d1d5db; font-size: 0.78rem; font-weight: 700; text-transform: none; }
+</style>
+</head>
+<body>
+  <div class="guide-wrap">
+    <header class="guide-hero">
+      <div class="eyebrow">Urban Nail Bar ï¿½ Operator guide</div>
+      <h1>How to start &amp; use</h1>
+      <p>Step-by-step for Windows 11, macOS High Sierra, and macOS Big Sur. Open the salon, run the desk, take bookings, and keep data accurate.</p>
+      <div class="os-badge"><i></i> Windows 11 Â· High Sierra Â· Big Sur â€” one shared appointment + client hub</div>
+    </header>
+
+    <nav class="guide-toc" aria-label="On this page">
+      <a href="#start">Start</a>
+      <a href="#urls">URLs</a>
+      <a href="#security">Security</a>
+      <a href="#daily">Daily use</a>
+      <a href="#booking">Booking</a>
+      <a href="#sync">Sync</a>
+      <a href="#fix">Fix</a>
+    </nav>
+
+    <section class="g-card gold" id="start">
+      <h2><i class="fas fa-play"></i> Start on this computer</h2>
+      <div class="flow">
+        <div><b>1</b><span>Install Node</span></div>
+        <div><b>2</b><span>Run START</span></div>
+        <div><b>3</b><span>Leave server open</span></div>
+        <div><b>4</b><span>Work in browser</span></div>
+      </div>
+      <h3>Node.js (once)</h3>
+      <p><strong>Node.js: High Sierra = 14.21.3 or 16 / Big Sur = 18 / Windows = LTS</strong> ï¿½ Install the exact package node-v14.21.3.pkg from https://nodejs.org/download/release/v14.21.3/ ï¿½ newer Node 17+ usually crashes on High Sierra.</p>
+      <h3>Launcher</h3>
+      <div class="file-pill">START-SALON.command / START-SALON.bat</div>
+      <p>Mac: double-click START-SALON.command (if blocked: right-click â†’ Open â†’ Open). Windows: double-click START-SALON.bat.</p>
+      <ol>
+        <li>Open this OS folder: <code>Urban Nail Bar (Windows 11)</code>, <code>Urban Nail Bar (macOS High Sierra)</code>, or <code>Urban Nail Bar (macOS Big Sur)</code>.</li>
+        <li>Double-click START-SALON.command (if blocked: right-click â†’ Open â†’ Open).</li>
+        <li>First launch may install server packages (internet required once).</li>
+        <li>Auto-sync runs when this folder sits under the parent <code>AI Salon Pro</code> folder with the other OS packages.</li>
+        <li>Staff Home and public booking open automatically.</li>
+      </ol>
+      <h3>Important</h3>
+      <ul>
+        <li>Prefer a writable copy on Desktop or unlocked USB ï¿½ not a locked DVD.</li>
+        <li>If the disc is read-only, START-SALON copies to Desktop automatically and relaunches.</li>
+        <li>Leave the Salon Server Terminal window open.</li>
+        <li>Do not install Node 17+ on High Sierra. Big Sur uses Node 18. Windows uses current LTS.</li>
+      </ul>
+      <h3>Read-only disc / ISO</h3>
+      <p>npm cannot install into a locked volume (EROFS). Always run from Desktop (or another writable disk) after the automatic copy ï¿½ or copy the folder yourself first.</p>
+    </section>
+
+    <section class="g-card" id="urls">
+      <h2><i class="fas fa-link"></i> Local URLs</h2>
+      <p>Always use <code>http://</code> ï¿½ never open HTML with <code>file://</code>.</p>
+      <div class="url">Staff Home â€” http://localhost:3001/index.html</div>
+      <div class="url">Public booking â€” http://localhost:3002/</div>
+      <div class="url">Website â€” http://localhost:3001/pages/website.html</div>
+      <div class="url">This guide â€” http://localhost:3001/pages/guide.html</div>
+    </section>
+
+    <section class="g-card" id="security">
+      <h2><i class="fas fa-shield-alt"></i> First login &amp; security</h2>
+      <ol>
+        <li>Open Staff Home and sign in with the Admin PIN.</li>
+        <li>Go to <strong>Admin â†’ Security</strong> and change every default PIN before go-live.</li>
+        <li>Confirm staff names, roles, and tech PINs.</li>
+        <li>Optional: <strong>Admin â†’ Data â†’ Backup Now</strong>.</li>
+      </ol>
+      <table class="g-table">
+        <thead><tr><th>Role</th><th>Main page</th></tr></thead>
+        <tbody>
+          <tr><td>Front desk</td><td>Scheduler + Alert</td></tr>
+          <tr><td>Technician</td><td>My Schedule (not full Scheduler)</td></tr>
+          <tr><td>Manager</td><td>Manager + Scheduler + Closeout</td></tr>
+          <tr><td>Admin / owner</td><td>Admin + everything</td></tr>
+          <tr><td>Customer</td><td>Public booking (phone only)</td></tr>
+        </tbody>
+      </table>
+      <p>Default PIN list: <code>docs/07-ROLES-AND-PINS.md</code></p>
+    </section>
+
+    <section class="g-card" id="daily">
+      <h2><i class="fas fa-sun"></i> Daily use</h2>
+      <h3>Morning</h3>
+      <ol>
+        <li>Run <code>START-SALON.command</code>.</li>
+        <li>Confirm 3001 and 3002 load.</li>
+        <li>Log in on Home â€” front desk opens Scheduler â€” techs open My Schedule.</li>
+      </ol>
+      <h3>Front desk</h3>
+      <ol>
+        <li>Check todayï¿½s board, waitlist, checkouts.</li>
+        <li><strong>New Appt</strong> / <strong>Walk-In</strong>.</li>
+        <li>Move clients arrived ? in service ? done.</li>
+        <li><strong>Checkout</strong>: assign each service to the correct tech, then take payment.</li>
+        <li>Optional: gold â†’ UNB AI ASSISTANT to book / cancel / reschedule.</li>
+      </ol>
+      <h3>Technician</h3>
+      <ol>
+        <li>My Schedule â†’ Clock In.</li>
+        <li>Work your appointments; request time off if needed.</li>
+        <li>Clock Out at end of day.</li>
+      </ol>
+      <h3>Manager / Admin</h3>
+      <ol>
+        <li>Manager: dashboard, inventory, reports, <strong>Closeout</strong>.</li>
+        <li>Admin: security, staff, payroll, backups, settings.</li>
+      </ol>
+    </section>
+
+    <section class="g-card" id="booking">
+      <h2><i class="fas fa-calendar-check"></i> Customer online booking</h2>
+      <p>Share <strong>only</strong> the public booking link ï¿½ never Scheduler or Admin.</p>
+      <ol>
+        <li>Customer enters phone + SMS consent.</li>
+        <li>New clients enter name.</li>
+        <li>Service ? date ? tech/time ? confirm.</li>
+      </ol>
+      <p>Same Wi-Fi phones: use the salon PC LAN URL (port 3002) shown after START.</p>
+    </section>
+
+    <section class="g-card" id="sync">
+      <h2><i class="fas fa-sync"></i> Sync &amp; accuracy</h2>
+      <ol>
+        <li>Keep <strong>one</strong> live salon server as the desk.</li>
+        <li>Other devices open that computerï¿½s Staff / Booking URL.</li>
+        <li>Appointments, staff, earnings sync through the server every few seconds.</li>
+        <li>Under parent <code>AI Salon Pro</code>, START auto-syncs code + newest data across Windows / Big Sur / Sierra.</li>
+        <li>Or run <code>AUTO-SYNC-ALL.bat</code> / <code>AUTO-SYNC-ALL.command</code> from the parent folder.</li>
+      </ol>
+      <div class="g-card warn" style="margin:12px 0 0;">
+        <p style="margin:0"><strong>Avoid two writers:</strong> do not run two full servers that save different datasets at once. One live desk = accurate numbers everywhere.</p>
+      </div>
+    </section>
+
+    <section class="g-card" id="close">
+      <h2><i class="fas fa-moon"></i> End of day</h2>
+      <ol>
+        <li>Finish checkouts.</li>
+        <li>Manager Closeout (register matches).</li>
+        <li>Optional Admin Backup Now.</li>
+        <li>Close server ï¿½ or leave it open for overnight online booking.</li>
+      </ol>
+    </section>
+
+    <section class="g-card" id="fix">
+      <h2><i class="fas fa-wrench"></i> Quick fixes</h2>
+      <table class="g-table">
+        <thead><tr><th>Problem</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>Node not found</td><td>Install Node.js: High Sierra = 14.21.3 or 16 / Big Sur = 18 / Windows = LTS for this OS.</td></tr>
+          <tr><td>Page looks wrong</td><td>Hard refresh: Ctrl+F5 (Windows) or Cmd+Shift+R (Mac).</td></tr>
+          <tr><td>Data not sharing</td><td>Use http:// not file:// ï¿½ one server ï¿½ correct LAN URL.</td></tr>
+          <tr><td>Port in use</td><td>Close old Salon Server windows; run START again.</td></tr>
+          <tr><td>Tech canï¿½t open Scheduler</td><td>By design ï¿½ use My Schedule.</td></tr>
+          <tr><td>Deeper help</td><td>docs/10-TROUBLESHOOTING.md ï¿½ node validate.js</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="g-card gold">
+      <h2><i class="fas fa-check"></i> Open checklist</h2>
+      <ul>
+        <li>Node installed ï¿½ <code>START-SALON.command</code> launched ï¿½ server window open</li>
+        <li>3001 + 3002 load ï¿½ PINs changed ï¿½ backup taken</li>
+        <li>Customers get booking URL only ï¿½ one live server</li>
+      </ul>
+    </section>
+  </div>
+
+  <script src="../shared/legacy-compat.js?v=20260805guide1"></script>
+  <script src="../shared/data-manager.js?v=20260815menu3"></script>
+<script src="../shared/live-sync.js?v=20260815perf1"></script>
+  <script src="../shared/utils.js?v=20260815menu3"></script>
+  <script src="../shared/auth.js?v=20260805guide1"></script>
+  <script src="../shared/app-nav.js?v=20260810navhover"></script>
+</body>
+</html>

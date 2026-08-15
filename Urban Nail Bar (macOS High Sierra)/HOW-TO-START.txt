@@ -1,0 +1,22 @@
+AI SALON PRO — package start helpers
+====================================
+
+Prefer the ROOT one-click (one folder up):
+
+  Windows → START-SALON.bat / START-SALON.vbs
+  macOS   → START-SALON.command
+
+Or double-click START-SALON in this package folder.
+
+Every start runs:
+  _sync/MIRROR-ALL-THREE.js
+  → backup data, sync appointments/clients, mirror pages across all 3 OS packages,
+    then start the salon server.
+
+Manual sync only (no start):
+  ..\_sync\MIRROR-ALL-THREE.bat     (Windows)
+  ../_sync/MIRROR-ALL-THREE.command (macOS)
+
+Do not delete:
+  ../_shared-salon-data/
+  ../_sync/

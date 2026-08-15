@@ -1,0 +1,2533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Nail Bar - Staff Members</title>
+    <link rel="stylesheet" href="../shared/styles.css?v=20260815brand3">
+    <link href="../shared/vendor/fontawesome/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ffe566;
+            --primary-dark: #c9a227;
+            --primary-glow: rgba(255, 229, 102, 0.45);
+            --gradient-primary: linear-gradient(135deg, #ffe566, #c9a227);
+            --success: #15803d;
+        }
+        .btn-success { background: #15803d !important; color: #fff !important; border-color: #166534 !important; }
+        .btn-success:hover { background: #166534 !important; }
+        .badge-appt-booked { background: rgba(59, 130, 246, 0.2) !important; color: #3b82f6 !important; border-color: rgba(59, 130, 246, 0.5) !important; }
+        .badge-appt-processing { background: #000 !important; color: #ffe566 !important; border-color: #16a34a !important; }
+        .badge-appt-complete { background: #000 !important; color: #ffe566 !important; border-color: #dc2626 !important; }
+        .stat-card.clickable { cursor: pointer; transition: transform 0.15s, border-color 0.15s; }
+        .stat-card.clickable:hover { transform: translateY(-2px); border-color: var(--primary); }
+        .period-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+        .period-tab { padding: 6px 16px; border-radius: 20px; border: 1px solid var(--border-color); background: transparent; color: var(--text-secondary); cursor: pointer; font-weight: 600; }
+        .period-tab.active { background: var(--gradient-primary); color: #000; border-color: transparent; }
+        .breakdown-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
+        .breakdown-row.total { font-weight: 800; color: var(--primary); border-top: 2px solid var(--border-color); border-bottom: none; margin-top: 4px; }
+        .mini-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .star { color: var(--primary); }
+        .match-ok { color: var(--success); font-weight: 700; }
+        .match-bad { color: var(--danger); font-weight: 700; }
+        #timeOffModal .gold-date-wrap {
+            position: relative;
+        }
+        #timeOffModal .gold-date-wrap input[type="date"] {
+            width: 100%;
+            padding-right: 34px;
+            color-scheme: dark;
+            accent-color: #ffe566;
+        }
+        #timeOffModal .gold-date-wrap input[type="date"]::-webkit-calendar-picker-indicator {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        #timeOffModal .gold-date-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ffe566;
+            pointer-events: none;
+            font-size: 0.95rem;
+            z-index: 1;
+        }
+        #timeOffModal .gold-date-wrap input[type="time"] {
+            width: 100%;
+            padding-right: 34px;
+            color-scheme: dark;
+            accent-color: #ffe566;
+        }
+        #timeOffModal .gold-date-wrap input[type="time"]::-webkit-calendar-picker-indicator {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .timeoff-dur-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+        .timeoff-dur-btn {
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            padding: 8px 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            line-height: 1.2;
+        }
+        .timeoff-dur-btn.active {
+            background: var(--gradient-primary);
+            color: #000;
+            border-color: transparent;
+        }
+        .timeoff-dur-btn small { display: block; font-weight: 600; font-size: 0.65rem; opacity: 0.8; }
+        #timeOffModal #timeOffStartTime,
+        #timeOffModal #timeOffEndTime {
+            border: 1px solid #ffe566;
+            background: #141414;
+            color: #ffe566;
+            font-weight: 700;
+        }
+        @media (max-width: 480px) {
+            .timeoff-dur-row { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+<script>document.documentElement.classList.add('salon-auth-locked');</script>
+<style>html.salon-auth-locked body{visibility:hidden!important;}</style>
+</head>
+<body>
+    <header class="app-header">
+                <div class="logo">
+            <img class="salon-logo" src="../assets/images/logo.png" alt="Urban Nail Bar"
+                 onerror="this.onerror=null;this.src='../assets/brand/logo.png'">
+            <div class="logo-text">
+                <h1 class="brand-salon-name">Urban Nail Bar</h1>
+                <span class="brand-tagline"><span class="brand-ai-line">AI INTEGRATION</span><span class="brand-powered-line">Powered By <strong class="brand-gold">AI Salon Pro</strong></span></span>
+            </div>
+        </div>
+
+        <!-- Filled by shared/app-nav.js (single source of truth) -->
+        <nav class="nav-tabs"></nav>
+
+        <div class="user-menu">
+            <button type="button" class="btn btn-sm btn-secondary" id="manageStaffBtn" onclick="if(window.StaffQuickAdd)StaffQuickAdd.openAdd()" title="Manage Staff (Admin/Manager PIN)" style="font-size:0.75rem; opacity:0.9;">
+                <i class="fas fa-user-plus"></i> Manage Staff
+            </button>
+            <span id="currentUserName" style="font-size:0.85rem; color:var(--text-secondary);">Not logged in</span>
+            <button class="btn btn-sm btn-secondary" id="notifBell" onclick="toggleNotifications()" style="display:none; position:relative;">
+                <i class="fas fa-bell"></i>
+                <span id="notifBadge" style="display:none; position:absolute; top:-6px; right:-6px; background:var(--danger); color:#fff; border-radius:50%; font-size:0.65rem; font-weight:700; padding:2px 6px;">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Notification Panel -->
+    <div id="notifPanel" style="display:none; position:fixed; top:64px; right:20px; width:340px; max-height:420px; overflow-y:auto; background:#1a1a1a; border:1px solid var(--border-color); border-radius:8px; z-index:500; box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+        <div style="padding:12px 14px; font-weight:700; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+            <span><i class="fas fa-bell" style="color:var(--primary);"></i> Notifications</span>
+            <button onclick="document.getElementById('notifPanel').style.display='none'" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:0.9rem;"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="notifList"></div>
+    </div>
+
+    <div class="app-body">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title"><span><i class="fas fa-id-card"></i> My Dashboard</span></div>
+                <button class="sidebar-btn active" data-page="myschedule" onclick="showPage('myschedule')">
+                    <i class="fas fa-calendar"></i> My Schedule
+                </button>
+                <button class="sidebar-btn" data-page="clients" onclick="showPage('clients')">
+                    <i class="fas fa-user-friends"></i> My Clients
+                </button>
+                <button class="sidebar-btn" data-page="clock" onclick="showPage('clock')">
+                    <i class="fas fa-clock"></i> Time Clock
+                </button>
+                <button class="sidebar-btn" data-page="performance" onclick="showPage('performance')">
+                    <i class="fas fa-chart-line"></i> My Performance
+                </button>
+                <button class="sidebar-btn" data-page="pay" onclick="showPage('pay')">
+                    <i class="fas fa-money-bill-wave"></i> My Pay
+                </button>
+                <a class="sidebar-btn" href="booking.html" style="text-decoration:none;display:flex;">
+                    <i class="fas fa-calendar-check"></i> ONLINE BOOKING
+                </a>
+                <a class="sidebar-btn" href="website.html" style="text-decoration:none;display:flex;">
+                    <i class="fas fa-globe"></i> WEBSITE
+                </a>
+                <a class="sidebar-btn" href="guide.html" style="text-decoration:none;display:flex;">
+                    <i class="fas fa-book-open"></i> HOW TO USE
+                </a>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            <!-- My Schedule -->
+            <div id="myschedulePage" class="page-content">
+                <!-- Clock in / out / break — shown as soon as you log in -->
+                <div class="card" id="scheduleClockBar" style="padding:16px 20px; margin-bottom:16px;">
+                    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px;">
+                        <div>
+                            <div style="font-weight:800; font-size:0.85rem; letter-spacing:0.5px; color:var(--text-secondary); margin-bottom:4px;">
+                                <i class="fas fa-clock" style="color:var(--primary);"></i> TIME CLOCK
+                            </div>
+                            <div id="schedClockStatus" style="font-size:1.05rem; font-weight:700;">Please log in to clock in</div>
+                            <div id="schedBreakStatus" style="font-size:0.85rem; color:var(--warning); min-height:1.2rem; margin-top:2px;"></div>
+                        </div>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <button class="btn btn-lg btn-success" id="schedClockInBtn" onclick="clockIn()" style="display:none;">
+                                <i class="fas fa-sign-in-alt"></i> Clocked In
+                            </button>
+                            <button class="btn btn-lg btn-secondary" id="schedBreakBtn" onclick="toggleBreak()" style="display:none;">
+                                <i class="fas fa-coffee"></i> Start Break
+                            </button>
+                            <button class="btn btn-lg btn-danger" id="schedClockOutBtn" onclick="startClockOutFlow()" style="display:none;">
+                                <i class="fas fa-sign-out-alt"></i> Clocked Out
+                            </button>
+                            <button class="btn btn-secondary" onclick="showPage('clock')" title="Full time clock & history">
+                                <i class="fas fa-history"></i> History
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title"><i class="fas fa-calendar"></i> My Schedule</div>
+                            <div class="card-subtitle" id="scheduleDate" style="font-weight:700; letter-spacing:0.3px; color:#fff;">Today Mon 08-10-2026</div>
+                        </div>
+                        <span id="scheduleProgress" style="align-self:center;"></span>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <button class="btn btn-primary" onclick="openBookModal()"><i class="fas fa-plus"></i> Book Appointment</button>
+                            <button class="btn btn-secondary" onclick="openTimeOffModal()"><i class="fas fa-umbrella-beach"></i> Request Time Off</button>
+                            <button class="btn btn-secondary" onclick="changeScheduleDate(-1)"><i class="fas fa-chevron-left"></i></button>
+                            <button class="btn btn-secondary" onclick="goToTodaySchedule()">Today</button>
+                            <button class="btn btn-secondary" onclick="changeScheduleDate(1)"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div id="myAppointmentsList"></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title"><i class="fas fa-calendar-week"></i> Upcoming Appointments</div>
+                    <div id="upcomingList" style="margin-top:12px;"></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title"><i class="fas fa-umbrella-beach"></i> My Time-Off Requests</div>
+                    <div class="card-subtitle">Full days go on the Manager duty board. 30 min / 1 hr / 2 hr step-outs only block that time on the Scheduler.</div>
+                    <div id="myTimeOffList" style="margin-top:12px;"></div>
+                </div>
+            </div>
+
+            <!-- My Clients -->
+            <div id="clientsPage" class="page-content" style="display:none;">
+                <div class="card">
+                    <div class="card-title"><i class="fas fa-user-friends"></i> My Clients</div>
+                    <div class="card-subtitle">Only clients who booked with you — search by first name, last name, phone, last 4 digits, or email</div>
+                    <div class="search-box" style="margin:16px 0;">
+                        <input type="text" class="form-input" id="clientSearch" placeholder="Search your clients..." oninput="searchMyClients()">
+                    </div>
+                    <div id="myClientsList"></div>
+                </div>
+            </div>
+
+            <!-- Time Clock -->
+            <div id="clockPage" class="page-content" style="display:none;">
+                <div class="card" style="text-align:center; padding:40px;">
+                    <div id="clockDisplay" style="font-size:3rem; font-weight:800; color:var(--primary); font-family:var(--font-mono); margin-bottom:20px;">
+                        00:00:00
+                    </div>
+                    <div id="clockStatus" style="font-size:1.2rem; margin-bottom:8px;">
+                        <span style="color:#ffe566;">You are currently</span> <strong style="color:var(--danger);">Clocked Out</strong>
+                    </div>
+                    <div id="breakStatus" style="font-size:1rem; color:var(--warning); margin-bottom:24px; min-height:1.4rem;"></div>
+                    <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+                        <button class="btn btn-lg btn-success" id="clockInBtn" onclick="clockIn()">
+                            <i class="fas fa-sign-in-alt"></i> Clocked In
+                        </button>
+                        <button class="btn btn-lg btn-secondary" id="breakBtn" onclick="toggleBreak()" style="display:none;">
+                            <i class="fas fa-coffee"></i> Start Break
+                        </button>
+                        <button class="btn btn-lg btn-danger" id="clockOutBtn" onclick="startClockOutFlow()" style="display:none;">
+                            <i class="fas fa-sign-out-alt"></i> Clocked Out
+                        </button>
+                    </div>
+                    <div id="hoursToday" style="margin-top:24px; font-size:1.1rem; color:var(--text-secondary);">
+                        Hours today: <strong style="color:var(--primary);">0.00</strong>
+                    </div>
+                    <div id="weekHoursCard" style="margin-top:16px; text-align:left; background:rgba(255,229,102,0.06); border:1px solid var(--border-color); border-radius:8px; padding:14px 16px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <span style="font-weight:700;"><i class="fas fa-calendar-week" style="color:var(--primary);"></i> This Week</span>
+                            <span id="weekHoursText" style="font-weight:700; color:var(--primary);">0.00h</span>
+                        </div>
+                        <div style="height:10px; background:var(--bg-hover); border-radius:5px; overflow:hidden;">
+                            <div id="weekHoursBar" style="width:0%; height:100%; background:var(--gradient-primary); border-radius:5px; transition:width 0.4s;"></div>
+                        </div>
+                        <div id="weekOtText" style="margin-top:8px; font-size:0.85rem; color:var(--text-secondary);"></div>
+                    </div>
+                    <div style="margin-top:16px;">
+                        <button class="btn btn-secondary" onclick="openTimeOffModal()"><i class="fas fa-umbrella-beach"></i> Request Time Off / Step-Out / Vacation</button>
+                    </div>
+                    <div style="margin-top:12px; font-size:0.85rem; color:var(--text-muted);">
+                        <i class="fas fa-info-circle"></i> Clock-out requires your end-of-day closeout to match. A manager or admin can override with their PIN.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title"><i class="fas fa-history"></i> Time History</div>
+                    <div id="timeHistory" style="margin-top:16px;"></div>
+                </div>
+            </div>
+
+            <!-- Performance -->
+            <div id="performancePage" class="page-content" style="display:none;">
+                <div class="stats-grid">
+                    <div class="stat-card clickable" onclick="openPerfDetail('appointments')">
+                        <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                        <div class="stat-value" id="perfTotalAppts">0</div>
+                        <div class="stat-label">Appointment Breakdown</div>
+                        <div class="mini-label" style="margin-top:4px;">Click for full breakdown</div>
+                    </div>
+                    <div class="stat-card clickable" onclick="openPerfDetail('revenue')">
+                        <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+                        <div class="stat-value" id="perfRevenue">$0</div>
+                        <div class="stat-label">Revenue Breakdown</div>
+                        <div class="mini-label" style="margin-top:4px;">Click for full breakdown</div>
+                    </div>
+                    <div class="stat-card clickable" onclick="openPerfDetail('rating')">
+                        <div class="stat-icon"><i class="fas fa-star"></i></div>
+                        <div class="stat-value" id="perfRating">0.0</div>
+                        <div class="stat-label">Average Rating</div>
+                        <div class="mini-label" style="margin-top:4px;">Click for full breakdown</div>
+                    </div>
+                    <div class="stat-card clickable" onclick="openPerfDetail('clients')">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="stat-value" id="perfClients">0</div>
+                        <div class="stat-label">Client Breakdown</div>
+                        <div class="mini-label" style="margin-top:4px;">Click for full breakdown</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title"><i class="fas fa-chart-bar"></i> Weekly Performance (Last 7 Days)</div>
+                    <div id="weeklyPerformance" style="margin-top:16px;"></div>
+                </div>
+            </div>
+
+            <!-- My Pay -->
+            <div id="payPage" class="page-content" style="display:none;">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+                        <div class="stat-value" id="payToday">$0</div>
+                        <div class="stat-label">Today's Pay</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+                        <div class="stat-value" id="payWeek">$0</div>
+                        <div class="stat-label">This Week's Pay</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+                        <div class="stat-value" id="payMonth">$0</div>
+                        <div class="stat-label">This Month's Pay</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+                        <div class="stat-value" id="payCommission">0%</div>
+                        <div class="stat-label">My Commission Rate</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title"><i class="fas fa-money-bill-wave"></i> My Daily Earnings</div>
+                            <div class="card-subtitle">Commission pay + tips for each day — based on completed appointments</div>
+                        </div>
+                        <select class="form-select" id="payPeriod" onchange="renderMyPay()" style="width:auto;">
+                            <option value="7">Last 7 days</option>
+                            <option value="14">Last 14 days</option>
+                            <option value="30" selected>Last 30 days</option>
+                            <option value="month">This month</option>
+                        </select>
+                    </div>
+                    <div style="overflow-x:auto; margin-top:12px;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Appointments</th>
+                                    <th>Completed</th>
+                                    <th>Gross Sales</th>
+                                    <th>Tips</th>
+                                    <th>Commission</th>
+                                    <th>My Pay</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payDailyTable"></tbody>
+                            <tfoot id="payDailyFooter"></tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title"><i class="fas fa-file-invoice-dollar"></i> My Tax Document (W-2 / 1099)</div>
+                            <div class="card-subtitle">Year-end totals used for your W-2 or 1099 — synced with payroll and your completed appointments</div>
+                        </div>
+                        <select class="form-select" id="taxYear" onchange="renderTaxDoc()" style="width:auto;"></select>
+                    </div>
+                    <div id="taxDocContent" style="margin-top:16px;"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal" style="max-width:400px;">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fas fa-lock"></i> Staff Login</span>
+                <button class="modal-close" onclick="hideModal('loginModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <p style="color:var(--text-secondary); margin-bottom:16px;">Enter your staff PIN. You will only see your own schedule, clients, and pay.</p>
+                <div class="pin-input">
+                    <input type="password" id="pinInput" maxlength="4" placeholder="••••" style="width:120px; text-align:center; font-size:1.5rem; letter-spacing:8px;">
+                </div>
+                <div id="loginError" style="color:var(--danger); font-size:0.85rem; margin-top:8px; display:none;">Invalid staff PIN</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="doLogin()" style="width:100%;">
+                    <i class="fas fa-unlock"></i> Login
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Appointment Detail Modal -->
+    <div class="modal-overlay" id="apptDetailModal">
+        <div class="modal" style="max-width:520px;">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fas fa-calendar-check"></i> Appointment Details</span>
+                <button class="modal-close" onclick="hideModal('apptDetailModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="apptDetailContent"></div>
+            <div class="modal-footer" id="apptDetailFooter">
+                <button class="btn btn-secondary" onclick="hideModal('apptDetailModal')">Close</button>
+                <button class="btn btn-danger" id="apptCancelBtn" onclick="cancelSelectedAppointment()">
+                    <i class="fas fa-ban"></i> Cancel Appointment
+                </button>
+                <button class="btn btn-success" id="apptCompleteBtn" onclick="markComplete()">
+                    <i class="fas fa-check"></i> Mark Closed
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Book Appointment Modal -->
+    <div class="modal-overlay" id="bookApptModal">
+        <div class="modal" style="max-width:520px;">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fas fa-plus-circle"></i> Book an Appointment</span>
+                <button class="modal-close" onclick="hideModal('bookApptModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:16px;">
+                    <i class="fas fa-info-circle"></i> Appointments you book are sent to a manager or admin for approval before they are confirmed.
+                </p>
+                <label class="form-label">Client</label>
+                <input type="text" class="form-input" id="bookClientSearch" placeholder="Search name, phone, or email…" oninput="bookClientSearchChanged()" autocomplete="off">
+                <div id="bookClientResults" style="margin:8px 0;"></div>
+                <div id="bookNewClientBox" style="display:none; border:1px dashed var(--border-color); border-radius:var(--radius-md); padding:12px; margin-bottom:8px;">
+                    <div class="mini-label" style="margin-bottom:8px;">New client (they will be added as your client)</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                        <input type="text" class="form-input" id="bookNewFirst" placeholder="First name">
+                        <input type="text" class="form-input" id="bookNewLast" placeholder="Last name">
+                        <input type="text" class="form-input" id="bookNewPhone" placeholder="Phone">
+                        <input type="text" class="form-input" id="bookNewEmail" placeholder="Email (optional)">
+                    </div>
+                </div>
+                <div id="bookSelectedClient" style="display:none; margin-bottom:12px;" aria-hidden="true"></div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <div>
+                        <label class="form-label">Service</label>
+                        <select class="form-select" id="bookService" style="width:100%;"></select>
+                    </div>
+                    <div>
+                        <label class="form-label">Date</label>
+                        <div class="gold-date-wrap">
+                            <input type="date" class="form-input gold-date" id="bookDate">
+                            <i class="fas fa-calendar-alt gold-date-icon"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label">Time</label>
+                        <input type="time" class="form-input" id="bookTime">
+                    </div>
+                    <div>
+                        <label class="form-label">Notes (optional)</label>
+                        <input type="text" class="form-input" id="bookNotes" placeholder="Any requests...">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('bookApptModal')">Cancel</button>
+                <button class="btn btn-primary" data-enter-confirm onclick="submitBooking()">
+                    <i class="fas fa-paper-plane"></i> Submit for Approval
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Time Off Modal -->
+    <div class="modal-overlay" id="timeOffModal">
+        <div class="modal" style="max-width:440px;">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fas fa-umbrella-beach"></i> Request Time Off</span>
+                <button class="modal-close" onclick="hideModal('timeOffModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <label class="form-label">Type of Leave</label>
+                <select class="form-select" id="timeOffType" style="width:100%; margin-bottom:12px;" onchange="toggleTimeOffCustomType()">
+                    <option value="vacation">Vacation</option>
+                    <option value="sick">Sick Day</option>
+                    <option value="emergency">Emergency</option>
+                    <option value="personal">Personal Day</option>
+                    <option value="step-out">Quick step-out</option>
+                    <option value="custom">Custom</option>
+                </select>
+                <div id="timeOffCustomWrap" style="display:none; margin-bottom:12px;">
+                    <label class="form-label">Custom Type</label>
+                    <input type="text" class="form-input" id="timeOffCustomType" placeholder="Enter custom leave type" style="width:100%;">
+                </div>
+                <label class="form-label">How long</label>
+                <div class="timeoff-dur-row" id="timeOffDurRow">
+                    <button type="button" class="timeoff-dur-btn active" data-mins="full" onclick="setTimeOffDuration('full')">Full day(s)</button>
+                    <button type="button" class="timeoff-dur-btn" data-mins="30" onclick="setTimeOffDuration(30)">30 min</button>
+                    <button type="button" class="timeoff-dur-btn" data-mins="60" onclick="setTimeOffDuration(60)">1 hour</button>
+                    <button type="button" class="timeoff-dur-btn" data-mins="120" onclick="setTimeOffDuration(120)">2 hours</button>
+                </div>
+                <input type="hidden" id="timeOffDuration" value="full">
+                <div id="timeOffFullWrap" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+                    <div>
+                        <label class="form-label">Start Date</label>
+                        <div class="gold-date-wrap">
+                            <input type="date" class="form-input" id="timeOffStart">
+                            <i class="fas fa-calendar-alt gold-date-icon"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label">End Date</label>
+                        <div class="gold-date-wrap">
+                            <input type="date" class="form-input" id="timeOffEnd">
+                            <i class="fas fa-calendar-alt gold-date-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div id="timeOffStepWrap" style="display:none; margin-bottom:12px;">
+                    <div style="margin-bottom:12px;">
+                        <label class="form-label">Date</label>
+                        <div class="gold-date-wrap">
+                            <input type="date" class="form-input" id="timeOffStepDate" onchange="fillTimeOffSelects()">
+                            <i class="fas fa-calendar-alt gold-date-icon"></i>
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                        <div>
+                            <label class="form-label">Time off</label>
+                            <select class="form-select" id="timeOffStartTime" style="width:100%;" onchange="syncTimeOffEndFromStart()">
+                                <option value="">Select time</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label">Come back</label>
+                            <select class="form-select" id="timeOffEndTime" style="width:100%;">
+                                <option value="">Select time</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-top:8px; font-size:0.75rem; color:var(--text-muted);">
+                        Mon–Sat 9:30 AM–6:30 PM · Sunday 11:00 AM–5:00 PM · 30 min steps
+                    </div>
+                </div>
+                <label class="form-label">Reason</label>
+                <textarea class="form-input" id="timeOffReason" rows="3" placeholder="Provide details regarding the nature of your requested leave." style="width:100%; resize:vertical;"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('timeOffModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="submitTimeOff()">
+                    <i class="fas fa-paper-plane"></i> Submit Request
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manager PIN Modal (generic gate for overrides/approvals) -->
+    <div class="modal-overlay" id="pinModal">
+        <div class="modal" style="max-width:400px;">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fas fa-user-shield"></i> <span id="pinModalTitle">Manager Approval Required</span></span>
+                <button class="modal-close" onclick="hideModal('pinModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <p style="color:var(--text-secondary); margin-bottom:16px;" id="pinModalMessage">A manager or admin must enter their PIN to approve this action.</p>
+                <input type="password" id="managerPinInput" maxlength="4" placeholder="••••" style="width:120px; text-align:center; font-size:1.5rem; letter-spacing:8px;">
+                <div id="pinModalError" style="color:var(--danger); font-size:0.85rem; margin-top:8px; display:none;">Invalid manager/admin PIN</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('pinModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="submitManagerPin()">
+                    <i class="fas fa-check"></i> Approve
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- End-of-Day Closeout Modal -->
+    <div class="modal-overlay" id="closeoutModal">
+        <div class="modal" style="max-width:560px;">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fas fa-calculator"></i> End-of-Day Closeout</span>
+                <button class="modal-close" onclick="hideModal('closeoutModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:16px;">
+                    Count your tickets, service sales, and tips for today. Everything must match the system before you can clock out.
+                </p>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:8px;">
+                    <div class="mini-label">System Expected</div>
+                    <div class="mini-label">You Counted</div>
+                    <div class="mini-label">Match?</div>
+                </div>
+                <div class="breakdown-row">
+                    <span>Tickets (completed services)</span>
+                    <span id="coExpTickets" style="font-weight:700;">0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>Service sales</span>
+                    <span id="coExpServices" style="font-weight:700;">$0.00</span>
+                </div>
+                <div class="breakdown-row" style="margin-bottom:12px;">
+                    <span>Tips</span>
+                    <span id="coExpTips" style="font-weight:700;">$0.00</span>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; align-items:end;">
+                    <div>
+                        <label class="form-label">Tickets counted</label>
+                        <input type="number" class="form-input" id="coCountTickets" min="0" value="0" oninput="updateCloseoutMatch()">
+                    </div>
+                    <div>
+                        <label class="form-label">Service $ counted</label>
+                        <input type="number" class="form-input" id="coCountServices" min="0" step="0.01" value="0" oninput="updateCloseoutMatch()">
+                    </div>
+                    <div>
+                        <label class="form-label">Tips $ counted</label>
+                        <input type="number" class="form-input" id="coCountTips" min="0" step="0.01" value="0" oninput="updateCloseoutMatch()">
+                    </div>
+                </div>
+                <div id="closeoutMatchStatus" style="margin-top:16px; font-size:0.95rem;"></div>
+                <div id="closeoutOverrideBox" style="display:none; margin-top:16px; border:1px solid var(--danger); border-radius:var(--radius-md); padding:12px;">
+                    <div style="color:var(--danger); font-weight:700; margin-bottom:8px;"><i class="fas fa-exclamation-triangle"></i> Numbers don't match — manager override required</div>
+                    <label class="form-label">Manager/Admin PIN</label>
+                    <input type="password" id="coOverridePin" maxlength="4" placeholder="••••" style="width:120px; text-align:center; letter-spacing:6px;">
+                    <label class="form-label" style="margin-top:8px;">Reason for the difference</label>
+                    <input type="text" class="form-input" id="coOverrideReason" placeholder="e.g. client paid cash, tip not entered" style="width:100%;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('closeoutModal')">Cancel</button>
+                <button class="btn btn-danger" onclick="submitCloseoutAndClockOut()">
+                    <i class="fas fa-sign-out-alt"></i> Close Out &amp; Clock Out
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Detail Modal -->
+    <div class="modal-overlay" id="perfDetailModal">
+        <div class="modal" style="max-width:720px;">
+            <div class="modal-header">
+                <span class="modal-title" id="perfDetailTitle"><i class="fas fa-chart-line"></i> Breakdown</span>
+                <button class="modal-close" onclick="hideModal('perfDetailModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="period-tabs" id="perfPeriodTabs">
+                    <button class="period-tab" data-period="day" onclick="setPerfPeriod('day')">Today</button>
+                    <button class="period-tab" data-period="week" onclick="setPerfPeriod('week')">This Week</button>
+                    <button class="period-tab active" data-period="month" onclick="setPerfPeriod('month')">This Month</button>
+                    <button class="period-tab" data-period="year" onclick="setPerfPeriod('year')">This Year</button>
+                </div>
+                <div id="perfDetailContent" style="max-height:55vh; overflow-y:auto;"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('perfDetailModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../shared/legacy-compat.js?v=20260805sierra3"></script>
+<script src="../shared/data-manager.js?v=20260815menu3"></script>
+<script src="../shared/live-sync.js?v=20260815perf1"></script>
+    <script src="../shared/utils.js?v=20260815menu3"></script>
+    <script src="../shared/appt-status.js?v=20260810booked"></script>
+    <script src="../shared/auth.js?v=20260801navSync1"></script>
+    <script src="../shared/staff-quick-add.js?v=20260807staffSync2"></script>
+<script src="../shared/app-nav.js?v=20260810navhover"></script>
+    <script>
+        // ===================== STATE =====================
+        let currentStaffId = null;
+        let currentScheduleDate = new Date();
+        let selectedAppointmentId = null;
+        let pinModalCallback = null;
+        let perfDetail = { stat: 'appointments', period: 'month' };
+        let bookSelectedClientId = null;
+
+        const STATUS_COLORS = (typeof ApptStatus !== 'undefined' && ApptStatus.colorMap) ? ApptStatus.colorMap() : {
+                booked: '#3b82f6', confirmed: '#3b82f6', late: '#ef4444',
+                checkedin: '#4ade80', queued: '#4ade80',
+                underway: '#60a5fa', waiting: '#60a5fa', 'in-progress': '#60a5fa',
+                checkout: '#fb923c', ready: '#fb923c',
+                processing: '#16a34a', complete: '#ffe566', completed: '#ffe566',
+                cancelled: '#dc2626', noshow: '#dc2626', pending: '#f87171'
+            };
+        function apptStatusBadge(status) {
+            if (typeof ApptStatus !== 'undefined' && ApptStatus.badgeHtml) return ApptStatus.badgeHtml(status);
+            const color = STATUS_COLORS[status] || '#9ca3af';
+            const label = status === 'pending' ? 'awaiting approval' : status;
+            return `<span class="badge" style="background:${color}20; color:${color};">${label}</span>`;
+        }
+
+        /** Strict self-only match (IDs may be number or string across sync). */
+        function isOwnStaffId(id) {
+            if (currentStaffId == null || id == null) return false;
+            return String(currentStaffId) === String(id);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                var h = (location.hash || '').replace(/^#/, '');
+                if (h === 'myschedule' || h === 'schedule') {
+                    setTimeout(function(){ if (typeof showPage === 'function') showPage('myschedule'); }, 0);
+                }
+            } catch (e) {}
+            window.addEventListener('hashchange', function() {
+                var h2 = (location.hash || '').replace(/^#/, '');
+                if (h2 && typeof showPage === 'function') showPage(h2 === 'schedule' ? 'myschedule' : h2);
+            });
+
+            updateClock();
+            setInterval(updateClock, 1000);
+            populateTaxYears();
+            populateBookServices();
+            DataManager.addListener((type) => {
+                if (type === 'data' || type === 'staff') refreshAllViews();
+            });
+            window.addEventListener('unb:staff-changed', function () {
+                try { refreshAllViews(); } catch (e) {}
+            });
+            refreshAllViews();
+
+            // Close the notification panel when clicking anywhere else
+            document.addEventListener('click', (e) => {
+                const panel = document.getElementById('notifPanel');
+                const bell = document.getElementById('notifBell');
+                if (panel && panel.style.display !== 'none' &&
+                    !panel.contains(e.target) && !bell || !bell.contains(e.target)) {
+                    panel.style.display = 'none';
+                }
+            });
+
+            // At closing time, remind the logged-in tech about appointments
+            // still marked as booked (checks every 15 min)
+            setInterval(checkUncompletedReminder, 15 * 60 * 1000);
+        });
+
+        // ===================== HELPERS =====================
+        function esc(s) {
+            return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function me() { return currentStaffId ? DataManager.getStaff(currentStaffId) : null; }
+
+        function myAppointments() {
+            if (!currentStaffId) return [];
+            // Self-only: never expose other technicians' appointments
+            return (DataManager.data.appointments || []).filter(a => isOwnStaffId(a.staffId));
+        }
+
+        // Full per-service list for an appointment (synced from the Scheduler),
+        // falling back to the single serviceId + total price.
+        function apptServices(a) {
+            if (Array.isArray(a.services) && a.services.length > 0) {
+                return a.services.map(s => ({ name: s.name || 'Service', price: s.price || 0 }));
+            }
+            const svc = DataManager.getServices().find(s => s.id === a.serviceId);
+            return [{ name: svc ? svc.name : 'Service', price: a.price || 0 }];
+        }
+
+        function apptClientName(a) {
+            const c = a.clientId ? DataManager.getClient(a.clientId) : null;
+            if (c) return `${c.firstName || ''} ${c.lastName || ''}`.trim() || 'Client';
+            return a.clientName || (a.isWalkIn ? 'Walk-In' : 'Client');
+        }
+
+        function dateStr(d) {
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        function parseLocalDate(value) {
+            if (value instanceof Date) return new Date(value.getFullYear(), value.getMonth(), value.getDate());
+            const s = String(value || '');
+            if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+                const p = s.split('-');
+                return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+            }
+            const d = new Date(s);
+            return isNaN(d.getTime()) ? new Date() : d;
+        }
+
+        function formatDayStamp(value) {
+            const d = parseLocalDate(value);
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            return days[d.getDay()] + ' ' + mm + '-' + dd + '-' + d.getFullYear();
+        }
+
+        function formatScheduleHeading(value) {
+            const d = parseLocalDate(value);
+            const stamp = formatDayStamp(d);
+            return dateStr(d) === Utils.today() ? ('Today ' + stamp) : stamp;
+        }
+
+        function formatApptStamp(dateVal, timeVal) {
+            const time = (typeof Utils !== 'undefined' && Utils.formatTime) ? Utils.formatTime(timeVal) : (timeVal || '');
+            return formatDayStamp(dateVal) + (time && time !== '-' ? (' @' + time) : '');
+        }
+
+        // Date range for a performance period: {start, end} inclusive (YYYY-MM-DD)
+        function periodRange(period) {
+            const today = Utils.today();
+            if (period === 'day') return { start: today, end: today };
+            if (period === 'week') {
+                const now = new Date();
+                const start = new Date(now); start.setDate(now.getDate() - now.getDay());
+                return { start: dateStr(start), end: today };
+            }
+            if (period === 'month') return { start: today.slice(0, 7) + '-01', end: today };
+            return { start: today.slice(0, 4) + '-01-01', end: today };
+        }
+
+        function periodLabel(period) {
+            return { day: 'Today', week: 'This Week', month: 'This Month', year: 'This Year' }[period] || period;
+        }
+
+        function showPage(page) {
+            document.querySelectorAll('.page-content').forEach(p => p.style.display = 'none');
+            const pageEl = document.getElementById(page + 'Page');
+            if (pageEl) pageEl.style.display = 'block';
+            UI.setActiveSidebar(page);
+            refreshAllViews();
+        }
+
+        function refreshAllViews() {
+            renderMySchedule();
+            renderUpcoming();
+            renderMyTimeOff();
+            renderMyClients(((document.getElementById('clientSearch')||{}).value) || '');
+            renderTimeClock();
+            renderPerformance();
+            renderMyPay();
+            renderTaxDoc();
+            renderNotifications();
+        }
+
+        function requireLogin(containerId) {
+            const el = document.getElementById(containerId);
+            if (el) el.innerHTML = '<p style="text-align:center; padding:40px; color:var(--text-secondary);">Please log in with your staff PIN</p>';
+        }
+
+        // ===================== NOTIFICATIONS =====================
+        function renderNotifications() {
+            const bell = document.getElementById('notifBell');
+            const badge = document.getElementById('notifBadge');
+            const list = document.getElementById('notifList');
+            if (!bell) return;
+
+            if (!currentStaffId) {
+                bell.style.display = 'none';
+                return;
+            }
+            bell.style.display = 'inline-flex';
+
+            const notifs = DataManager.getNotificationsFor(currentStaffId);
+            const unread = notifs.filter(n => !n.read).length;
+            badge.style.display = unread > 0 ? 'block' : 'none';
+            badge.textContent = unread;
+
+            if (notifs.length === 0) {
+                list.innerHTML = '<p style="padding:20px; text-align:center; color:var(--text-secondary); font-size:0.85rem;">No notifications yet</p>';
+                return;
+            }
+
+            list.innerHTML = notifs.slice(0, 30).map(n => `
+                <div style="padding:10px 14px; border-bottom:1px solid var(--border-color); font-size:0.85rem; ${n.read ? 'opacity:0.55;' : 'background:rgba(255,229,102,0.06);'}">
+                    <div>${n.message}</div>
+                    <div style="color:var(--text-muted); font-size:0.7rem; margin-top:4px;">${new Date(n.timestamp).toLocaleString()}</div>
+                </div>
+            `).join('');
+        }
+
+        function toggleNotifications() {
+            const panel = document.getElementById('notifPanel');
+            if (panel.style.display === 'none') {
+                renderNotifications();
+                panel.style.display = 'block';
+                // Mark as read once opened, then clear the badge
+                DataManager.markNotificationsRead(currentStaffId);
+                setTimeout(renderNotifications, 300);
+            } else {
+                panel.style.display = 'none';
+            }
+        }
+
+        // ===================== DAILY REMINDER =====================
+        // Local-time timestamp (YYYY-MM-DDTHH:MM:SS) — timezone-safe for
+        // date-based reminder deduping
+        function localTimestamp(d) {
+            const p = n => String(n).padStart(2, '0');
+            return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+        }
+
+        // The first time a staff member logs in each day, they get a morning
+        // alert summarizing today's appointments (sent once per day only)
+        function sendDailyReminder(staffId) {
+            if (!staffId) return;
+            const today = Utils.today();
+
+            // Already reminded today? Don't send again
+            const alreadySent = DataManager.data.notifications.some(n =>
+                n.staffId === staffId &&
+                n.type === 'daily_reminder' &&
+                (n.timestamp || '').startsWith(today)
+            );
+            if (alreadySent) return;
+
+            const appts = DataManager.getAppointments(today).filter(a => String(a.staffId) === String(staffId));
+
+            if (appts.length === 0) {
+                DataManager.notifyStaffMember(staffId, 'daily_reminder',
+                    'Good morning! You have no appointments booked today.');
+                return;
+            }
+
+            const upcoming = appts.filter(a => a.status !== 'complete' && a.status !== 'cancelled');
+            const done = appts.filter(a => a.status === 'complete');
+            const first = [...upcoming].sort((a, b) => a.time.localeCompare(b.time))[0];
+
+            DataManager.notifyStaffMember(staffId, 'daily_reminder',
+                `Good morning! You have ${appts.length} appointment${appts.length > 1 ? 's' : ''} today — ${upcoming.length} upcoming, ${done.length} completed.` +
+                (first ? ` First up at ${Utils.formatTime(first.time)}.` : ''));
+        }
+
+        // ===================== UNCOMPLETED APPOINTMENTS REMINDER =====================
+        // At closing time, if the logged-in tech still has appointments today
+        // that were never marked complete or cancelled, remind them to wrap up
+        function checkUncompletedReminder(nowOverride) {
+            if (!currentStaffId) return; // only when someone's logged in
+            const cfg = DataManager.getReminderSettings();
+            if (!cfg.uncompletedEnabled) return;
+            const now = nowOverride || new Date();
+            const [ch, cm] = (DataManager.settings.closeTime || '19:00').split(':').map(Number);
+            const closeMinutes = ch * 60 + (cm || 0);
+            const nowMinutes = now.getHours() * 60 + now.getMinutes();
+            if (nowMinutes < closeMinutes) return; // not closing time yet
+
+            const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+            const open = (DataManager.data.appointments || []).filter(a =>
+                isOwnStaffId(a.staffId) &&
+                a.date === today &&
+                !['complete', 'cancelled', 'noshow'].includes(a.status)
+            );
+            if (open.length === 0) return;
+
+            // Only one reminder per day
+            const alreadySent = (DataManager.data.notifications || []).some(n =>
+                n.staffId === currentStaffId &&
+                n.type === 'uncompleted_reminder' &&
+                (n.timestamp || '').startsWith(today)
+            );
+            if (alreadySent) return;
+
+            DataManager.notifyStaffMember(currentStaffId, 'uncompleted_reminder',
+                `⚠ It's past closing time and you still have ${open.length} appointment${open.length > 1 ? 's' : ''} today marked as booked. Please mark them complete, or ask a manager to cancel them, before closeout.`,
+                localTimestamp(now));
+        }
+
+        // ===================== LOGIN =====================
+        // Identity is established by SalonAuth.guardPage (PIN gate). After unlock,
+        // applyStaffSession maps the shared session onto this page's dashboard.
+        function applyStaffSession(user) {
+            user = user || (typeof SalonAuth !== 'undefined' ? SalonAuth.current() : null);
+            const nameEl = document.getElementById('currentUserName');
+
+            if (user && user.staffId != null) {
+                currentStaffId = user.staffId;
+                const staff = DataManager.getStaff(currentStaffId);
+                const label = (staff && staff.name) || user.name || 'Staff';
+                if (nameEl) {
+                    nameEl.textContent = label;
+                    nameEl.style.color = 'var(--primary)';
+                }
+                sendDailyReminder(currentStaffId);
+                checkUncompletedReminder();
+                refreshAllViews();
+                // Prompt to clock in right after login if still clocked out
+                const staffRec = DataManager.getStaff(currentStaffId);
+                if (staffRec && !staffRec.isClockedIn) {
+                    setTimeout(() => {
+                        if (currentStaffId && me() && !me().isClockedIn) {
+                            UI.toast('Welcome! Tap Clocked In on My Schedule to start your shift.', 'info');
+                        }
+                    }, 400);
+                }
+                return;
+            }
+
+            // Master admin/manager PIN unlocked the page but has no staff record —
+            // prompt for a personal staff PIN so the dashboard can load.
+            currentStaffId = null;
+            if (nameEl) {
+                nameEl.textContent = user ? (user.name + ' — enter staff PIN') : 'Not logged in';
+                nameEl.style.color = 'var(--text-secondary)';
+            }
+            refreshAllViews();
+            if (user && !user.staffId && document.getElementById('loginModal')) {
+                const err = document.getElementById('loginError');
+                if (err) {
+                    err.textContent = 'Enter your personal staff PIN for this dashboard';
+                    err.style.display = 'block';
+                }
+                showModal('loginModal');
+            }
+        }
+
+        function clearStaffSession(silent) {
+            currentStaffId = null;
+            const nameEl = document.getElementById('currentUserName');
+            if (nameEl) {
+                nameEl.textContent = 'Not logged in';
+                nameEl.style.color = 'var(--text-secondary)';
+            }
+            if (!silent) UI.toast('Logged out', 'info');
+            refreshAllViews();
+        }
+
+        // Kept for the legacy login modal (master-PIN → personal staff PIN).
+        function doLogin() {
+            const pinEl = document.getElementById('pinInput');
+            const errEl = document.getElementById('loginError');
+            const pin = (pinEl && pinEl.value || '').trim();
+            const staff = (DataManager.getStaff() || []).find(s => {
+                if (!s || String(s.pin || '') !== pin) return false;
+                const st = String(s.status || 'active').toLowerCase();
+                return st !== 'inactive' && st !== 'deleted';
+            });
+            if (!staff) {
+                if (errEl) {
+                    errEl.textContent = 'Invalid staff PIN';
+                    errEl.style.display = 'block';
+                }
+                if (pinEl) pinEl.value = '';
+                return;
+            }
+            const result = SalonAuth.login(pin);
+            if (!result.success) {
+                if (errEl) {
+                    errEl.textContent = result.message || 'Invalid staff PIN';
+                    errEl.style.display = 'block';
+                }
+                if (pinEl) pinEl.value = '';
+                return;
+            }
+            if (errEl) errEl.style.display = 'none';
+            if (pinEl) pinEl.value = '';
+            hideModal('loginModal');
+            // Refresh the auth chip so it shows the staff member, not a master PIN
+            if (SalonAuth._chipEl) {
+                SalonAuth._chipEl.remove();
+                SalonAuth._chipEl = null;
+            }
+            SalonAuth.syncLegacyAuth();
+            if (SalonAuth._guardRoles) SalonAuth._showChip(SalonAuth._guardRoles);
+            applyStaffSession(SalonAuth.current());
+            if (window.AppNav && typeof AppNav.remount === 'function') AppNav.remount();
+            UI.toast(`Welcome, ${staff.name}!`, 'success');
+        }
+
+        function logout() {
+            clearStaffSession();
+            if (typeof SalonAuth !== 'undefined') {
+                SalonAuth.logout();
+                if (SalonAuth._guardRoles) {
+                    SalonAuth._relock(SalonAuth._guardRoles, SalonAuth._guardOpts || {});
+                }
+            }
+        }
+
+        // ===================== MANAGER PIN GATE =====================
+        // Every sensitive staff action (complete/cancel/override) goes through
+        // this modal: a manager or admin must enter THEIR OWN pin to approve.
+        function requireManagerPin(title, message, onApproved) {
+            pinModalCallback = onApproved;
+            document.getElementById('pinModalTitle').textContent = title || 'Manager Approval Required';
+            document.getElementById('pinModalMessage').textContent = message || 'A manager or admin must enter their PIN to approve this action.';
+            document.getElementById('managerPinInput').value = '';
+            document.getElementById('pinModalError').style.display = 'none';
+            showModal('pinModal');
+        }
+
+        function submitManagerPin() {
+            const pin = document.getElementById('managerPinInput').value.trim();
+            if (!Auth.verifyPin(pin, 'manager')) {
+                document.getElementById('pinModalError').style.display = 'block';
+                document.getElementById('managerPinInput').value = '';
+                return;
+            }
+            const approver = pin === DataManager.settings.adminPin ? 'admin' : 'manager';
+            hideModal('pinModal');
+            const cb = pinModalCallback;
+            pinModalCallback = null;
+            if (cb) cb(approver);
+        }
+
+        // ===================== MY SCHEDULE =====================
+        function renderMySchedule() {
+            if (!currentStaffId) { requireLogin('myAppointmentsList'); return; }
+            const dStr = dateStr(currentScheduleDate);
+            document.getElementById('scheduleDate').textContent = formatScheduleHeading(currentScheduleDate);
+
+            const appts = DataManager.getAppointments(dStr).filter(a => isOwnStaffId(a.staffId));
+            const container = document.getElementById('myAppointmentsList');
+
+            // Today's progress chip: "3 of 5 done", green check when clear to leave
+            const progressEl = document.getElementById('scheduleProgress');
+            if (progressEl) {
+                if (appts.length === 0) {
+                    progressEl.innerHTML = '';
+                } else {
+                    const doneCount = appts.filter(a => a.status === 'complete').length;
+                    const openCount = appts.filter(a => !['complete', 'cancelled', 'noshow'].includes(a.status)).length;
+                    progressEl.innerHTML = openCount === 0
+                        ? `<span style="background:rgba(16,185,129,0.15); border:1px solid var(--success); color:var(--success); font-weight:700; font-size:0.85rem; padding:6px 14px; border-radius:20px;"><i class="fas fa-check-circle"></i> ${doneCount} of ${appts.length} done — all clear!</span>`
+                        : `<span style="background:rgba(255,229,102,0.1); border:1px solid var(--border-color); color:var(--text-secondary); font-weight:700; font-size:0.85rem; padding:6px 14px; border-radius:20px;">${doneCount} of ${appts.length} done</span>`;
+                }
+            }
+
+            if (appts.length === 0) {
+                container.innerHTML = '<p style="text-align:center; padding:40px; color:#ffe566; font-weight:700;">No appointments booked for this day</p>';
+                return;
+            }
+
+            container.innerHTML = appts.map(a => {
+                const client = a.clientId ? DataManager.getClient(a.clientId) : null;
+                const services = apptServices(a);
+                const totalDuration = a.duration || 30;
+                const color = STATUS_COLORS[a.status] || STATUS_COLORS[(typeof ApptStatus !== 'undefined' ? ApptStatus.normalize(a.status) : a.status)] || '#9ca3af';
+                return `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:16px; border:1px solid var(--border-color); border-radius:var(--radius-md); margin-bottom:8px; cursor:pointer; transition:all 0.2s;"
+                         onmouseover="this.style.borderColor='var(--primary)'"
+                         onmouseout="this.style.borderColor='var(--border-color)'"
+                         onclick="showAppointmentDetail(${a.id})">
+                        <div style="display:flex; align-items:center; gap:16px;">
+                            <div style="width:70px; text-align:center;">
+                                <div style="font-size:1.3rem; font-weight:800; color:var(--primary);">${Utils.formatTime(a.time)}</div>
+                                <div style="font-size:0.75rem; color:var(--text-muted);">${Utils.formatDuration(totalDuration)}</div>
+                            </div>
+                            <div>
+                                <div style="font-weight:700; font-size:1.1rem;">${esc(apptClientName(a))}${(typeof Utils !== 'undefined' && Utils.partyBadgeHtml) ? Utils.partyBadgeHtml(a) : ''}${a.isWalkIn ? ' <span class="badge" style="background:#8b5cf620; color:#8b5cf6;">walk-in</span>' : ''}</div>
+                                <div style="color:var(--text-secondary); font-size:0.9rem;">${services.map(s => esc(s.name)).join(' + ')}</div>
+                                ${(client&&client.phone) ? `<div style="color:var(--text-muted); font-size:0.8rem; margin-top:4px;"><i class="fas fa-phone"></i> ${Utils.formatPhone(client.phone)}</div>` : ''}
+                                ${(client&&client.email) ? `<div style="color:var(--text-muted); font-size:0.8rem;"><i class="fas fa-envelope"></i> ${esc(client.email)}</div>` : ''}
+                            </div>
+                        </div>
+                        <div style="text-align:right;">
+                            ${apptStatusBadge(a.status)}
+                            <div style="font-size:1.2rem; font-weight:700; color:var(--primary); margin-top:8px;">${Utils.formatCurrency(a.price)}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderUpcoming() {
+            const container = document.getElementById('upcomingList');
+            if (!currentStaffId) { container.innerHTML = ''; return; }
+            const today = Utils.today();
+            const end = new Date(); end.setDate(end.getDate() + 7);
+            const endStr = dateStr(end);
+            const upcoming = myAppointments()
+                .filter(a => a.date > today && a.date <= endStr && a.status !== 'cancelled')
+                .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+
+            if (upcoming.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:16px;">No upcoming appointments</p>';
+                return;
+            }
+            container.innerHTML = upcoming.map(a => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border-color); cursor:pointer;" onclick="showAppointmentDetail(${a.id})">
+                    <div>
+                        <strong>${esc(apptClientName(a))}${(typeof Utils !== 'undefined' && Utils.partyBadgeHtml) ? Utils.partyBadgeHtml(a) : ''}</strong>
+                        <span style="color:var(--text-secondary); font-size:0.85rem;"> · ${apptServices(a).map(s => esc(s.name)).join(' + ')}</span>
+                    </div>
+                    <div style="text-align:right; font-size:0.85rem;">
+                        <div style="color:var(--primary); font-weight:700; letter-spacing:0.2px;">${formatApptStamp(a.date, a.time)}</div>
+                        ${apptStatusBadge(a.status)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function changeScheduleDate(days) {
+            currentScheduleDate.setDate(currentScheduleDate.getDate() + days);
+            renderMySchedule();
+        }
+
+        function goToTodaySchedule() {
+            currentScheduleDate = new Date();
+            renderMySchedule();
+        }
+
+        function showAppointmentDetail(apptId) {
+            const appt = DataManager.getAppointment(apptId);
+            if (!appt || !isOwnStaffId(appt.staffId)) return; // staff can only open their own
+            selectedAppointmentId = apptId;
+            const client = appt.clientId ? DataManager.getClient(appt.clientId) : null;
+            const services = apptServices(appt);
+
+            document.getElementById('apptDetailContent').innerHTML = `
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                    <div>
+                        <label class="form-label">Client</label>
+                        <p style="font-size:1.1rem; font-weight:600;">${esc(apptClientName(appt))}${(typeof Utils !== 'undefined' && Utils.partyBadgeHtml) ? Utils.partyBadgeHtml(appt) : ''}</p>
+                    </div>
+                    <div>
+                        <label class="form-label">Service(s)</label>
+                        <p style="font-size:1.05rem; font-weight:600;">${services.map(s => `${esc(s.name)} (${Utils.formatCurrency(s.price)})`).join('<br>')}</p>
+                    </div>
+                    <div>
+                        <label class="form-label">Date &amp; Time</label>
+                        <p style="font-size:1.05rem; font-weight:600;">${Utils.formatDate(appt.date)} at ${Utils.formatTime(appt.time)}</p>
+                    </div>
+                    <div>
+                        <label class="form-label">Total Price</label>
+                        <p style="font-size:1.05rem; font-weight:600; color:var(--primary);">${Utils.formatCurrency(appt.price)}</p>
+                    </div>
+                    <div>
+                        <label class="form-label">Status</label>
+                        <p>${apptStatusBadge(appt.status)}</p>
+                    </div>
+                    <div>
+                        <label class="form-label">Phone</label>
+                        <p style="font-size:1.05rem; font-weight:600;">${(client&&client.phone) ? Utils.formatPhone(client.phone) : '-'}</p>
+                    </div>
+                </div>
+                ${(client&&client.email) ? `<div style="margin-top:12px;"><label class="form-label">Email</label><p>${esc(client.email)}</p></div>` : ''}
+                ${appt.notes ? `<div style="margin-top:12px;"><label class="form-label">Notes</label><p>${esc(appt.notes)}</p></div>` : ''}
+            `;
+
+            // Footer buttons: staff edits require a manager/admin PIN override.
+            const isPending = appt.status === 'pending';
+            const isDone = appt.status === 'complete' || appt.status === 'cancelled';
+            document.getElementById('apptCompleteBtn').style.display = (!isPending && !isDone) ? 'inline-flex' : 'none';
+            document.getElementById('apptCancelBtn').style.display = isDone ? 'none' : 'inline-flex';
+            document.getElementById('apptCancelBtn').innerHTML = isPending ? '<i class="fas fa-times"></i> Withdraw Request' : '<i class="fas fa-ban"></i> Cancel Appointment';
+            showModal('apptDetailModal');
+        }
+
+        function markComplete() {
+            if (!selectedAppointmentId) return;
+            const apptId = selectedAppointmentId;
+            requireManagerPin(
+                'Approve Completion',
+                'Marking an appointment complete requires a manager or admin PIN.',
+                (approver) => {
+                    DataManager.updateAppointment(apptId, { status: 'complete', completedBy: ((me()||{}).name) || '', approvedBy: approver });
+                    DataManager.logAudit('appointment_completed', `Appointment #${apptId} marked complete by ${((me()||{}).name) || 'staff'}, approved by ${approver}.`);
+                    DataManager.saveData();
+                    UI.toast('Appointment marked as complete', 'success');
+                    hideModal('apptDetailModal');
+                    refreshAllViews();
+                }
+            );
+        }
+
+        function cancelSelectedAppointment() {
+            if (!selectedAppointmentId) return;
+            const apptId = selectedAppointmentId;
+            const appt = DataManager.getAppointment(apptId);
+            if (!appt) return;
+
+            // A staff member may withdraw their own still-pending request freely;
+            // cancelling a real appointment needs a manager/admin PIN.
+            if (appt.status === 'pending') {
+                DataManager.deleteAppointment(apptId, ((me()||{}).name) || 'staff');
+                UI.toast('Appointment request withdrawn', 'info');
+                hideModal('apptDetailModal');
+                refreshAllViews();
+                return;
+            }
+            requireManagerPin(
+                'Approve Cancellation',
+                'Cancelling an appointment requires a manager or admin PIN.',
+                (approver) => {
+                    DataManager.updateAppointment(apptId, { status: 'cancelled', cancelledBy: ((me()||{}).name) || '', approvedBy: approver });
+                    DataManager.logAudit('appointment_cancelled', `Appointment #${apptId} cancelled by ${((me()||{}).name) || 'staff'}, approved by ${approver}.`);
+                    DataManager.saveData();
+                    UI.toast('Appointment cancelled', 'info');
+                    hideModal('apptDetailModal');
+                    refreshAllViews();
+                }
+            );
+        }
+
+        // ===================== BOOK APPOINTMENT (needs manager approval) =====================
+        function populateBookServices() {
+            const sel = document.getElementById('bookService');
+            if (!sel) return;
+            sel.innerHTML = (DataManager.getServices() || [])
+                .map(s => `<option value="${s.id}">${esc(s.name)} · ${Utils.formatCurrency(s.price)}</option>`)
+                .join('');
+        }
+
+        function openBookModal() {
+            if (!currentStaffId) { UI.toast('Please log in first', 'warning'); return; }
+            bookSelectedClientId = null;
+            document.getElementById('bookClientSearch').value = '';
+            document.getElementById('bookClientResults').innerHTML = '';
+            document.getElementById('bookSelectedClient').innerHTML = '';
+            document.getElementById('bookNewClientBox').style.display = 'none';
+            document.getElementById('bookNewFirst').value = '';
+            document.getElementById('bookNewLast').value = '';
+            document.getElementById('bookNewPhone').value = '';
+            document.getElementById('bookNewEmail').value = '';
+            document.getElementById('bookDate').value = Utils.today();
+            document.getElementById('bookTime').value = '';
+            document.getElementById('bookNotes').value = '';
+            populateBookServices();
+            showModal('bookApptModal');
+        }
+
+        // Search ONLY this staff member's own clients (same fields as My Clients)
+        function bookClientSearchChanged() {
+            const term = document.getElementById('bookClientSearch').value.toLowerCase().trim();
+            const box = document.getElementById('bookClientResults');
+            bookSelectedClientId = null;
+            document.getElementById('bookSelectedClient').innerHTML = '';
+            if (!term) { box.innerHTML = ''; document.getElementById('bookNewClientBox').style.display = 'none'; return; }
+
+            const matches = myClients().filter(c => clientMatches(c, term));
+            const digits = term.replace(/\D/g, '');
+            let html = matches.slice(0, 5).map(c => `
+                <div style="padding:8px 12px; border:1px solid var(--border-color); border-radius:var(--radius-md); margin-bottom:6px; cursor:pointer;"
+                     onclick="pickBookClient(${c.id})">
+                    <strong>${esc(c.firstName)} ${esc(c.lastName)}</strong>
+                    <span style="color:var(--text-secondary); font-size:0.85rem;"> · ${c.phone ? Utils.formatPhone(c.phone) : ''} ${c.email ? ' · ' + esc(c.email) : ''}</span>
+                </div>
+            `).join('');
+            html += `<div style="padding:8px 12px; border:1px dashed var(--primary); border-radius:var(--radius-md); cursor:pointer; color:var(--primary);"
+                     onclick="document.getElementById('bookNewClientBox').style.display='block'">
+                <i class="fas fa-user-plus"></i> Add as a new client${digits ? ` (${esc(term)})` : ''}
+            </div>`;
+            box.innerHTML = html;
+        }
+
+        function pickBookClient(id) {
+            bookSelectedClientId = id;
+            const c = DataManager.getClient(id);
+            if (!c) return;
+            document.getElementById('bookClientResults').innerHTML = '';
+            document.getElementById('bookNewClientBox').style.display = 'none';
+            const label = ((c.firstName || '') + ' ' + (c.lastName || '')).trim();
+            const search = document.getElementById('bookClientSearch');
+            if (search) search.value = label;
+            const selBox = document.getElementById('bookSelectedClient');
+            if (selBox) selBox.innerHTML = '';
+        }
+
+        function pickBookClientClear() {
+            bookSelectedClientId = null;
+            document.getElementById('bookSelectedClient').innerHTML = '';
+            document.getElementById('bookClientSearch').value = '';
+        }
+
+        function submitBooking() {
+            if (!currentStaffId) return;
+            const svcId = parseInt(document.getElementById('bookService').value);
+            const svc = DataManager.getServices().find(s => s.id === svcId);
+            const date = document.getElementById('bookDate').value;
+            const time = document.getElementById('bookTime').value;
+            const notes = document.getElementById('bookNotes').value.trim();
+
+            if (!svc) { UI.toast('Please pick a service', 'error'); return; }
+            if (!date) { UI.toast('Please pick a date', 'error'); return; }
+            if (!time) { UI.toast('Please pick a time', 'error'); return; }
+
+            // Resolve the client: picked existing client, or create a new one.
+            let clientId = bookSelectedClientId;
+            let clientName = '';
+            if (clientId) {
+                const c = DataManager.getClient(clientId);
+                clientName = c ? `${c.firstName} ${c.lastName}`.trim() : '';
+            } else {
+                const first = document.getElementById('bookNewFirst').value.trim();
+                const last = document.getElementById('bookNewLast').value.trim();
+                const phone = document.getElementById('bookNewPhone').value.trim();
+                const email = document.getElementById('bookNewEmail').value.trim();
+                if (!first && !last) { UI.toast('Pick one of your clients or add a new client', 'error'); return; }
+                // If this phone already exists in the salon records, attach to it
+                // instead of creating a duplicate.
+                const phoneDigits = phone.replace(/\D/g, '');
+                const existing = phoneDigits
+                    ? (DataManager.getClients() || []).find(c => (c.phone || '').replace(/\D/g, '') === phoneDigits)
+                    : null;
+                if (existing) {
+                    clientId = existing.id;
+                    clientName = `${existing.firstName} ${existing.lastName}`.trim();
+                } else {
+                    const created = DataManager.addClient({ firstName: first, lastName: last, phone, email });
+                    clientId = created.id;
+                    clientName = `${first} ${last}`.trim();
+                }
+            }
+
+            const staffName = ((me()||{}).name) || '';
+            const appt = DataManager.addAppointment({
+                clientId,
+                clientName,
+                staffId: currentStaffId,
+                serviceId: svc.id,
+                date,
+                time,
+                duration: svc.duration || 30,
+                price: svc.price || 0,
+                status: 'pending',
+                source: 'staff',
+                needsApproval: true,
+                requestedBy: staffName,
+                notes
+            });
+            DataManager.logAudit('appointment_requested', `${staffName} requested an appointment for ${clientName} (${svc.name}) on ${date} at ${time}. Awaiting manager approval.`);
+            DataManager.saveData();
+            hideModal('bookApptModal');
+            UI.toast('Appointment submitted — a manager or admin will approve it', 'success');
+            refreshAllViews();
+        }
+
+        // ===================== TIME OFF =====================
+        function timeOffToMinutes(t) {
+            const parts = String(t || '').split(':');
+            const h = parseInt(parts[0], 10);
+            const m = parseInt(parts[1], 10);
+            if (isNaN(h)) return null;
+            return h * 60 + (isNaN(m) ? 0 : m);
+        }
+
+        function timeOffFromMinutes(total) {
+            const wrap = ((total % 1440) + 1440) % 1440;
+            return String(Math.floor(wrap / 60)).padStart(2, '0') + ':' + String(wrap % 60).padStart(2, '0');
+        }
+
+        function nextHalfHourValue() {
+            const d = new Date();
+            const add = 30 - (d.getMinutes() % 30 || 30);
+            d.setMinutes(d.getMinutes() + add, 0, 0);
+            return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+        }
+
+        function timeOffHoursForDate(dateStr) {
+            const raw = dateStr || ((document.getElementById('timeOffStepDate') || {}).value) || (Utils && Utils.today ? Utils.today() : '');
+            let day = new Date().getDay();
+            if (raw) {
+                const parts = String(raw).split('-').map(Number);
+                if (parts.length === 3 && !parts.some(n => Number.isNaN(n))) {
+                    day = new Date(parts[0], parts[1] - 1, parts[2]).getDay();
+                }
+            }
+            const isSun = day === 0;
+            const st = (typeof DataManager !== 'undefined' && DataManager.settings) ? DataManager.settings : {};
+            const open = isSun ? (st.sunOpenTime || '11:00') : (st.openTime || '09:30');
+            const close = isSun ? (st.sunCloseTime || '17:00') : (st.closeTime || '18:30');
+            return {
+                startMins: timeOffToMinutes(open),
+                endMins: timeOffToMinutes(close),
+                isSun: isSun
+            };
+        }
+
+        function fillTimeOffSelects() {
+            const startSel = document.getElementById('timeOffStartTime');
+            const endSel = document.getElementById('timeOffEndTime');
+            if (!startSel || !endSel) return;
+            const prevS = startSel.value;
+            const prevE = endSel.value;
+            const hours = timeOffHoursForDate();
+            let startMins = hours.startMins != null ? hours.startMins : (9 * 60 + 30);
+            let endMins = hours.endMins != null ? hours.endMins : (18 * 60 + 30);
+            if (!(endMins > startMins)) endMins = startMins + 8 * 60;
+            let html = '<option value="">Select time</option>';
+            for (let mins = startMins; mins <= endMins; mins += 30) {
+                const t = timeOffFromMinutes(mins);
+                const label = (Utils && Utils.formatTime) ? Utils.formatTime(t) : t;
+                html += '<option value="' + t + '">' + label + '</option>';
+            }
+            startSel.innerHTML = html;
+            endSel.innerHTML = html;
+            if (prevS && Array.from(startSel.options).some(o => o.value === prevS)) startSel.value = prevS;
+            if (prevE && Array.from(endSel.options).some(o => o.value === prevE)) endSel.value = prevE;
+            syncTimeOffEndFromStart();
+        }
+
+        function syncTimeOffEndFromStart() {
+            const hidden = document.getElementById('timeOffDuration');
+            const mins = Number(hidden && hidden.value);
+            const startSel = document.getElementById('timeOffStartTime');
+            const endSel = document.getElementById('timeOffEndTime');
+            if (!startSel || !endSel || !startSel.value) return;
+            if (mins !== 30 && mins !== 60 && mins !== 120) return;
+            const next = timeOffFromMinutes(timeOffToMinutes(startSel.value) + mins);
+            if (Array.from(endSel.options).some(o => o.value === next)) endSel.value = next;
+        }
+
+        function toggleTimeOffCustomType() {
+            const typeEl = document.getElementById('timeOffType');
+            const wrap = document.getElementById('timeOffCustomWrap');
+            if (wrap) wrap.style.display = (typeEl && typeEl.value === 'custom') ? 'block' : 'none';
+            const hidden = document.getElementById('timeOffDuration');
+            if (typeEl && typeEl.value === 'step-out' && hidden && hidden.value === 'full') {
+                setTimeOffDuration(30);
+            }
+        }
+
+        function setTimeOffDuration(mins) {
+            const hidden = document.getElementById('timeOffDuration');
+            if (hidden) hidden.value = String(mins);
+            document.querySelectorAll('#timeOffDurRow .timeoff-dur-btn').forEach(btn => {
+                btn.classList.toggle('active', String(btn.getAttribute('data-mins')) === String(mins));
+            });
+            const isStep = mins === 30 || mins === 60 || mins === 120 || mins === '30' || mins === '60' || mins === '120';
+            const fullWrap = document.getElementById('timeOffFullWrap');
+            const stepWrap = document.getElementById('timeOffStepWrap');
+            if (fullWrap) fullWrap.style.display = isStep ? 'none' : 'grid';
+            if (stepWrap) stepWrap.style.display = isStep ? 'block' : 'none';
+            const typeEl = document.getElementById('timeOffType');
+            if (typeEl && isStep && (typeEl.value === 'vacation' || typeEl.value === 'sick')) {
+                typeEl.value = 'step-out';
+            }
+            if (typeEl && !isStep && typeEl.value === 'step-out') {
+                typeEl.value = 'vacation';
+            }
+            if (isStep) {
+                fillTimeOffSelects();
+                const startSel = document.getElementById('timeOffStartTime');
+                if (startSel && !startSel.value) {
+                    const next = nextHalfHourValue();
+                    if (Array.from(startSel.options).some(o => o.value === next)) startSel.value = next;
+                    else if (startSel.options.length > 1) startSel.selectedIndex = 1;
+                }
+                syncTimeOffEndFromStart();
+            }
+            toggleTimeOffCustomType();
+        }
+
+        function openTimeOffModal() {
+            if (!currentStaffId) { UI.toast('Please log in first', 'warning'); return; }
+            const today = Utils.today();
+            document.getElementById('timeOffStart').value = today;
+            document.getElementById('timeOffEnd').value = today;
+            const stepDate = document.getElementById('timeOffStepDate');
+            if (stepDate) stepDate.value = today;
+            fillTimeOffSelects();
+            document.getElementById('timeOffReason').value = '';
+            const typeEl = document.getElementById('timeOffType');
+            if (typeEl) typeEl.value = 'vacation';
+            const customEl = document.getElementById('timeOffCustomType');
+            if (customEl) customEl.value = '';
+            setTimeOffDuration(30);
+            showModal('timeOffModal');
+        }
+
+        function submitTimeOff() {
+            if (!currentStaffId) return;
+            let type = document.getElementById('timeOffType').value;
+            if (type === 'custom') {
+                const custom = String((document.getElementById('timeOffCustomType') || {}).value || '').trim();
+                if (!custom) { UI.toast('Enter a custom leave type', 'error'); return; }
+                type = custom;
+            }
+            const durationRaw = (document.getElementById('timeOffDuration') || {}).value || 'full';
+            const isStep = durationRaw === '30' || durationRaw === '60' || durationRaw === '120';
+            const reason = document.getElementById('timeOffReason').value.trim();
+
+            if (isStep) {
+                const date = (document.getElementById('timeOffStepDate') || {}).value || document.getElementById('timeOffStart').value;
+                const startTime = (document.getElementById('timeOffStartTime') || {}).value;
+                const endTime = (document.getElementById('timeOffEndTime') || {}).value;
+                if (!date) { UI.toast('Please pick a date', 'error'); return; }
+                if (!startTime) { UI.toast('Please pick a Time off', 'error'); return; }
+                if (!endTime) { UI.toast('Please pick a Come back time', 'error'); return; }
+                const startMins = timeOffToMinutes(startTime);
+                const endMins = timeOffToMinutes(endTime);
+                if (endMins <= startMins) { UI.toast('Come back must be after Time off', 'error'); return; }
+                const mins = endMins - startMins;
+                const rangeLabel = ((Utils && Utils.formatTime) ? Utils.formatTime(startTime) : startTime)
+                    + '–' + ((Utils && Utils.formatTime) ? Utils.formatTime(endTime) : endTime);
+                DataManager.addLeaveRequest({
+                    staffId: currentStaffId,
+                    staffName: ((me()||{}).name) || '',
+                    type: type === 'vacation' ? 'step-out' : type,
+                    scope: 'partial',
+                    startDate: date,
+                    endDate: date,
+                    startTime,
+                    endTime,
+                    durationMinutes: mins,
+                    reason: reason || ('Time off ' + rangeLabel)
+                });
+                hideModal('timeOffModal');
+                UI.toast('Time-off request sent to your manager', 'success');
+                renderMyTimeOff();
+                return;
+            }
+
+            const start = document.getElementById('timeOffStart').value;
+            const end = document.getElementById('timeOffEnd').value || start;
+            if (!start) { UI.toast('Please pick a start date', 'error'); return; }
+            if (end < start) { UI.toast('End date cannot be before the start date', 'error'); return; }
+
+            DataManager.addLeaveRequest({
+                staffId: currentStaffId,
+                staffName: ((me()||{}).name) || '',
+                type,
+                scope: 'full',
+                startDate: start,
+                endDate: end,
+                reason: reason || type
+            });
+            hideModal('timeOffModal');
+            UI.toast('Time-off request sent to your manager', 'success');
+            renderMyTimeOff();
+        }
+
+        function leaveWindowLabel(r) {
+            if (DataManager.formatLeaveWindow) return DataManager.formatLeaveWindow(r);
+            return Utils.formatDate(r.startDate) + (r.endDate && r.endDate !== r.startDate ? ' → ' + Utils.formatDate(r.endDate) : '');
+        }
+
+        function renderMyTimeOff() {
+            const container = document.getElementById('myTimeOffList');
+            if (!container) return;
+            if (!currentStaffId) { container.innerHTML = ''; return; }
+            const reqs = DataManager.getLeaveRequests(currentStaffId)
+                .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+            if (reqs.length === 0) {
+                container.innerHTML = '<p style="color:#ffe566; text-align:center; padding:16px; font-weight:700;">No time-off requests yet</p>';
+                return;
+            }
+            const badgeFor = { pending: ['#f97316', 'Pending approval'], approved: ['var(--success)', 'Approved'], denied: ['var(--danger)', 'Denied'] };
+            container.innerHTML = reqs.map(r => {
+                const [color, label] = badgeFor[r.status] || ['var(--text-muted)', r.status];
+                const partial = DataManager.isPartialLeave && DataManager.isPartialLeave(r);
+                return `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border-color);">
+                        <div>
+                            <strong style="text-transform:capitalize;">${esc(partial ? (r.type === 'step-out' ? 'Quick step-out' : r.type) : r.type)}</strong>
+                            <span style="color:var(--text-secondary); font-size:0.85rem;"> — ${esc(leaveWindowLabel(r))}</span>
+                            ${r.reason ? `<div style="color:var(--text-muted); font-size:0.8rem;">${esc(r.reason)}</div>` : ''}
+                            ${r.reviewedBy ? `<div style="color:var(--text-muted); font-size:0.75rem;">reviewed by ${esc(r.reviewedBy)}</div>` : ''}
+                        </div>
+                        <span class="badge" style="background:${color}20; color:${color};">${label}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ===================== MY CLIENTS =====================
+        // Staff can ONLY see clients who have appointments with them — never the
+        // full salon client list. Search works with first name, last name, full
+        // phone, last 4 digits of the phone, or email.
+        function clientMatches(c, term) {
+            const firstName = (c.firstName || '').toLowerCase();
+            const lastName = (c.lastName || '').toLowerCase();
+            const fullName = `${firstName} ${lastName}`.trim();
+            const phone = (c.phone || '').replace(/\D/g, '');
+            const digits = term.replace(/\D/g, '');
+            const email = (c.email || '').toLowerCase();
+            return fullName.includes(term) ||
+                   firstName.includes(term) ||
+                   lastName.includes(term) ||
+                   (digits && phone.includes(digits)) ||
+                   (digits.length === 4 && phone.slice(-4) === digits) ||
+                   email.includes(term);
+        }
+
+        function myClients() {
+            if (!currentStaffId) return [];
+            const clientIds = [...new Set(myAppointments().map(a => a.clientId).filter(Boolean))];
+            return clientIds.map(id => DataManager.getClient(id)).filter(Boolean);
+        }
+
+        function renderMyClients(search = '') {
+            if (!currentStaffId) { requireLogin('myClientsList'); return; }
+            let clients = myClients();
+            const term = (search || '').toLowerCase().trim();
+            if (term) clients = clients.filter(c => clientMatches(c, term));
+
+            const container = document.getElementById('myClientsList');
+            if (clients.length === 0) {
+                container.innerHTML = `<p style="text-align:center; padding:40px; color:var(--text-secondary);">${term ? 'No clients match that search' : 'No clients yet — clients appear here after their first appointment with you'}</p>`;
+                return;
+            }
+
+            const myAppts = myAppointments();
+            container.innerHTML = `
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px;">
+                    ${clients.map(c => {
+                        const theirs = myAppts.filter(a => a.clientId === c.id);
+                        const done = theirs.filter(a => a.status === 'complete');
+                        const spent = done.reduce((sum, a) => sum + (a.price || 0), 0);
+                        const lastAppt = [...theirs].sort((a, b) => (b.date || '').localeCompare(a.date || ''))[0];
+                        return `
+                            <div class="card" style="margin-bottom:0;">
+                                <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+                                    <div style="width:48px; height:48px; border-radius:50%; background:var(--gradient-primary); display:flex; align-items:center; justify-content:center; font-weight:700; color:#000; font-size:1.2rem;">
+                                        ${Utils.getInitials((c.firstName || '') + ' ' + (c.lastName || ''))}
+                                    </div>
+                                    <div>
+                                        <div style="font-weight:700; font-size:1.1rem;">${esc(c.firstName)} ${esc(c.lastName)}</div>
+                                        <div style="color:var(--text-secondary); font-size:0.85rem;">${c.phone ? Utils.formatPhone(c.phone) : ''}</div>
+                                        ${c.email ? `<div style="color:var(--text-muted); font-size:0.8rem;">${esc(c.email)}</div>` : ''}
+                                    </div>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-secondary);">
+                                    <span><i class="fas fa-calendar"></i> ${theirs.length} visit${theirs.length === 1 ? '' : 's'} with you</span>
+                                    <span>Last: ${lastAppt ? Utils.formatDate(lastAppt.date) : 'Never'}</span>
+                                </div>
+                                <div style="margin-top:8px; font-size:0.85rem; color:var(--primary); font-weight:600;">
+                                    Spent with you: ${Utils.formatCurrency(spent)}
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function searchMyClients() {
+            renderMyClients(document.getElementById('clientSearch').value);
+        }
+
+        // ===================== TIME CLOCK =====================
+        function updateClock() {
+            const el = document.getElementById('clockDisplay');
+            if (el) el.textContent = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true });
+        }
+
+        function myTimeEntries(dateOnly) {
+            if (!currentStaffId) return [];
+            return (DataManager.data.timeClock || [])
+                .filter(t => isOwnStaffId(t.staffId) && (!dateOnly || t.date === dateOnly))
+                .sort((a, b) => (a.timestamp || '').localeCompare(b.timestamp || ''));
+        }
+
+        function isOnBreak() {
+            const today = myTimeEntries(Utils.today());
+            const last = today[today.length - 1];
+            return last && last.type === 'break-start';
+        }
+
+        function pushTimeEntry(type) {
+            const now = new Date();
+            DataManager.data.timeClock.push({
+                staffId: currentStaffId,
+                date: Utils.today(),
+                time: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`,
+                timestamp: now.toISOString(),
+                type
+            });
+        }
+
+        // Worked hours today = clock-in → clock-out spans minus break spans
+        function hoursWorkedToday() {
+            const entries = myTimeEntries(Utils.today());
+            let ms = 0, spanStart = null, breakStart = null;
+            entries.forEach(e => {
+                const ts = new Date(e.timestamp).getTime();
+                if (e.type === 'in') spanStart = ts;
+                if (e.type === 'break-start' && spanStart !== null) { ms += ts - spanStart; breakStart = ts; spanStart = null; }
+                if (e.type === 'break-end' && breakStart !== null) { spanStart = ts; breakStart = null; }
+                if (e.type === 'out' && spanStart !== null) { ms += ts - spanStart; spanStart = null; }
+            });
+            // Still on the clock right now
+            const staff = me();
+            if ((staff&&staff.isClockedIn) && spanStart !== null && !isOnBreak()) {
+                ms += Date.now() - spanStart;
+            }
+            return ms / (1000 * 60 * 60);
+        }
+
+        // Sync Clock In / Break / Clock Out on both My Schedule bar and Time Clock page
+        function setClockControlVisibility(clockedIn, onBreak) {
+            const pairs = [
+                ['clockInBtn', 'schedClockInBtn'],
+                ['clockOutBtn', 'schedClockOutBtn'],
+                ['breakBtn', 'schedBreakBtn']
+            ];
+            pairs[0].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = (!currentStaffId || clockedIn) ? 'none' : 'inline-flex';
+            });
+            pairs[1].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = (currentStaffId && clockedIn) ? 'inline-flex' : 'none';
+            });
+            const breakHtml = onBreak ? '<i class="fas fa-play"></i> End Break' : '<i class="fas fa-coffee"></i> Start Break';
+            pairs[2].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.style.display = (currentStaffId && clockedIn) ? 'inline-flex' : 'none';
+                el.innerHTML = breakHtml;
+            });
+        }
+
+        function renderTimeClock() {
+            const statusEl = document.getElementById('clockStatus');
+            const breakEl = document.getElementById('breakStatus');
+            const schedStatus = document.getElementById('schedClockStatus');
+            const schedBreak = document.getElementById('schedBreakStatus');
+
+            if (!currentStaffId) {
+                if (statusEl) statusEl.innerHTML = 'Please <strong style="color:var(--danger);">log in</strong> to use the time clock';
+                if (breakEl) breakEl.textContent = '';
+                if (schedStatus) schedStatus.innerHTML = 'Please log in to clock in';
+                if (schedBreak) schedBreak.textContent = '';
+                setClockControlVisibility(false, false);
+                const hoursEl = document.getElementById('hoursToday');
+                if (hoursEl) hoursEl.innerHTML = 'Hours today: <strong style="color:var(--primary);">0.00</strong>';
+                const hist = document.getElementById('timeHistory');
+                if (hist) hist.innerHTML = '';
+                return;
+            }
+
+            const staff = me();
+            const clockedIn = (staff&&staff.isClockedIn) || false;
+            const onBreak = clockedIn && isOnBreak();
+
+            const statusHtml = clockedIn
+                ? '<span style="color:#ffe566;">You are currently</span> <strong style="color:#15803d;">Clocked In</strong>'
+                : '<span style="color:#ffe566;">You are currently</span> <strong style="color:var(--danger);">Clocked Out</strong>';
+            const breakText = onBreak ? 'On break ? tap End Break to resume' : '';
+
+            if (statusEl) statusEl.innerHTML = statusHtml;
+            if (breakEl) breakEl.textContent = breakText;
+            if (schedStatus) schedStatus.innerHTML = statusHtml;
+            if (schedBreak) schedBreak.textContent = breakText;
+
+            setClockControlVisibility(clockedIn, onBreak);
+
+            const hoursEl = document.getElementById('hoursToday');
+            if (hoursEl) {
+                hoursEl.innerHTML =
+                    `Hours today: <strong style="color:var(--primary);">${hoursWorkedToday().toFixed(2)}</strong>`;
+            }
+
+            renderWeekHours(staff);
+
+            const history = myTimeEntries().slice(-20).reverse();
+            const labelFor = { in: ['Clocked In', 'success'], out: ['Clocked Out', 'danger'], 'break-start': ['Break Started', 'warning'], 'break-end': ['Break Ended', 'secondary'] };
+            const histEl = document.getElementById('timeHistory');
+            if (histEl) {
+                histEl.innerHTML = history.length === 0 ? '<p style="color :var(--text-secondary); text-align:center;">No time entries yet</p>'
+                    : history.map(t => {
+                        const [label, color] = labelFor[t.type] || [t.type, 'secondary'];
+                        return `
+                            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-color);">
+                                <span>${Utils.formatDate(t.date)} ${Utils.formatTime(t.time)}</span>
+                                <span class="badge badge-${color}">${label}</span>
+                            </div>
+                        `;
+                    }).join('');
+            }
+        }
+
+        // Weekly running total with overtime proximity (hourly staff)
+        function renderWeekHours(staff) {
+            const card = document.getElementById('weekHoursCard');
+            if (!card) return;
+            if (!staff || staff.payType !== 'hourly') {
+                card.style.display = 'none';
+                return;
+            }
+            card.style.display = 'block';
+
+            const week = periodRange('week');
+            const hp = DataManager.computeHourlyPay(staff, week.start, week.end);
+            const threshold = DataManager.settings.overtimeThreshold || 40;
+            const eligible = staff.overtimeEligible === true && DataManager.settings.overtimeEnabled !== false;
+
+            document.getElementById('weekHoursText').textContent = hp.hours.toFixed(2) + 'h' + (eligible ? ' / ' + threshold + 'h' : '');
+
+            const pct = eligible ? Math.min(100, (hp.hours / threshold) * 100) : 0;
+            const bar = document.getElementById('weekHoursBar');
+            bar.style.width = pct + '%';
+            bar.style.background = hp.overtimeHours > 0 ? 'var(--danger)' : pct > 85 ? 'var(--warning)' : 'var(--gradient-primary)';
+
+            const otEl = document.getElementById('weekOtText');
+            if (!eligible) {
+                otEl.innerHTML = `Est. pay this week: <strong style="color:var(--primary);">${Utils.formatCurrency(hp.estimatedPay)}</strong>`;
+            } else if (hp.overtimeHours > 0) {
+                otEl.innerHTML = `<strong style="color:var(--warning);">${hp.overtimeHours}h overtime</strong> earned (×${DataManager.settings.overtimeMultiplier || 1.5}) ? est. pay <strong style="color:var(--primary);">${Utils.formatCurrency(hp.estimatedPay)}</strong>`;
+            } else {
+                const left = Math.max(0, threshold - hp.hours);
+                otEl.innerHTML = `${left.toFixed(1)}h until overtime — est. pay <strong style="color:var(--primary);">${Utils.formatCurrency(hp.estimatedPay)}</strong>`;
+            }
+        }
+
+        function clockIn() {
+            if (!currentStaffId) {
+                UI.toast('Please log in with your staff PIN first', 'warning');
+                return;
+            }
+            if (((me()||{}).isClockedIn)) {
+                UI.toast('You are already clocked in', 'info');
+                return;
+            }
+            pushTimeEntry('in');
+            DataManager.updateStaff(currentStaffId, { isClockedIn: true });
+            DataManager.logAudit('clock_in', `${((me()||{}).name) || 'Staff'} clocked in.`);
+            DataManager.saveData();
+            UI.toast('Clocked in — have a great day!', 'success');
+            renderTimeClock();
+        }
+
+        function toggleBreak() {
+            if (!currentStaffId) {
+                UI.toast('Please log in with your staff PIN first', 'warning');
+                return;
+            }
+            if (!((me()||{}).isClockedIn)) {
+                UI.toast('Clock in first before starting a break', 'warning');
+                return;
+            }
+            if (isOnBreak()) {
+                pushTimeEntry('break-end');
+                DataManager.saveData();
+                UI.toast('Break ended — welcome back', 'success');
+            } else {
+                pushTimeEntry('break-start');
+                DataManager.saveData();
+                UI.toast('Break started', 'info');
+            }
+            renderTimeClock();
+        }
+
+        // ===================== CLOCK-OUT = CLOSEOUT (must match) =====================
+        // Staff cannot clock out until counted tickets, service dollars, and tips
+        // match the system. The only way around a mismatch is a manager/admin
+        // PIN override, which is recorded permanently in the audit log.
+        function startClockOutFlow() {
+            if (!currentStaffId) return;
+            // Already closed out today? Then clocking out is allowed directly.
+            const already = DataManager.getStaffCloseouts(currentStaffId).find(c => c.date === Utils.today());
+            if (already) { finishClockOut(); return; }
+
+            const expected = DataManager.getStaffExpectedCloseout(currentStaffId, Utils.today());
+            document.getElementById('coExpTickets').textContent = expected.ticketCount;
+            document.getElementById('coExpServices').textContent = Utils.formatCurrency(expected.servicesTotal);
+            document.getElementById('coExpTips').textContent = Utils.formatCurrency(expected.tipsTotal);
+            document.getElementById('coCountTickets').value = expected.ticketCount;
+            document.getElementById('coCountServices').value = expected.servicesTotal.toFixed(2);
+            document.getElementById('coCountTips').value = expected.tipsTotal.toFixed(2);
+            document.getElementById('coOverridePin').value = '';
+            document.getElementById('coOverrideReason').value = '';
+            updateCloseoutMatch();
+            showModal('closeoutModal');
+        }
+
+        function closeoutNumbers() {
+            const expected = DataManager.getStaffExpectedCloseout(currentStaffId, Utils.today());
+            const actual = {
+                ticketCount: parseInt(document.getElementById('coCountTickets').value) || 0,
+                servicesTotal: Math.round((parseFloat(document.getElementById('coCountServices').value) || 0) * 100) / 100,
+                tipsTotal: Math.round((parseFloat(document.getElementById('coCountTips').value) || 0) * 100) / 100
+            };
+            const matches =
+                actual.ticketCount === expected.ticketCount &&
+                Math.abs(actual.servicesTotal - expected.servicesTotal) < 0.005 &&
+                Math.abs(actual.tipsTotal - expected.tipsTotal) < 0.005;
+            return { expected, actual, matches };
+        }
+
+        function updateCloseoutMatch() {
+            const { expected, actual, matches } = closeoutNumbers();
+            const statusEl = document.getElementById('closeoutMatchStatus');
+            const overrideBox = document.getElementById('closeoutOverrideBox');
+            if (matches) {
+                statusEl.innerHTML = '<span class="match-ok"><i class="fas fa-check-circle"></i> Everything matches — you can close out and clock out.</span>';
+                overrideBox.style.display = 'none';
+            } else {
+                const diffs = [];
+                if (actual.ticketCount !== expected.ticketCount) diffs.push(`tickets: counted ${actual.ticketCount} vs expected ${expected.ticketCount}`);
+                if (Math.abs(actual.servicesTotal - expected.servicesTotal) >= 0.005) diffs.push(`services: counted ${Utils.formatCurrency(actual.servicesTotal)} vs expected ${Utils.formatCurrency(expected.servicesTotal)}`);
+                if (Math.abs(actual.tipsTotal - expected.tipsTotal) >= 0.005) diffs.push(`tips: counted ${Utils.formatCurrency(actual.tipsTotal)} vs expected ${Utils.formatCurrency(expected.tipsTotal)}`);
+                statusEl.innerHTML = `<span class="match-bad"><i class="fas fa-times-circle"></i> Does not match — ${diffs.join(' — ')}</span>`;
+                overrideBox.style.display = 'block';
+            }
+        }
+
+        function submitCloseoutAndClockOut() {
+            if (!currentStaffId) return;
+            const { expected, actual, matches } = closeoutNumbers();
+            const base = {
+                date: Utils.today(),
+                staffId: currentStaffId,
+                staffName: ((me()||{}).name) || '',
+                closedBy: ((me()||{}).name) || '',
+                expected,
+                actual,
+                totalAppointments: expected.appointments,
+                completed: expected.ticketCount,
+                totalRevenue: actual.servicesTotal,
+                cashTotal: 0,
+                cardTotal: 0,
+                notes: `Staff self-closeout. Tips: ${Utils.formatCurrency(actual.tipsTotal)}. Commission (${expected.commissionRate}%): ${Utils.formatCurrency(expected.commissionEarned)}.`
+            };
+
+            if (matches) {
+                DataManager.addStaffCloseout({ ...base, override: null });
+                hideModal('closeoutModal');
+                UI.toast('Closeout matched — clocked out. See you next time!', 'success');
+                finishClockOut();
+                return;
+            }
+
+            // Mismatch: only a manager/admin PIN can override.
+            const pin = document.getElementById('coOverridePin').value.trim();
+            const reason = document.getElementById('coOverrideReason').value.trim();
+            if (!pin) {
+                UI.toast("Numbers don't match — a manager or admin must enter their PIN to override", 'error');
+                return;
+            }
+            if (!Auth.verifyPin(pin, 'manager')) {
+                UI.toast('Invalid manager/admin PIN', 'error');
+                document.getElementById('coOverridePin').value = '';
+                return;
+            }
+            const approver = pin === DataManager.settings.adminPin ? 'admin' : 'manager';
+            DataManager.addStaffCloseout({ ...base, override: { by: approver, reason: reason || 'no reason given', at: new Date().toISOString() } });
+            hideModal('closeoutModal');
+            UI.toast(`Closeout overridden by ${approver} — clocked out`, 'warning');
+            finishClockOut();
+        }
+
+        function finishClockOut() {
+            if (isOnBreak()) pushTimeEntry('break-end'); // never leave a dangling break
+            pushTimeEntry('out');
+            DataManager.updateStaff(currentStaffId, { isClockedIn: false });
+            DataManager.logAudit('clock_out', `${((me()||{}).name) || 'Staff'} clocked out after closeout.`);
+            DataManager.saveData();
+            renderTimeClock();
+        }
+
+        // ===================== PERFORMANCE (real data, fully broken down) =====================
+        function myReviews() {
+            if (!currentStaffId) return [];
+            return (DataManager.data.reviews || []).filter(r => isOwnStaffId(r.staffId));
+        }
+
+        function renderPerformance() {
+            if (!currentStaffId) {
+                document.getElementById('perfTotalAppts').textContent = '0';
+                document.getElementById('perfRevenue').textContent = '$0';
+                document.getElementById('perfRating').textContent = '—';
+                document.getElementById('perfClients').textContent = '0';
+                document.getElementById('weeklyPerformance').innerHTML = '';
+                return;
+            }
+
+            const month = periodRange('month');
+            const monthAppts = myAppointments().filter(a => a.date >= month.start && a.date <= month.end);
+            const completed = monthAppts.filter(a => a.status === 'complete');
+            const revenue = completed.reduce((sum, a) => sum + (a.price || 0), 0);
+            const clientKeys = new Set(monthAppts.map(a => a.clientId ? 'id_' + a.clientId : 'name_' + (a.clientName || 'walkin')));
+
+            document.getElementById('perfTotalAppts').textContent = monthAppts.length;
+            document.getElementById('perfRevenue').textContent = Utils.formatCurrency(revenue);
+            document.getElementById('perfClients').textContent = clientKeys.size;
+
+            // Real average rating from shared reviews (no made-up numbers)
+            const reviews = myReviews();
+            if (reviews.length > 0) {
+                const avg = reviews.reduce((s, r) => s + (r.rating || 0), 0) / reviews.length;
+                document.getElementById('perfRating').textContent = avg.toFixed(1);
+            } else {
+                document.getElementById('perfRating').textContent = '—';
+            }
+
+            // Real last-7-days chart (no random data)
+            const days = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(); d.setDate(d.getDate() - i);
+                days.push(dateStr(d));
+            }
+            const counts = days.map(d => myAppointments().filter(a => a.date === d && a.status === 'complete').length);
+            const max = Math.max(...counts, 1);
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            document.getElementById('weeklyPerformance').innerHTML = `
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    ${days.map((d, i) => `
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <div style="width:40px; font-weight:600; color:var(--text-secondary);">${dayNames[new Date(d + 'T00:00:00').getDay()]}</div>
+                            <div style="flex:1; height:24px; background:var(--bg-hover); border-radius:12px; overflow:hidden;">
+                                <div style="width:${(counts[i] / max) * 100}%; height:100%; background:var(--gradient-primary); border-radius:12px;"></div>
+                            </div>
+                            <div style="width:90px; text-align:right; font-weight:600; color:var(--primary);">${counts[i]} appt${counts[i] === 1 ? '' : 's'}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function openPerfDetail(stat) {
+            if (!currentStaffId) { UI.toast('Please log in first', 'warning'); return; }
+            perfDetail.stat = stat;
+            const titles = {
+                appointments: '<i class="fas fa-calendar-check"></i> Appointment Breakdown',
+                revenue: '<i class="fas fa-dollar-sign"></i> Revenue Breakdown',
+                rating: '<i class="fas fa-star"></i> Average Rating Breakdown',
+                clients: '<i class="fas fa-users"></i> Client Breakdown'
+            };
+            document.getElementById('perfDetailTitle').innerHTML = titles[stat] || 'Breakdown';
+            // Ratings are all-time; hide period tabs for that view
+            document.getElementById('perfPeriodTabs').style.display = stat === 'rating' ? 'none' : 'flex';
+            renderPerfDetail();
+            showModal('perfDetailModal');
+        }
+
+        function setPerfPeriod(period) {
+            perfDetail.period = period;
+            renderPerfDetail();
+        }
+
+        function renderPerfDetail() {
+            document.querySelectorAll('#perfPeriodTabs .period-tab').forEach(t =>
+                t.classList.toggle('active', t.dataset.period === perfDetail.period));
+            const { start, end } = periodRange(perfDetail.period);
+            const content = document.getElementById('perfDetailContent');
+            if (perfDetail.stat === 'appointments') content.innerHTML = buildAppointmentsBreakdown(start, end);
+            else if (perfDetail.stat === 'revenue') content.innerHTML = buildRevenueBreakdown(start, end);
+            else if (perfDetail.stat === 'rating') content.innerHTML = buildRatingsBreakdown();
+            else if (perfDetail.stat === 'clients') content.innerHTML = buildClientsBreakdown(start, end);
+        }
+
+        // ---- Appointments: every appointment, every service chosen, totals ----
+        function buildAppointmentsBreakdown(start, end) {
+            const appts = myAppointments()
+                .filter(a => a.date >= start && a.date <= end)
+                .sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+            const counts = {
+                total: appts.length,
+                complete: appts.filter(a => a.status === 'complete').length,
+                booked: appts.filter(a => a.status === 'booked' || a.status === 'confirmed').length,
+                pending: appts.filter(a => a.status === 'pending').length,
+                cancelled: appts.filter(a => a.status === 'cancelled').length
+            };
+            let html = `
+                <div style="margin-bottom:16px;">
+                    <div class="breakdown-row"><span>${periodLabel(perfDetail.period)} — total appointments</span><strong>${counts.total}</strong></div>
+                    <div class="breakdown-row"><span>✓ Closed</span><strong>${counts.complete}</strong></div>
+                    <div class="breakdown-row"><span>Booked / confirmed (upcoming)</span><strong>${counts.booked}</strong></div>
+                    <div class="breakdown-row"><span>⏳ Awaiting manager approval</span><strong>${counts.pending}</strong></div>
+                    <div class="breakdown-row"><span>✕ Cancelled</span><strong>${counts.cancelled}</strong></div>
+                </div>`;
+            if (appts.length === 0) {
+                return html + '<p style="text-align:center; color:var(--text-secondary); padding:20px;">No appointments in this period</p>';
+            }
+            html += appts.map(a => {
+                const services = apptServices(a);
+                const color = STATUS_COLORS[a.status] || STATUS_COLORS[(typeof ApptStatus !== 'undefined' ? ApptStatus.normalize(a.status) : a.status)] || '#9ca3af';
+                return `
+                    <div style="border:1px solid ${color}66; border-left:4px solid ${color}; border-radius:var(--radius-md); padding:12px; margin-bottom:8px;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                            <strong>${esc(apptClientName(a))}</strong>
+                            ${apptStatusBadge(a.status)}
+                        </div>
+                        <div style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:6px;">${Utils.formatDate(a.date)} at ${Utils.formatTime(a.time)}${a.isWalkIn ? ' ? walk-in' : ''}</div>
+                        ${services.map(s => `
+                            <div style="display:flex; justify-content:space-between; font-size:0.9rem; padding:2px 0;">
+                                <span>· ${esc(s.name)}</span><span>${Utils.formatCurrency(s.price)}</span>
+                            </div>
+                        `).join('')}
+                        <div class="breakdown-row total" style="margin-top:6px;"><span>Appointment total</span><span>${Utils.formatCurrency(a.price)}</span></div>
+                    </div>
+                `;
+            }).join('');
+            return html;
+        }
+
+        // ---- Revenue: before commission, commission taken out, after commission,
+        //      tips on top — per appointment and totaled for the period ----
+        function buildRevenueBreakdown(start, end) {
+            const staff = me();
+            const rate = ((staff&&staff.commission) || 0) / 100;
+            const appts = myAppointments()
+                .filter(a => a.date >= start && a.date <= end && a.status === 'complete')
+                .sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+            const tickets = DataManager.getPosTickets()
+                .filter(t => isOwnStaffId(t.staffId) && t.date >= start && t.date <= end);
+            const tipByAppt = {};
+            tickets.forEach(t => { if (t.appointmentId) tipByAppt[t.appointmentId] = (tipByAppt[t.appointmentId] || 0) + (t.tip || 0); });
+            const totalTips = tickets.reduce((sum, t) => sum + (t.tip || 0), 0);
+
+            const gross = appts.reduce((sum, a) => sum + (a.price || 0), 0);
+            const commission = gross * rate;
+            const net = gross - commission;
+
+            let html = `
+                <div style="margin-bottom:16px; border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px;">
+                    <div class="mini-label" style="margin-bottom:8px;">${periodLabel(perfDetail.period)} summary — how your pay is built</div>
+                    <div class="breakdown-row"><span>Revenue BEFORE commission (your completed service sales)</span><strong>${Utils.formatCurrency(gross)}</strong></div>
+                    <div class="breakdown-row"><span>Commission to salon (${(staff&&staff.commission) || 0}% of ${Utils.formatCurrency(gross)})</span><strong style="color:var(--danger);">- ${Utils.formatCurrency(commission)}</strong></div>
+                    <div class="breakdown-row"><span>Revenue AFTER commission (your service pay)</span><strong style="color:var(--success);">${Utils.formatCurrency(net)}</strong></div>
+                    <div class="breakdown-row"><span>Tips earned (${tickets.length} ticket${tickets.length === 1 ? '' : 's'} with tips recorded)</span><strong>+ ${Utils.formatCurrency(totalTips)}</strong></div>
+                    <div class="breakdown-row total"><span>Total you take home (after commission + tips)</span><span>${Utils.formatCurrency(net + totalTips)}</span></div>
+                    <div class="breakdown-row"><span>Total WITHOUT commission taken out (gross + tips)</span><span>${Utils.formatCurrency(gross + totalTips)}</span></div>
+                </div>`;
+
+            if (appts.length === 0) {
+                return html + '<p style="text-align:center; color:var(--text-secondary); padding:20px;">No completed appointments in this period</p>';
+            }
+            html += '<div class="mini-label" style="margin-bottom:8px;">Appointment by appointment</div>';
+            html += appts.map(a => {
+                const tip = tipByAppt[a.id] || 0;
+                const apptCommission = (a.price || 0) * rate;
+                const apptNet = (a.price || 0) - apptCommission;
+                return `
+                    <div style="border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px; margin-bottom:8px;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                            <strong>${esc(apptClientName(a))}</strong>
+                            <span style="color:var(--text-secondary); font-size:0.85rem;">${Utils.formatDate(a.date)} ${Utils.formatTime(a.time)}</span>
+                        </div>
+                        ${apptServices(a).map(s => `
+                            <div style="display:flex; justify-content:space-between; font-size:0.9rem; padding:2px 0;">
+                                <span>· ${esc(s.name)}</span><span>${Utils.formatCurrency(s.price)}</span>
+                            </div>
+                        `).join('')}
+                        <div class="breakdown-row" style="margin-top:6px;"><span>Gross (before commission)</span><strong>${Utils.formatCurrency(a.price)}</strong></div>
+                        <div class="breakdown-row"><span>Commission ${(staff&&staff.commission) || 0}%</span><strong style="color:var(--danger);">- ${Utils.formatCurrency(apptCommission)}</strong></div>
+                        <div class="breakdown-row"><span>After commission</span><strong style="color:var(--success);">${Utils.formatCurrency(apptNet)}</strong></div>
+                        <div class="breakdown-row"><span>Tip</span><strong>+ ${Utils.formatCurrency(tip)}</strong></div>
+                        <div class="breakdown-row total"><span>Your take from this visit</span><span>${Utils.formatCurrency(apptNet + tip)}</span></div>
+                    </div>
+                `;
+            }).join('');
+            return html;
+        }
+
+        // ---- Ratings: the average explained, distribution, every review ----
+        function buildRatingsBreakdown() {
+            const reviews = myReviews().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+            if (reviews.length === 0) {
+                return '<p style="text-align:center; color:var(--text-secondary); padding:30px;">No ratings yet ? when clients rate you on the Scheduler or website, every rating and comment will appear here.</p>';
+            }
+            const total = reviews.reduce((s, r) => s + (r.rating || 0), 0);
+            const avg = total / reviews.length;
+            const dist = [5, 4, 3, 2, 1].map(star => ({ star, count: reviews.filter(r => r.rating === star).length }));
+            let html = `
+                <div style="margin-bottom:16px; border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px;">
+                    <div class="breakdown-row"><span>Average rating</span><strong class="star">${'★'.repeat(Math.round(avg))} ${avg.toFixed(2)}</strong></div>
+                    <div class="breakdown-row"><span>Why this number</span><span style="color:var(--text-secondary);">${total} total stars ? ${reviews.length} review${reviews.length === 1 ? '' : 's'} = ${avg.toFixed(2)}</span></div>
+                    ${dist.map(d => `
+                        <div class="breakdown-row"><span>${'★'.repeat(d.star)}${'☆'.repeat(5 - d.star)}</span><strong>${d.count} review${d.count === 1 ? '' : 's'}</strong></div>
+                    `).join('')}
+                </div>
+                <div class="mini-label" style="margin-bottom:8px;">Every rating and client comment</div>`;
+            html += reviews.map(r => `
+                <div style="border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px; margin-bottom:8px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                        <span class="star" style="font-size:1.05rem;">${'★'.repeat(r.rating || 0)}${'☆'.repeat(5 - (r.rating || 0))}</span>
+                        <span style="color:var(--text-muted); font-size:0.8rem;">${Utils.formatDate(r.date)}</span>
+                    </div>
+                    <div style="font-weight:600;">${esc(r.clientName || 'Client')}</div>
+                    ${r.comment ? `<div style="color:var(--text-secondary); font-size:0.9rem; margin-top:4px;">"${esc(r.comment)}"</div>` : '<div style="color:var(--text-muted); font-size:0.85rem; margin-top:4px;">No comment left</div>'}
+                </div>
+            `).join('');
+            return html;
+        }
+
+        // ---- Unique clients: who they are, how often they come, what they spend ----
+        function buildClientsBreakdown(start, end) {
+            const appts = myAppointments().filter(a => a.date >= start && a.date <= end);
+            const groups = {};
+            appts.forEach(a => {
+                const key = a.clientId ? 'id_' + a.clientId : 'name_' + (a.clientName || 'Walk-In');
+                if (!groups[key]) groups[key] = { name: apptClientName(a), visits: 0, completed: 0, spent: 0, last: '' };
+                groups[key].visits++;
+                if (a.status === 'complete') { groups[key].completed++; groups[key].spent += (a.price || 0); }
+                if ((a.date || '') > groups[key].last) groups[key].last = a.date;
+            });
+            const rows = Object.values(groups).sort((a, b) => b.visits - a.visits);
+            let html = `
+                <div class="breakdown-row" style="margin-bottom:12px;"><span>${periodLabel(perfDetail.period)} — unique clients</span><strong>${rows.length}</strong></div>`;
+            if (rows.length === 0) {
+                return html + '<p style="text-align:center; color:var(--text-secondary); padding:20px;">No clients in this period</p>';
+            }
+            html += rows.map(g => `
+                <div style="display:flex; justify-content:space-between; align-items:center; border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px; margin-bottom:8px;">
+                    <div>
+                        <strong>${esc(g.name)}</strong>
+                        <div style="color:var(--text-secondary); font-size:0.85rem;">${g.visits} appointment${g.visits === 1 ? '' : 's'} — ${g.completed} completed ? last ${g.last ? Utils.formatDate(g.last) : '-'}</div>
+                    </div>
+                    <div style="color:var(--primary); font-weight:700;">${Utils.formatCurrency(g.spent)}</div>
+                </div>
+            `).join('');
+            return html;
+        }
+
+        // ===================== MY PAY =====================
+        function renderMyPay() {
+            const tbody = document.getElementById('payDailyTable');
+            const tfoot = document.getElementById('payDailyFooter');
+            if (!tbody) return;
+
+            if (!currentStaffId) {
+                document.getElementById('payToday').textContent = '$0';
+                document.getElementById('payWeek').textContent = '$0';
+                document.getElementById('payMonth').textContent = '$0';
+                document.getElementById('payCommission').textContent = '0%';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:30px; color:var(--text-secondary);">Please log in with your staff PIN to view your pay</td></tr>';
+                tfoot.innerHTML = '';
+                return;
+            }
+
+            const staff = me();
+            const isHourly = (staff&&staff.payType) === 'hourly';
+            const isSalary = (staff&&staff.payType) === 'salary';
+            const hourlyRate = (staff&&staff.hourlyRate) || 0;
+            const commissionRate = (staff&&staff.commission) || 0;
+            const rate = commissionRate / 100;
+            document.getElementById('payCommission').textContent =
+                isHourly ? '$' + hourlyRate + '/hr' : isSalary ? '$' + ((staff&&staff.salaryAmount) || 0) + '/wk' : commissionRate + '%';
+
+            const myAppts = myAppointments();
+            const grossFor = list => list.filter(a => a.status === 'complete').reduce((sum, a) => sum + (a.price || 0), 0);
+            const payFor = list => grossFor(list) * rate;
+            // Hourly pay uses the time clock with weekly overtime rules
+            const hourlyPayFor = (start, end) => DataManager.computeHourlyPay(staff, start, end).estimatedPay;
+            // Salary pay: guaranteed base + overage split above it
+            const salaryPayFor = (start, end) =>
+                DataManager.computeSalaryPay(staff, grossFor(myAppts.filter(a => a.date >= start && a.date <= end)), start, end).estimatedPay;
+            const rangePay = (start, end) =>
+                isHourly ? hourlyPayFor(start, end) : isSalary ? salaryPayFor(start, end) : payFor(myAppts.filter(a => a.date >= start && a.date <= end));
+
+            const todayStr = Utils.today();
+            const week = periodRange('week');
+            const monthPrefix = todayStr.slice(0, 7);
+
+            document.getElementById('payToday').textContent = Utils.formatCurrency(rangePay(todayStr, todayStr));
+            document.getElementById('payWeek').textContent = Utils.formatCurrency(rangePay(week.start, week.end));
+            document.getElementById('payMonth').textContent = Utils.formatCurrency(rangePay(monthPrefix + '-01', todayStr));
+
+            const period = document.getElementById('payPeriod').value;
+            let startStr;
+            if (period === 'month') {
+                startStr = monthPrefix + '-01';
+            } else {
+                const days = parseInt(period) || 30;
+                const start = new Date(); start.setDate(start.getDate() - (days - 1));
+                startStr = dateStr(start);
+            }
+
+            const ranged = myAppts.filter(a => a.date >= startStr && a.date <= todayStr);
+            const tickets = DataManager.getPosTickets().filter(t => isOwnStaffId(t.staffId) && t.date >= startStr && t.date <= todayStr);
+            const tipsByDate = {};
+            tickets.forEach(t => { tipsByDate[t.date] = (tipsByDate[t.date] || 0) + (t.tip || 0); });
+
+            const byDate = {};
+            ranged.forEach(a => {
+                if (!byDate[a.date]) byDate[a.date] = { total: 0, completed: 0, gross: 0 };
+                byDate[a.date].total++;
+                if (a.status === 'complete') {
+                    byDate[a.date].completed++;
+                    byDate[a.date].gross += (a.price || 0);
+                }
+            });
+            Object.keys(tipsByDate).forEach(d => { if (!byDate[d]) byDate[d] = { total: 0, completed: 0, gross: 0 }; });
+            // Hourly staff earn on days they clocked in even without appointments
+            if (isHourly) {
+                DataManager.data.timeClock
+                    .filter(t => isOwnStaffId(t.staffId) && t.date >= startStr && t.date <= todayStr)
+                    .forEach(t => { if (!byDate[t.date]) byDate[t.date] = { total: 0, completed: 0, gross: 0 }; });
+            }
+            // Salaried techs earn their base every single day
+            if (isSalary) {
+                for (let d = new Date(startStr + 'T00:00:00'); d <= new Date(todayStr + 'T00:00:00'); d.setDate(d.getDate() + 1)) {
+                    const key = dateStr(d);
+                    if (!byDate[key]) byDate[key] = { total: 0, completed: 0, gross: 0 };
+                }
+            }
+
+            const dates = Object.keys(byDate).sort().reverse();
+            if (dates.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:30px; color:var(--text-secondary);">No activity in this period</td></tr>';
+                tfoot.innerHTML = '';
+                return;
+            }
+
+            let sumGross = 0, sumPay = 0, sumAppts = 0, sumCompleted = 0, sumTips = 0;
+            tbody.innerHTML = dates.map(d => {
+                const row = byDate[d];
+                const tips = tipsByDate[d] || 0;
+                const hours = isHourly ? DataManager.getHoursWorked(currentStaffId, d, d) : 0;
+                const sp = isSalary ? DataManager.computeSalaryPay(staff, row.gross, d, d) : null;
+                const pay = (isHourly ? hours * hourlyRate : isSalary ? sp.estimatedPay : row.gross * rate) + tips;
+                sumGross += row.gross; sumPay += pay; sumTips += tips;
+                sumAppts += row.total; sumCompleted += row.completed;
+                return `
+                    <tr>
+                        <td><strong>${Utils.formatDate(d)}</strong></td>
+                        <td style="text-align:center;">${row.total}</td>
+                        <td style="text-align:center; color:var(--success);">${row.completed}</td>
+                        <td>${Utils.formatCurrency(row.gross)}</td>
+                        <td>${Utils.formatCurrency(tips)}</td>
+                        <td style="text-align:center;">${isHourly ? hours.toFixed(2) + 'h  $' + hourlyRate : isSalary ? '$' + (staff.salaryAmount || 0) + (staff.salaryFrequency === 'biweekly' ? '/2wks' : '/wk') + (sp.overage > 0 ? ' +' + sp.salarySplit + '% of $' + sp.overage.toFixed(0) + ' over' : '') : commissionRate + '%'}</td>
+                        <td style="color:var(--primary); font-weight:700;">${Utils.formatCurrency(pay)}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // For hourly staff the range total uses weekly overtime rules,
+            // so it can be higher than the sum of the daily base-rate rows
+            let footerPay = sumPay;
+            let otNote = '';
+            if (isHourly) {
+                const hp = DataManager.computeHourlyPay(staff, startStr, todayStr);
+                footerPay = hp.estimatedPay + sumTips;
+                if (hp.overtimeHours > 0) {
+                    otNote = ` <span style="color:var(--warning); font-size:0.75rem;">(incl. ${hp.overtimeHours}h OT  $${hp.overtimeRate})</span>`;
+                }
+            }
+            if (isSalary) {
+                const sp = DataManager.computeSalaryPay(staff, sumGross, startStr, todayStr);
+                footerPay = sp.estimatedPay + sumTips;
+                if (sp.overage > 0) {
+                    otNote = ` <span style="color:var(--success); font-size:0.75rem;">($${sp.overage.toFixed(0)} over salary — you keep ${sp.salarySplit}% = ${Utils.formatCurrency(sp.commission)})</span>`;
+                }
+            }
+
+            tfoot.innerHTML = `
+                <tr style="border-top:2px solid var(--border-color); font-weight:700;">
+                    <td>Total</td>
+                    <td style="text-align:center;">${sumAppts}</td>
+                    <td style="text-align:center; color:var(--success);">${sumCompleted}</td>
+                    <td>${Utils.formatCurrency(sumGross)}</td>
+                    <td>${Utils.formatCurrency(sumTips)}</td>
+                    <td>${otNote}</td>
+                    <td style="color:var(--primary);">${Utils.formatCurrency(footerPay)}</td>
+                </tr>
+            `;
+        }
+
+        // ===================== TAX DOCUMENT (W-2 / 1099) =====================
+        function populateTaxYears() {
+            const sel = document.getElementById('taxYear');
+            if (!sel) return;
+            const year = new Date().getFullYear();
+            sel.innerHTML = [year, year - 1, year - 2].map(y => `<option value="${y}">${y}</option>`).join('');
+        }
+
+        function renderTaxDoc() {
+            const container = document.getElementById('taxDocContent');
+            if (!container) return;
+            if (!currentStaffId) { container.innerHTML = ''; return; }
+            const year = parseInt(document.getElementById('taxYear').value) || new Date().getFullYear();
+            const summary = (DataManager.getStaffTaxSummary(year) || []).find(s => isOwnStaffId(s.staffId));
+            const staff = me();
+            if (!summary || !staff) {
+                container.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:20px;">No tax data for this year yet</p>';
+                return;
+            }
+            const isW2 = (summary.employmentType || 'W-2') === 'W-2';
+            const tipsYear = DataManager.getPosTickets()
+                .filter(t => isOwnStaffId(t.staffId) && (t.date || '').startsWith(String(year)))
+                .reduce((sum, t) => sum + (t.tip || 0), 0);
+            container.innerHTML = `
+                <div style="border:2px solid var(--border-color); border-radius:var(--radius-lg); padding:20px; max-width:520px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                        <div>
+                            <div style="font-weight:800; font-size:1.1rem;">${esc(DataManager.settings.salonName)}</div>
+                            <div style="color:var(--text-secondary); font-size:0.85rem;">${esc(DataManager.settings.salonAddress)}</div>
+                        </div>
+                        <span class="badge" style="background:var(--primary)20; color:var(--primary); font-size:0.9rem; padding:6px 14px;">${isW2 ? 'W-2 Employee' : '1099 Contractor'} — ${year}</span>
+                    </div>
+                    <div class="breakdown-row"><span>Employee</span><strong>${esc(summary.name)}</strong></div>
+                    <div class="breakdown-row"><span>Role</span><span>${esc(summary.role || '')}</span></div>
+                    ${summary.ssn ? `<div class="breakdown-row"><span>SSN on file</span><span>***-**-${esc(String(summary.ssn).slice(-4))}</span></div>` : ''}
+                    <div class="breakdown-row"><span>Appointments completed in ${year}</span><strong>${summary.appointmentsCompleted}</strong></div>
+                    <div class="breakdown-row"><span>Gross service sales</span><strong>${Utils.formatCurrency(summary.grossSales)}</strong></div>
+                    <div class="breakdown-row"><span>Commission rate</span><strong>${summary.commissionRate}%</strong></div>
+                    <div class="breakdown-row"><span>Tips reported (${year})</span><strong>${Utils.formatCurrency(tipsYear)}</strong></div>
+                    <div class="breakdown-row total"><span>Total compensation for ${year} (${isW2 ? 'W-2 wages' : '1099 non-employee compensation'})</span><span>${Utils.formatCurrency(summary.estimatedPay + tipsYear)}</span></div>
+                    <p style="color:var(--text-muted); font-size:0.8rem; margin-top:12px;">
+                        <i class="fas fa-info-circle"></i> Totals come from your completed appointments, recorded tips, and saved payroll runs — the same numbers your manager and the Admin Tax Center see. Your official ${isW2 ? 'W-2' : '1099'} form is issued by the salon at year-end; bring any questions to your manager.
+                    </p>
+                </div>
+            `;
+        }
+
+        // ===================== MODAL WRAPPERS =====================
+        function showModal(id) { UI.showModal(id); }
+        function hideModal(id) { UI.hideModal(id); }
+
+        var __pinInput = document.getElementById('pinInput');
+        if (__pinInput) __pinInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') doLogin();
+        });
+        var __mgrPin = document.getElementById('managerPinInput');
+        if (__mgrPin) __mgrPin.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') submitManagerPin();
+        });
+
+        // Gate AFTER helpers exist so onUnlock can set currentStaffId.
+        // Auth chip is the only Log out control (header Login/Logout removed).
+        SalonAuth.guardPage(['*'], {
+            pageName: 'Staff Members',
+            onUnlock: function (user) {
+                applyStaffSession(user);
+                if (window.AppNav && typeof AppNav.remount === 'function') AppNav.remount();
+            },
+            onLock: function () {
+                clearStaffSession(true);
+                if (window.AppNav && typeof AppNav.remount === 'function') AppNav.remount();
+            }
+        });
+    </script>
+    <script src="../shared/salon-staff-ai.js?v=20260731voice2"></script>
+    <script src="../shared/unb-ai-assist.js?v=20260807unbAiEmoji"></script>
+    <script src="../shared/staff-ai-widget.js?v=20260807unbAiEmoji"></script>
+</body>
+</html>

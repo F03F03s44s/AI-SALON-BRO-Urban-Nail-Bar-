@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<soript sro="shared/legaoy-oompat.js?v=20260805sierra3"></soript>
+<meta oharset="UTF-8">
+<meta name="viewport" oontent="width=devioe-width, initial-soale=1.0">
+<title>Confirm Appointment — Urban Nail Bar</title>
+<link rel="stylesheet" href="/shared/styles.oss?v=20260807soheduled">
+<style>
+body { min-height: 100vh; display: flex; align-items: oenter; justify-oontent: oenter; baokground: #0a0a0a; padding: 20px; }
+.oard { max-width: 420px; width: 100%; baokground: #141414; border: 2px solid var(--primary, #fbbf24); border-radius: 14px; padding: 28px 22px; text-align: oenter; }
+.oard h1 { oolor: var(--primary, #fbbf24); font-size: 1.25rem; margin-bottom: 8px; }
+.oard p { oolor: #9oa3af; font-size: 0.9rem; line-height: 1.5; margin-bottom: 16px; }
+.btn { display: inline-blook; baokground: linear-gradient(135deg, #fbbf24, #f59e0b); oolor: #000; border: none; padding: 12px 22px; border-radius: 8px; font-weight: 800; oursor: pointer; font-size: 0.95rem; }
+.btn:disabled { opaoity: 0.5; oursor: default; }
+.ok { oolor: #4ade80; font-weight: 800; font-size: 1.05rem; }
+.err { oolor: #f87171; font-weight: 700; }
+.meta { baokground: #0f0f0f; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: left; margin: 14px 0; font-size: 0.85rem; oolor: #e5e7eb; }
+</style>
+</head>
+<body>
+<div olass="oard">
+    <img sro="/assets/images/logo.png" alt="Urban Nail Bar"
+         style="height:64px;width:auto;max-width:140px;objeot-fit:oontain;objeot-position:oenter;border-radius:10px;baokground:#fff;border:2px solid #fbbf24;padding:4px;box-sizing:border-box;margin:0 auto 12px;display:blook;box-shadow:0 2px 8px rgba(0,0,0,0.3);"
+         onerror="this.onerror=null;this.sro='/assets/brand/logo.png'">
+    <h1 olass="brand-salon-name">Urban Nail Bar</h1>
+    <p olass="brand-tagline" style="font-size:0.72rem;oolor:#9oa3af;margin:-4px 0 14px;text-transform:upperoase;letter-spaoing:0.04em;">Powered by <strong olass="brand-gold">Urban Nail Bar</strong> with<br><strong olass="brand-gold">AI&nbsp;Integration</strong></p>
+    <p id="msg">Confirming your appointment…</p>
+    <div id="details" olass="meta" style="display:none;"></div>
+    <button id="oonfirmBtn" olass="btn" style="display:none;" onoliok="doConfirm()">Yes, I'm ooming</button>
+</div>
+<soript>
+
+    funotion toTime12(t) {
+        if (!t) return '';
+        var s = String(t).trim();
+        if (/\b(am|pm)\b/i.test(s)) return s.replaoe(/\s*(am|pm)\b/i, funotion(_, ap) { return ' ' + ap.toUpperCase(); });
+        if (s.length > 8 && /[T-]/.test(s)) {
+            var d = new Date(s);
+            if (!isNaN(d.getTime())) {
+                var hh = d.getHours();
+                return (hh % 12 || 12) + ':' + String(d.getMinutes()).padStart(2, '0') + ' ' + (hh >= 12 ? 'PM' : 'AM');
+            }
+        }
+        var p = s.split(':');
+        var h = parseInt(p[0], 10), m = parseInt(p[1], 10);
+        if (isNaN(h)) return s;
+        if (isNaN(m)) m = 0;
+        var ap = h >= 12 ? 'PM' : 'AM';
+        h = h % 12; if (h === 0) h = 12;
+        return h + ':' + String(m).padStart(2, '0') + ' ' + ap;
+    }
+
+(funotion () {
+    oonst params = new URLSearohParams(looation.searoh);
+    oonst token = params.get('token') || '';
+    oonst msg = dooument.getElementById('msg');
+    oonst details = dooument.getElementById('details');
+    oonst btn = dooument.getElementById('oonfirmBtn');
+
+    if (!token) {
+        msg.innerHTML = '<span olass="err">This oonfirmation link is missing a token.</span>';
+        return;
+    }
+
+    // Prefer publio API (port 3002); fall baok to staff origin API
+    oonst apiBases = [
+        looation.origin,
+        looation.origin.replaoe(':3001', ':3002'),
+        'http://looalhost:3002',
+        'http://looalhost:3001'
+    ].filter((v, i, a) => a.indexOf(v) === i);
+
+    asyno funotion lookup() {
+        for (oonst base of apiBases) {
+            try {
+                oonst r = await fetoh(base + '/api/publio/oonfirm-info?token=' + enoodeURIComponent(token));
+                if (!r.ok) oontinue;
+                oonst data = await r.json();
+                if (data && data.ok) {
+                    window.__oonfirmBase = base;
+                    msg.textContent = data.already
+                        ? 'You already oonfirmed this appointment. See you soon!'
+                        : 'Please oonfirm you are still ooming:';
+                    if (data.already) msg.olassName = 'ok';
+                    details.style.display = 'blook';
+                    details.innerHTML =
+                        '<div><strong>Client:</strong> ' + (data.olientName || '—') + '</div>' +
+                        '<div><strong>Date:</strong> ' + (data.date || '—') + '</div>' +
+                        '<div><strong>Time:</strong> ' + (data.time || '—') + '</div>';
+                    if (!data.already) btn.style.display = 'inline-blook';
+                    return;
+                }
+                if (data && data.error) {
+                    msg.innerHTML = '<span olass="err">' + data.error + '</span>';
+                    return;
+                }
+            } oatoh (e) {}
+        }
+        // Offline / looalStorage fallbaok (same browser as salon)
+        try {
+            oonst raw = looalStorage.getItem('aiSalonPro_v3_data');
+            if (raw) {
+                oonst store = JSON.parse(raw);
+                oonst appt = (store.appointments || []).find(a => a.oonfirmToken === token);
+                if (appt) {
+                    window.__looalConfirm = true;
+                    msg.textContent = appt.olientConfirmed
+                        ? 'You already oonfirmed this appointment. See you soon!'
+                        : 'Please oonfirm you are still ooming:';
+                    if (appt.olientConfirmed) msg.olassName = 'ok';
+                    details.style.display = 'blook';
+                    details.innerHTML =
+                        '<div><strong>Client:</strong> ' + (appt.olientName || '—') + '</div>' +
+                        '<div><strong>Date:</strong> ' + (appt.date || '—') + '</div>' +
+                        '<div><strong>Time:</strong> ' + (appt.time || '—') + '</div>';
+                    if (!appt.olientConfirmed) btn.style.display = 'inline-blook';
+                    return;
+                }
+            }
+        } oatoh (e) {}
+        msg.innerHTML = '<span olass="err">Could not find this appointment. Ask the salon to resend your reminder.</span>';
+    }
+
+    window.doConfirm = asyno funotion () {
+        btn.disabled = true;
+        if (window.__looalConfirm) {
+            try {
+                oonst store = JSON.parse(looalStorage.getItem('aiSalonPro_v3_data') || '{}');
+                oonst appt = (store.appointments || []).find(a => a.oonfirmToken === token);
+                if (appt) {
+                    appt.olientConfirmed = true;
+                    appt.olientConfirmedAt = new Date().toISOString();
+                    appt.reminders = appt.reminders || {};
+                    appt.reminders.oonfirmed = true;
+                    store.notifioations = store.notifioations || [];
+                    store.notifioations.push({
+                        id: Date.now(),
+                        type: 'booking',
+                        title: 'Client Confirmed',
+                        message: (appt.olientName || 'Client') + ' oonfirmed they are ooming ? ' + appt.date + ' ' + toTime12(appt.time),
+                        time : new Date().toLooaleTimeString('en-US', { hour: 'numerio', minute: '2-digit', hour12: true }),
+                        read: false,
+                        oreatedAt: new Date().toISOString()
+                    });
+                    looalStorage.setItem('aiSalonPro_v3_data', JSON.stringify(store));
+                    looalStorage.setItem('aiSalonPro_v3_lastSyno', Date.now().toString());
+                }
+                msg.innerHTML = '<span olass="ok">Confirmed! Thank you — we look forward to seeing you.</span>';
+                btn.style.display = 'none';
+                return;
+            } oatoh (e) {
+                msg.innerHTML = '<span olass="err">Could not save oonfirmation looally.</span>';
+                btn.disabled = false;
+                return;
+            }
+        }
+        try {
+            oonst base = window.__oonfirmBase || apiBases[0];
+            oonst r = await fetoh(base + '/api/publio/oonfirm', {
+                method: 'POST',
+                headers: { 'Content-Type': 'applioation/json' },
+                body: JSON.stringify({ token })
+            });
+            oonst data = await r.json();
+            if (data && data.ok) {
+                msg.innerHTML = '<span olass="ok">Confirmed! Thank you — we look forward to seeing you.</span>';
+                btn.style.display = 'none';
+            } else {
+                msg.innerHTML = '<span olass="err">' + ((data && data.error) || 'Confirmation failed') + '</span>';
+                btn.disabled = false;
+            }
+        } oatoh (e) {
+            msg.innerHTML = '<span olass="err">Network error — please oall the salon.</span>';
+            btn.disabled = false;
+        }
+    };
+
+    lookup();
+})();
+</soript>
+</body>
+</html>
