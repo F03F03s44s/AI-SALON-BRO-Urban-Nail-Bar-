@@ -1,0 +1,3805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Nail Bar — Schedule Online</title>
+    <link rel="stylesheet" href="../shared/styles.css?v=20260815brand3">
+    <link rel="stylesheet" href="../shared/vendor/fontawesome/css/all.min.css">
+    <link rel="manifest" href="manifest-booking.webmanifest">
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="apple-touch-icon" href="../assets/pwa/booking-apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Schedule">
+    <style>
+        /* ===== Professional centered booking shell ===== */
+        .header-booking-tagline {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: #fde68a;
+            text-transform: none;
+            white-space: nowrap;
+        }
+        body.page-booking .app-header {
+            position: relative;
+            display: grid !important;
+            grid-template-columns: minmax(120px, 1fr) minmax(260px, 640px) minmax(120px, 1fr);
+            align-items: center;
+            justify-items: stretch;
+            gap: 10px 18px;
+            padding: 12px 18px !important;
+            min-height: 0 !important;
+            width: 100%;
+            box-sizing: border-box;
+            border-bottom: 1px solid rgba(251, 191, 36, 0.35);
+            background: rgba(8, 8, 8, 0.94) !important;
+        }
+        body.page-booking .app-header .logo {
+            grid-column: 1;
+            justify-self: start;
+            align-self: center;
+            z-index: 2;
+            max-width: 100%;
+        }
+        body.page-booking .app-header .logo-text .brand-tagline {
+            font-size: 0.62rem;
+            line-height: 1.2;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+        body.page-booking .app-header .nav-tabs {
+            display: none !important;
+        }
+        body.page-booking .app-header .user-menu {
+            grid-column: 3;
+            justify-self: end;
+            align-self: center;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 0 !important;
+        }
+        .header-family-wrap {
+            grid-column: 2;
+            position: static !important;
+            left: auto !important;
+            top: auto !important;
+            transform: none !important;
+            width: 100%;
+            max-width: 640px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+            z-index: 1;
+        }
+        .gallery-family.header-gallery-family,
+        .header-gallery-family {
+            margin: 0 auto;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            font-size: clamp(1rem, 2vw, 1.28rem);
+            padding: 10px 16px;
+            white-space: normal;
+            line-height: 1.25;
+            text-align: center;
+        }
+        .header-welcome-note {
+            margin: 0 auto !important;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            font-size: clamp(0.8rem, 1.4vw, 0.98rem) !important;
+            line-height: 1.4 !important;
+            padding: 0 6px;
+            text-align: center !important;
+        }
+        .header-welcome-note .welcome-line {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        .header-book-now {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 16px;
+            border-radius: 8px;
+            border: none;
+            background: #fbbf24;
+            color: #111 !important;
+            font: inherit;
+            font-size: 0.78rem;
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            cursor: pointer;
+            white-space: nowrap;
+            box-shadow: 0 2px 10px rgba(251, 191, 36, 0.35);
+        }
+        .header-book-now:hover { filter: brightness(1.05); }
+        .header-book-now i { color: #111 !important; }
+
+        /* Section jump links — centered under header (keeps page axis centered) */
+        .booking-side-nav {
+            display: none;
+            position: sticky;
+            top: 0;
+            left: auto;
+            right: auto;
+            bottom: auto;
+            transform: none;
+            z-index: 800;
+            width: 100%;
+            max-width: 920px;
+            margin: 0 auto;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            box-sizing: border-box;
+            background: rgba(6, 6, 6, 0.92);
+            border-bottom: 1px solid rgba(251, 191, 36, 0.28);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        body.booking-mkt-on .booking-side-nav { display: flex; }
+        body.booking-mkt-on .app-body,
+        body.booking-mkt-on .content-area {
+            padding-left: 0 !important;
+            padding-bottom: 0 !important;
+        }
+        .booking-side-nav a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            background: rgba(12, 12, 12, 0.95);
+            color: #fde68a !important;
+            text-decoration: none !important;
+            font-size: 0.7rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+        .booking-side-nav a:hover,
+        .booking-side-nav a.is-active {
+            border-color: #fbbf24;
+            background: rgba(251, 191, 36, 0.18);
+            color: #fff !important;
+        }
+        .booking-side-nav a.side-nav-book {
+            order: 0;
+            background: #fbbf24 !important;
+            border: 1px solid #f59e0b !important;
+            color: #111 !important;
+            -webkit-text-fill-color: #111 !important;
+            font-weight: 900;
+        }
+        .booking-side-nav a.side-nav-book:hover,
+        .booking-side-nav a.side-nav-book.is-active {
+            background: #f59e0b !important;
+            color: #111 !important;
+            -webkit-text-fill-color: #111 !important;
+        }
+
+        /* Centered content column — compact professional spacing */
+        body.page-booking .content-area#qbMain,
+        body.page-booking #qbMain {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        body.page-booking #qbFlow,
+        body.page-booking #loginMarketing,
+        body.page-booking .booking-mkt {
+            width: 100%;
+            max-width: 880px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .booking-mkt {
+            max-width: 880px !important;
+            margin: 0 auto !important;
+            padding: 18px 18px 36px !important;
+            box-sizing: border-box;
+        }
+        .salon-block {
+            margin: 0 0 26px;
+            text-align: center;
+        }
+        .salon-strip-sub {
+            text-align: center;
+            margin: 0 auto 8px !important;
+        }
+        .salon-strip-note {
+            text-align: center;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            max-width: 720px;
+        }
+        .login-service-menu,
+        .booking-hours,
+        .booking-reviews-wrap,
+        .booking-contact-us,
+        .auth-card {
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+        @media (max-width: 900px) {
+            body.page-booking .app-header {
+                grid-template-columns: 1fr auto;
+                grid-template-areas:
+                    "logo actions"
+                    "family family";
+            }
+            body.page-booking .app-header .logo { grid-area: logo; }
+            body.page-booking .app-header .user-menu { grid-area: actions; }
+            .header-family-wrap {
+                grid-area: family;
+                grid-column: 1 / -1;
+                max-width: 100%;
+            }
+            .header-booking-tagline { display: none; }
+        }
+        .qb-hero {
+            text-align: center;
+            padding: 24px 16px 8px;
+        }
+        .qb-hero h1 {
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+        .qb-hero p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .qb-section {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        .qb-section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+        .qb-section-title .qb-num {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+        .qb-section.done .qb-section-title .qb-num {
+            background: var(--success);
+            color: #fff;
+        }
+
+        /* Services — single-column aligned rows (name | duration | price) */
+        .qb-svc-panel {
+            max-width: 720px;
+            margin: 0 auto;
+            max-height: min(52vh, 480px);
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 12px;
+            background: rgba(12, 12, 12, 0.92);
+            padding: 8px;
+            -webkit-overflow-scrolling: touch;
+            box-sizing: border-box;
+        }
+        .qb-services {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 6px;
+            width: 100%;
+        }
+        .qb-service {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 76px 84px;
+            align-items: center;
+            column-gap: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 10px;
+            padding: 10px 12px;
+            min-height: 44px;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.12s, border-color 0.12s;
+            user-select: none;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .qb-service:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: #ffffff;
+        }
+        .qb-service:hover .s-name,
+        .qb-service:hover .s-dur,
+        .qb-service:hover .s-price,
+        .qb-service:hover .svc-popular {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+        }
+        .qb-service:active { background: rgba(251, 191, 36, 0.06); }
+        .qb-service.selected {
+            background: rgba(251, 191, 36, 0.1);
+            border-color: var(--primary);
+            box-shadow: inset 3px 0 0 var(--primary);
+        }
+        .s-name .svc-popular,
+        .m-name .svc-popular,
+        .svc-popular {
+            color: #ffe566 !important;
+            -webkit-text-fill-color: #ffe566 !important;
+        }
+        .s-name .svc-pipe,
+        .m-name .svc-pipe,
+        .qb-service .svc-pipe,
+        .svc-pipe {
+            color: #ffe566 !important;
+            -webkit-text-fill-color: #ffe566 !important;
+            font-weight: 900;
+        }
+        .qb-service .s-name {
+            font-weight: 700;
+            font-size: 0.84rem;
+            color: #ffffff;
+            line-height: 1.3;
+            margin: 0;
+            min-width: 0;
+            overflow-wrap: break-word;
+            word-break: normal;
+        }
+        .qb-service .s-dur {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            justify-self: center;
+            font-size: 0.64rem;
+            color: #f5f5f5;
+            font-weight: 700;
+            text-align: center;
+            white-space: nowrap;
+            padding: 3px 8px;
+            border: 1px solid rgba(255, 229, 102, 0.65);
+            border-radius: 999px;
+            line-height: 1.2;
+            box-sizing: border-box;
+            min-width: 58px;
+        }
+        .qb-service .s-price {
+            font-size: 0.86rem;
+            color: var(--primary);
+            font-weight: 800;
+            text-align: right;
+            justify-self: end;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .qb-service.addon .s-name { font-weight: 600; font-size: 0.8rem; color: #ffffff; }
+        .qb-search-cat {
+            grid-column: 1 / -1;
+            margin: 0;
+            padding: 8px 4px 4px;
+            font-size: 0.68rem;
+            font-weight: 900;
+            letter-spacing: 0.55px;
+            text-transform: uppercase;
+            color: var(--primary);
+            background: linear-gradient(90deg, rgba(255, 229, 102, 0.1), transparent 75%);
+            border: none;
+            border-top: 1px solid rgba(255, 229, 102, 0.2);
+            margin-top: 4px;
+        }
+        .qb-family-label,
+        .sch-qb-family-label {
+            grid-column: 1 / -1;
+            margin: 0;
+            padding: 8px 4px 4px;
+            font-size: 0.68rem;
+            font-weight: 900;
+            letter-spacing: 0.55px;
+            text-transform: uppercase;
+            color: #ffe566;
+            background: linear-gradient(90deg, rgba(255, 229, 102, 0.1), transparent 75%);
+            border: none;
+            border-top: 1px solid rgba(255, 229, 102, 0.2);
+            margin-top: 4px;
+        }
+        .qb-addons-label {
+            grid-column: 1 / -1;
+            margin: 0;
+            padding: 8px 4px 4px;
+            font-size: 0.68rem;
+            font-weight: 900;
+            letter-spacing: 0.55px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            border-top: 1px solid #333;
+            margin-top: 4px;
+        }
+        .qb-family-label:first-child,
+        .sch-qb-family-label:first-child,
+        .qb-search-cat:first-child {
+            border-top: none;
+            margin-top: 0;
+            padding-top: 2px;
+            background: none;
+        }
+        .qb-addons-toggle {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            margin: 0;
+            padding: 8px 12px;
+            min-height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-secondary);
+            font: inherit;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+        }
+        .qb-addons-toggle:hover { color: var(--primary); }
+        .qb-addons-toggle i { font-size: 0.65rem; }
+        .qb-empty-msg {
+            grid-column: 1 / -1;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            padding: 14px 12px;
+            text-align: center;
+        }
+
+        /* Service search */
+        .qb-search-wrap {
+            position: relative;
+            margin: 0 auto 10px;
+            width: 100%;
+            max-width: 720px;
+        }
+        .qb-search-wrap i.qb-search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+        .qb-search {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: inherit;
+            font-weight: 600;
+        }
+        .qb-search:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15);
+        }
+        /* Browse-menu search — high contrast so it is easy to spot */
+        .login-service-menu .qb-search-wrap {
+            margin: 14px auto 14px;
+            max-width: 720px;
+        }
+        .login-service-menu .qb-search-wrap i.qb-search-icon {
+            color: #fbbf24;
+            font-size: 1rem;
+            left: 16px;
+        }
+        .login-service-menu .qb-search {
+            padding: 15px 46px;
+            border: 2px solid #fbbf24;
+            border-radius: 14px;
+            background: #141414;
+            color: #ffffff;
+            font-size: 1.02rem;
+            font-weight: 700;
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.18), 0 8px 22px rgba(0,0,0,0.35);
+        }
+        .login-service-menu .qb-search::placeholder {
+            color: #d6d3d1;
+            opacity: 1;
+            font-weight: 700;
+        }
+        .login-service-menu .qb-search:focus {
+            border-color: #ffe566;
+            box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.28), 0 8px 22px rgba(0,0,0,0.4);
+        }
+        .login-service-menu .qb-search-clear { color: #fde68a; }
+        .qb-search-clear {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 6px;
+            display: none;
+            font-size: 0.9rem;
+        }
+        .qb-search-wrap.has-query .qb-search-clear { display: block; }
+        .qb-search-hint {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: -4px 0 8px;
+            letter-spacing: 0.02em;
+        }
+        .qb-service .s-check {
+            display: none;
+            color: var(--primary);
+            font-size: 0.75rem;
+            margin-right: 4px;
+        }
+        .qb-service.selected .s-check { display: inline; }
+
+        /* Quick party booker — client line list */
+        .qb-pick-hint {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-top: 8px;
+            line-height: 1.35;
+        }
+        .qb-quick-card {
+            margin-top: 12px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: rgba(251, 191, 36, 0.04);
+        }
+        .qb-quick-card:empty { display: none; }
+        .qb-line-head {
+            font-size: 1.08rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            font-variant-numeric: tabular-nums;
+            margin: 12px 0 0;
+            text-align: center;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+        .qb-line-head .sub { color: var(--primary); }
+        .qb-line-hint {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin: 0 0 10px;
+            line-height: 1.35;
+        }
+        .qb-client-lines { display: grid; gap: 8px; }
+        .qb-client-line {
+            display: grid;
+            grid-template-columns: minmax(76px, 0.85fr) minmax(0, 1.5fr) auto auto;
+            gap: 8px;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.55);
+            border-radius: 10px;
+            background: var(--bg-card);
+            cursor: pointer;
+        }
+        .qb-client-line.active {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 1px rgba(251,191,36,0.4);
+            background: rgba(251,191,36,0.07);
+        }
+        .qb-client-line .cl-name {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            min-width: 0;
+        }
+        .qb-client-line .cl-name input {
+            width: 100%;
+            max-width: 140px;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            font: inherit;
+            font-size: 1.05rem;
+            font-weight: 800;
+            padding: 0;
+            outline: none;
+        }
+        .qb-client-line .cl-svcs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-items: center;
+            min-width: 0;
+        }
+        .qb-client-line .cl-svcs .empty {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .qb-cl-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(251,191,36,0.45);
+            background: rgba(251,191,36,0.12);
+            color: var(--primary);
+            font-size: 0.92rem;
+            font-weight: 700;
+            max-width: 100%;
+        }
+        .qb-cl-chip span {
+            min-width: 0;
+            max-width: 100%;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            white-space: normal;
+        }
+        .qb-cl-chip button {
+            border: none;
+            background: transparent;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+            padding: 0 1px;
+        }
+        .qb-client-line select.tech {
+            box-sizing: border-box;
+            max-width: 128px;
+            padding: 8px 9px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.55);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+        .qb-client-line button.rm {
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.25rem;
+            line-height: 1;
+            padding: 2px 4px;
+        }
+        .qb-client-line button.rm:hover { color: #f87171; }
+        .qb-client-line .rm-spacer { width: 1.4rem; }
+        .qb-add-person {
+            border: 1px dashed rgba(251,191,36,0.45);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 999px;
+            padding: 8px 14px;
+            margin-top: 10px;
+            font: inherit;
+            font-size: 0.98rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        .qb-add-person:hover { background: rgba(251,191,36,0.1); }
+        .qb-add-person:disabled { opacity: 0.4; cursor: not-allowed; }
+        @media (max-width: 520px) {
+            .qb-client-line {
+                grid-template-columns: minmax(0, 1fr) auto auto;
+                grid-template-areas:
+                    "name tech rm"
+                    "svcs svcs svcs";
+            }
+            .qb-client-line .cl-name { grid-area: name; }
+            .qb-client-line .cl-svcs { grid-area: svcs; }
+            .qb-client-line select.tech { grid-area: tech; }
+            .qb-client-line button.rm,
+            .qb-client-line .rm-spacer { grid-area: rm; }
+        }
+
+        /* Category / staff pills */
+        .qb-pills {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        /* Staff names — centered wrap (like times), not a horizontal scroll row */
+        #qbStaffPills {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            overflow-x: visible;
+            white-space: normal;
+        }
+        #qbStaffPills .qb-pill {
+            flex: 0 0 auto;
+            white-space: nowrap;
+        }
+        .qb-pills.qb-cat-pills {
+            position: sticky;
+            top: 0;
+            z-index: 4;
+            background: var(--bg-dark, #0a0a0a);
+            padding: 6px 0 8px;
+            margin-bottom: 8px;
+        }
+        .qb-pills.qb-cat-pills .qb-pill,
+        .qb-pills.qb-cat-pills .qb-pill.selected {
+            color: #ffe566;
+            border-color: #c9a227;
+        }
+        .qb-pills.qb-cat-pills .qb-pill:hover,
+        .qb-pills.qb-cat-pills .qb-pill.selected:hover {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            border-color: #ffe566;
+        }
+        .qb-pill {
+            padding: 7px 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            user-select: none;
+            max-width: 100%;
+            text-align: center;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+        .qb-pill.selected {
+            border-color: var(--primary);
+            background: rgba(251, 191, 36, 0.08);
+            color: #ffffff;
+        }
+        .qb-pill:hover,
+        .qb-pill.selected:hover {
+            color: #ffffff;
+            border-color: #ffe566;
+        }
+
+        /* Date chips — horizontal scroll */
+        .qb-dates {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+            margin-bottom: 14px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .qb-dates::-webkit-scrollbar { height: 4px; }
+        .qb-date {
+            min-width: 64px;
+            padding: 8px 6px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--bg-card);
+            text-align: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.15s;
+            user-select: none;
+        }
+        .qb-date.selected {
+            border-color: var(--primary);
+            background: rgba(251, 191, 36, 0.08);
+        }
+        .qb-date .d-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .qb-date.selected .d-label { color: var(--primary); }
+        .qb-date .d-day {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+        .qb-date .d-day:hover { color: #ffe566; text-decoration: underline; }
+        .qb-cal-wrap {
+            min-width: 148px;
+            flex-shrink: 0;
+            align-self: stretch;
+            display: flex;
+            align-items: center;
+        }
+        .qb-cal-wrap input[type="date"] {
+            height: 100%;
+            min-height: 58px;
+            background: var(--bg-card);
+            border: 2px solid #c9a227;
+            color: #ffe566;
+            font-weight: 800;
+            border-radius: var(--radius-md);
+        }
+
+        /* Available-staff label inside time slots */
+        .qb-time .t-staff {
+            display: block;
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 88px;
+        }
+        .qb-time.selected .t-staff { color: rgba(0, 0, 0, 0.7); }
+
+        /* Time slots — wrapping grid (match staff/dates, not horizontal strip) */
+        .qb-times {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+            gap: 8px;
+        }
+        .qb-time {
+            padding: 10px 12px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--bg-card);
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.15s;
+            user-select: none;
+        }
+        .qb-time.selected {
+            background: var(--gradient-primary);
+            border-color: var(--primary);
+            color: #000;
+        }
+        .qb-time.off {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .qb-times-empty {
+            grid-column: 1 / -1;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            padding: 12px 8px;
+            text-align: center;
+        }
+
+        /* Details */
+        .qb-details .form-group { margin-bottom: 12px; }
+        .qb-optional-toggle {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: 4px 0;
+        }
+        .qb-optional-toggle:hover { color: var(--primary); }
+        #qbOptional { display: none; }
+        #qbOptional.open { display: block; }
+
+        /* Sticky summary (confirm lives under details) */
+        .qb-bar {
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 15, 15, 0.97);
+            border-top: 2px solid var(--primary);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+        }
+        .qb-bar-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .qb-bar-summary {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+        .qb-bar-price {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .qb-confirm-inline {
+            width: 100%;
+            margin-top: 4px;
+        }
+
+        /* Success */
+        #qbSuccess { display: none; }
+        .qb-success-card {
+            max-width: 520px;
+            margin: 40px auto;
+            text-align: center;
+            padding: 40px 24px;
+        }
+        .qb-success-card .big { font-size: 3.5rem; margin-bottom: 12px; }
+
+        @media (max-width: 600px) {
+            .qb-services { grid-template-columns: 1fr; }
+            .qb-bar-summary { font-size: 0.75rem; }
+            .qb-svc-panel { max-height: min(48vh, 420px); }
+        }
+
+        /* Phone login gate — services stay hidden until signed in */
+        .auth-card { background: var(--bg-card); border: 2px solid var(--primary); border-radius: var(--radius-lg); padding: 22px 18px; margin: 14px auto; max-width: 720px; box-shadow: 0 0 30px rgba(251,191,36,0.12); box-sizing: border-box; }
+        .booking-mkt > .auth-card { max-width: none; width: 100%; margin: 8px 0 20px; }
+        .auth-card h2 { color: var(--primary); font-size: 1.15rem; text-align: center; margin-bottom: 4px; }
+        .auth-card .sub { color: var(--text-secondary); font-size: 0.8rem; text-align: center; margin-bottom: 14px; }
+        .auth-card .form-group { margin-bottom: 10px; }
+        .auth-error { color: #f87171; font-size: 0.78rem; font-weight: 700; min-height: 18px; text-align: center; margin: 6px 0; }
+        .auth-info { color: var(--text-muted); font-size: 0.7rem; text-align: center; margin-top: 10px; }
+        .session-bar { display: none; align-items: center; justify-content: space-between; gap: 10px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 10px 14px; margin: 12px auto; max-width: 720px; flex-wrap: wrap; }
+        .session-bar .who { font-size: 0.85rem; color: var(--text-primary); font-weight: 700; }
+        .session-bar .who i { color: var(--primary); margin-right: 6px; }
+        .session-bar button { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-secondary); border-radius: 8px; padding: 6px 12px; font-size: 0.72rem; font-weight: 700; cursor: pointer; }
+
+        .sms-consent {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 12px 0 4px;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: rgba(251,191,36,0.06);
+            text-align: left;
+            cursor: pointer;
+        }
+        .sms-consent input {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: var(--primary);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .sms-consent span {
+            color: var(--text-secondary);
+            font-size: 0.72rem;
+            line-height: 1.45;
+            font-weight: 700;
+        }
+        /* Shared centered marketing column: salon / work / discounts */
+        .booking-mkt {
+            max-width: 720px;
+            margin: 12px auto 8px;
+            padding: 0 16px;
+            box-sizing: border-box;
+        }
+        .salon-strip { margin: 0; width: 100%; }
+        .salon-strip-title {
+            text-align: center; color: var(--text-secondary);
+            font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px;
+        }
+        .salon-strip-title i { color: var(--primary); }
+        .salon-block { margin: 0 0 20px; }
+        .salon-strip-sub {
+            text-align: center; color: #ffffff !important;
+            font-size: clamp(1.15rem, 2.4vw, 1.45rem); font-weight: 800; letter-spacing: 0.4px; margin: 0 0 8px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.95);
+        }
+        .salon-strip-note {
+            text-align: center; color: #ffe566 !important;
+            font-size: clamp(0.98rem, 2vw, 1.18rem); margin: 0 0 14px; font-weight: 700;
+            line-height: 1.45;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 0 8px rgba(0,0,0,0.65);
+        }
+        .salon-strip-note.no-caps {
+            font-size: clamp(1.05rem, 2.2vw, 1.28rem);
+            line-height: 1.5;
+            text-transform: none !important;
+        }
+        .salon-photos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 0;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .salon-photos > * { margin: 5px; }
+        .salon-photo {
+            flex: 0 1 calc((100% - 30px) / 3);
+            width: calc((100% - 30px) / 3);
+            max-width: calc((100% - 30px) / 3);
+            /* 4:3 without aspect-ratio (Safari < 15) */
+            height: 0;
+            padding: 0 0 25%;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            cursor: zoom-in;
+            position: relative;
+            background: #111;
+            box-sizing: border-box;
+        }
+        .salon-photo img {
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover; display: block;
+        }
+        .salon-photo .cap {
+            position: absolute; left: 0; right: 0; bottom: 0; padding: 8px 10px;
+            font-size: 0.68rem; font-weight: 800; letter-spacing: 0.02em;
+            color: #ffe566 !important;
+            -webkit-text-fill-color: #ffe566 !important;
+            background: linear-gradient(transparent, rgba(0,0,0,0.92));
+            text-shadow: 0 1px 3px rgba(0,0,0,1), 0 0 6px rgba(0,0,0,0.8);
+        }
+        .discount-ads-title {
+            text-align: center; font-weight: 900; color: var(--primary);
+            font-size: clamp(1.1rem, 2.2vw, 1.35rem); letter-spacing: 0.5px; margin: 8px 0 14px;
+        }
+        .discount-ads {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            width: 100%;
+            margin: 0 auto 8px;
+        }
+        .discount-ad {
+            background: linear-gradient(135deg, rgba(251,191,36,0.14), rgba(251,191,36,0.05));
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            padding: 12px 10px;
+            text-align: center;
+            min-height: 72px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-sizing: border-box;
+            box-shadow: 0 0 14px rgba(251,191,36,0.18), inset 0 0 18px rgba(251,191,36,0.05);
+        }
+        .discount-ad .t { font-weight: 900; color: #ffffff !important; font-size: 0.85rem; overflow-wrap: anywhere; word-break: break-word; text-shadow: 0 1px 2px rgba(0,0,0,0.9); }
+        .discount-ad .d { font-size: 0.7rem; color: #fde68a !important; font-weight: 700; margin-top: 3px; overflow-wrap: anywhere; word-break: break-word; text-shadow: 0 1px 3px rgba(0,0,0,0.95); }
+        .booking-promo {
+            width: 100%;
+            margin: 0 auto 12px;
+            background: linear-gradient(135deg, rgba(251,191,36,0.16), rgba(251,191,36,0.06));
+            border: none;
+            border-radius: var(--radius-lg);
+            padding: 12px 18px;
+            text-align: center;
+            font-weight: 800;
+            color: #ffffff !important;
+            font-size: 0.95rem;
+            box-shadow: 0 0 16px rgba(251,191,36,0.2), inset 0 0 20px rgba(251,191,36,0.06);
+            box-sizing: border-box;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.85);
+        }
+        .booking-promo .promo-emoji {
+            color: #fde68a !important;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.95);
+        }
+        @media (max-width: 600px) {
+            .salon-photos > * { margin: 4px; }
+            .salon-photo {
+                flex: 0 1 calc((100% - 16px) / 2);
+                width: calc((100% - 16px) / 2);
+                max-width: calc((100% - 16px) / 2);
+                padding: 0 0 37.5%;
+            }
+            .discount-ads { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+        }
+        .booking-mkt .booking-testimonials,
+        .booking-mkt .booking-hours,
+        .booking-mkt .booking-contact-us,
+        .booking-mkt .booking-review-links,
+        .booking-mkt .booking-social-links,
+        .booking-mkt .login-service-menu {
+            max-width: 760px;
+            width: 100%;
+            margin: 12px auto 20px;
+            padding: 0 12px;
+            box-sizing: border-box;
+        }
+        .login-service-menu { margin: 8px auto 16px; }
+        .login-service-menu .qb-section-title {
+            display: block;
+            width: 100%;
+            margin: 0 auto 12px;
+            text-align: center;
+            justify-content: center;
+            color: #ffffff !important;
+            font-size: clamp(1.35rem, 2.8vw, 1.65rem);
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .login-menu-note {
+            text-align: center; color: var(--text-secondary); font-size: 0.72rem;
+            font-weight: 700; margin: 0 0 10px;
+        }
+        .pub-menu-panel {
+            max-width: 720px;
+            margin: 0 auto;
+            max-height: min(48vh, 440px);
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 12px;
+            background: rgba(12, 12, 12, 0.92);
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            -webkit-overflow-scrolling: touch;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .pub-menu-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 76px 84px;
+            align-items: center;
+            column-gap: 10px;
+            padding: 10px 12px;
+            min-height: 44px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 10px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .pub-menu-row.addon .n { font-weight: 600; font-size: 0.8rem; color: #d1d5db; }
+        .pub-menu-row .n {
+            font-weight: 700; font-size: 0.84rem; color: var(--text-primary); line-height: 1.3;
+            min-width: 0; overflow-wrap: break-word; word-break: normal;
+        }
+        .pub-menu-row .d { font-size: 0.7rem; color: var(--text-secondary); margin-top: 2px; line-height: 1.3; }
+        .pub-menu-row .dur {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            justify-self: center;
+            font-size: 0.64rem; color: #f5f5f5; font-weight: 700;
+            text-align: center; white-space: nowrap;
+            padding: 3px 8px;
+            border: 1px solid rgba(255, 229, 102, 0.65);
+            border-radius: 999px;
+            line-height: 1.2;
+            box-sizing: border-box;
+            min-width: 58px;
+        }
+        .pub-menu-row .p {
+            font-weight: 800; color: var(--primary); white-space: nowrap; font-size: 0.86rem;
+            text-align: right; justify-self: end; font-variant-numeric: tabular-nums;
+        }
+        .pub-menu-addons {
+            margin: 0; padding: 6px 4px 2px;
+            font-size: 0.68rem; font-weight: 800; letter-spacing: 0.6px;
+            text-transform: uppercase; color: var(--text-secondary);
+            background: transparent; border: none;
+        }
+        .pub-addons-toggle {
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            width: 100%; padding: 8px 12px; min-height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.35); border-radius: 8px;
+            background: transparent; color: var(--text-secondary);
+            font: inherit; font-size: 0.75rem; font-weight: 700; cursor: pointer;
+        }
+        .pub-addons-toggle:hover { color: var(--primary); }
+        .pub-addons-toggle i { font-size: 0.65rem; }
+        .salon-strip-note.gallery-family,
+        .gallery-family {
+            text-align: center;
+            color: #ffffff !important;
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            margin: 8px auto 12px;
+            text-transform: uppercase;
+            max-width: 640px;
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, rgba(251,191,36,0.55), rgba(251,191,36,0.28));
+            box-shadow: 0 0 36px rgba(251,191,36,0.55), inset 0 0 48px rgba(251,191,36,0.22);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.85);
+            box-sizing: border-box;
+        }
+        .booking-services-intro {
+            max-width: 760px; margin: 0 auto 12px; padding: 0 12px;
+            text-align: center; color: #ffffff; font-size: clamp(1rem, 2vw, 1.15rem); line-height: 1.65;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.85);
+        }
+        .booking-services-categories {
+            max-width: 760px; margin: 0 auto 18px; padding: 0 12px;
+            text-align: center; color: #fde68a !important; font-size: clamp(1.05rem, 2.2vw, 1.22rem); font-weight: 800;
+            line-height: 1.55; text-shadow: 0 1px 3px rgba(0,0,0,0.95);
+        }
+        .login-service-menu .qb-section-title { color: #ffffff !important; text-align: center !important; }
+        .booking-menu-dropdowns {
+            display: grid;
+            gap: 10px;
+            margin: 12px auto 8px;
+            max-width: 720px;
+            width: 100%;
+        }
+        .menu-dropdown {
+            background: linear-gradient(180deg, rgba(255,229,102,0.08), rgba(255,255,255,0.02));
+            border: 1px solid rgba(255, 229, 102, 0.45);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+        }
+        .menu-dropdown-toggle {
+            width: 100%; display: flex; align-items: center; gap: 10px;
+            padding: 12px 14px; background: transparent; border: none; cursor: pointer;
+            color: #ffffff; font: inherit; text-align: left;
+        }
+        .menu-dropdown-toggle h3 { margin: 0; flex: 1; font-size: 0.95rem; color: #ffffff !important; }
+        .menu-dropdown-toggle .count { color: #fde68a; font-size: 0.72rem; white-space: nowrap; }
+        .menu-dropdown-toggle .chevron { color: var(--primary); transition: transform 0.2s; }
+        .menu-dropdown.open .chevron { transform: rotate(180deg); }
+        .menu-dropdown-panel { display: none; border-top: 1px solid rgba(255,255,255,0.08); }
+        .menu-dropdown.open .menu-dropdown-panel { display: block; }
+        .menu-col-labels, .menu-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 80px 88px;
+            column-gap: 10px;
+            padding: 9px 14px;
+            align-items: center;
+            min-height: 42px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .menu-col-labels {
+            font-size: 0.66rem;
+            font-weight: 800;
+            color: #fde68a !important;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .menu-col-labels .c-dur, .menu-row .m-dur { text-align: center; justify-self: center; }
+        .menu-col-labels .c-price, .menu-row .m-price { text-align: right; justify-self: end; }
+        .menu-row { border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .menu-row:hover .m-name,
+        .menu-row:hover .m-dur,
+        .menu-row:hover .m-price,
+        .menu-row:hover .svc-popular {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+        }
+        .menu-row .m-info { min-width: 0; }
+        .menu-row .m-name {
+            color: #ffffff !important;
+            font-size: 0.84rem;
+            font-weight: 700;
+            line-height: 1.3;
+            overflow-wrap: break-word;
+        }
+        .menu-row .m-desc { color: rgba(255,255,255,0.75); font-size: 0.68rem; margin-top: 2px; }
+        .menu-row .m-dur {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            justify-self: center;
+            color: #f5f5f5 !important;
+            font-size: 0.64rem;
+            font-weight: 700;
+            white-space: nowrap;
+            padding: 3px 8px;
+            border: 1px solid rgba(255, 229, 102, 0.65);
+            border-radius: 999px;
+            line-height: 1.2;
+            box-sizing: border-box;
+            min-width: 58px;
+        }
+        .menu-row .m-price {
+            color: #ffe566 !important;
+            font-size: 0.86rem;
+            font-weight: 800;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+            justify-self: end;
+            text-align: right;
+        }
+        .menu-addons-toggle {
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            width: 100%; padding: 8px; border: none; border-top: 1px solid rgba(255,255,255,0.06);
+            background: transparent; color: #ffffff; font: inherit; font-size: 0.72rem; cursor: pointer;
+        }
+        .menu-addons-label { padding: 6px 14px 2px; font-size: 0.65rem; color: #ffffff; text-align: center; text-transform: uppercase; }
+        @media (max-width: 520px) {
+            .menu-col-labels, .menu-row {
+                grid-template-columns: minmax(0, 1fr) 64px 70px;
+                column-gap: 6px;
+                padding: 8px 10px;
+            }
+            .qb-service {
+                grid-template-columns: minmax(0, 1fr) 64px 70px;
+                column-gap: 6px;
+                padding: 9px 10px;
+            }
+            .menu-row .m-name, .qb-service .s-name { font-size: 0.78rem; }
+            .menu-row .m-price, .qb-service .s-price { font-size: 0.78rem; }
+        }
+        .services-book-wrap { display: flex; justify-content: center; margin: 14px 0 8px; }
+        .services-book-wrap .btn-primary {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 10px !important;
+            background: linear-gradient(135deg, #ffe566, #f5c518) !important;
+            color: #111111 !important;
+            border: 2px solid #c9a227 !important;
+            font-weight: 900 !important;
+            text-shadow: none !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+        }
+        .services-book-wrap .btn-primary i,
+        .services-book-wrap .btn-primary .fa-calendar-check,
+        .services-book-wrap .btn-primary .fa-calendar-alt {
+            color: #111111 !important;
+            -webkit-text-fill-color: #111111 !important;
+            font-size: 1.05em !important;
+            filter: none !important;
+            opacity: 1 !important;
+        }
+        .booking-reviews-head { text-align: center; margin: 18px 0 10px; padding: 0 12px; }
+        .booking-reviews-head h2 { color: #fde68a !important; font-size: 1.25rem; margin: 0 0 4px; }
+        .booking-reviews-head p { color: #ffffff !important; font-size: 0.85rem; margin: 0; }
+        .booking-rating-pill {
+            display: inline-flex; align-items: center; gap: 8px; margin: 0 auto 14px;
+            padding: 8px 16px; border-radius: 999px; border: 2px solid var(--primary);
+            color: #ffffff !important; font-size: 0.9rem;
+            background: linear-gradient(135deg, rgba(251,191,36,0.14), rgba(251,191,36,0.05));
+            text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+        }
+        .booking-rating-pill i { color: #fde68a !important; }
+        .booking-reviews-wrap { text-align: center; }
+        .booking-testimonials { max-width: 720px; margin: 8px auto 16px; padding: 0 16px; display: grid; gap: 10px; text-align: left; }
+        .booking-testimonials .t-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 14px; }
+        .booking-testimonials .stars { color: var(--primary); font-size: 0.75rem; letter-spacing: 1px; }
+        .booking-testimonials .quote { color: var(--text-primary); font-size: 0.82rem; line-height: 1.45; margin: 6px 0; overflow-wrap: anywhere; word-break: break-word; }
+        .booking-testimonials .meta { color: var(--text-secondary); font-size: 0.7rem; overflow-wrap: anywhere; }
+        .booking-review-links, .booking-social-links {
+            display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+            max-width: 720px; margin: 0 auto 14px; padding: 0 16px;
+        }
+        .booking-hours {
+            max-width: 720px; margin: 0 auto 14px; padding: 0 16px;
+            text-align: center; color: var(--text-secondary); font-size: 0.8rem; line-height: 1.5;
+        }
+        .booking-hours strong { color: var(--text-primary); }
+        .booking-contact-btn {
+            display: inline-block; color: var(--primary); font-size: 0.8rem; font-weight: 700;
+            text-decoration: none; border: 1px solid var(--primary); border-radius: 20px;
+            padding: 6px 14px; background: transparent; transition: all 0.2s; cursor: pointer;
+            font-family: inherit;
+        }
+        .booking-contact-btn:hover { background: var(--primary); color: #000; }
+        .booking-contact-us {
+            margin: 8px 0 20px;
+            text-align: center;
+        }
+        .booking-contact-us .contact-title {
+            color: #fde68a !important; font-size: 1.35rem; font-weight: 900;
+            margin: 0 0 4px; letter-spacing: 0.02em;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.95);
+        }
+        .booking-contact-us .contact-subtitle {
+            color: #ffffff !important; font-size: 0.85rem; font-weight: 700;
+            margin: 0 0 18px; text-shadow: 0 1px 2px rgba(0,0,0,0.85);
+        }
+        .booking-contact-us .contact-info-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 16px;
+            margin: 0 0 20px;
+            text-align: left;
+        }
+        @media (max-width: 640px) {
+            .booking-contact-us .contact-info-grid { grid-template-columns: 1fr; }
+        }
+        .booking-contact-us .contact-info-panel,
+        .booking-contact-us .contact-hours-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 18px 16px;
+        }
+        .booking-contact-us .contact-info-panel h3,
+        .booking-contact-us .contact-hours-panel h3 {
+            color: #fde68a !important; font-size: 1.05rem; margin: 0 0 12px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.95);
+        }
+        .booking-contact-us .contact-info-links {
+            display: flex; flex-wrap: wrap; gap: 8px;
+        }
+        .booking-contact-us .contact-info-links a {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #ffffff !important; font-size: 0.78rem; font-weight: 700;
+            text-decoration: none !important; border: 1px solid var(--primary); border-radius: 20px;
+            padding: 6px 12px; background: transparent; transition: all 0.2s;
+        }
+        .booking-contact-us .contact-info-links a i { color: #fde68a !important; }
+        .booking-contact-us .contact-info-links a:hover {
+            background: rgba(251,191,36,0.4); color: #ffffff !important;
+            box-shadow: 0 0 12px rgba(251,191,36,0.35);
+        }
+        .booking-contact-us .contact-hours-list { display: grid; gap: 10px; }
+        .booking-contact-us .contact-hours-row {
+            display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+            color: #ffffff !important; font-size: 0.88rem;
+            border-bottom: 0; padding-bottom: 0;
+        }
+        .booking-contact-us .contact-hours-row .day,
+        .booking-contact-us .contact-hours-row .time {
+            color: #ffffff !important; border: 1px solid var(--primary); border-radius: 20px;
+            padding: 7px 14px; font-weight: 700;
+        }
+        .booking-contact-us .contact-hours-row:last-child { border-bottom: 0; padding-bottom: 0; }
+        .booking-contact-us .contact-hours-row .day { color: var(--text-primary); font-weight: 700; }
+        .booking-contact-us .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 0 0 18px;
+            text-align: center;
+        }
+        .booking-contact-us .contact-cards.two-col {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @media (max-width: 640px) {
+            .booking-contact-us .contact-cards,
+            .booking-contact-us .contact-cards.two-col { grid-template-columns: 1fr; gap: 18px; }
+        }
+        .booking-contact-us .contact-cards h4 {
+            color: #fde68a !important; margin: 0 0 4px; font-size: 0.95rem;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.95);
+        }
+        .booking-contact-us .contact-cards p {
+            color: #ffffff !important; font-size: 0.8rem; line-height: 1.45; margin: 0 0 8px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.85);
+        }
+        .booking-contact-us .contact-cards .ico {
+            font-size: 1.6rem; color: #fde68a !important; margin-bottom: 6px;
+        }
+        .booking-contact-us .contact-action-btn {
+            display: inline-block; color: #ffffff !important; font-size: 0.8rem; font-weight: 700;
+            text-decoration: none !important; border: 1px solid var(--primary); border-radius: 20px;
+            padding: 6px 14px; background: transparent; transition: all 0.2s;
+        }
+        .booking-contact-us .contact-action-btn i { color: #fde68a !important; }
+        .booking-contact-us .contact-action-btn:hover {
+            background: rgba(251,191,36,0.4); color: #ffffff !important;
+            box-shadow: 0 0 12px rgba(251,191,36,0.35);
+        }
+        .booking-map-wrap {
+            border-radius: var(--radius-lg); overflow: hidden;
+            border: 2px solid var(--border-color); box-shadow: var(--shadow-glow);
+            margin-top: 4px;
+        }
+        .booking-map-wrap iframe { width: 100%; height: 280px; border: 0; display: block; }
+        .booking-contact-us .contact-cards h4 { color: #fde68a !important; text-shadow: 0 1px 3px rgba(0,0,0,0.95); }
+        .booking-contact-us .contact-cards p { color: #ffffff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.85); }
+        .salon-strip-note {
+            color: #ffe566 !important;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 0 8px rgba(0,0,0,0.65);
+        }
+        .salon-strip-sub {
+            color: #ffffff !important;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.95);
+        }
+        .salon-photo .cap {
+            color: #ffe566 !important;
+            -webkit-text-fill-color: #ffe566 !important;
+        }
+        .booking-policy details { border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-card); margin-bottom: 8px; padding: 10px 12px; }
+        .booking-policy summary { cursor: pointer; color: var(--primary); font-size: 0.85rem; font-weight: 800; }
+        .booking-policy p { color: var(--text-secondary); font-size: 0.75rem; line-height: 1.5; margin: 8px 0 0; }
+        .booking-footer { text-align: center; padding: 24px 16px 40px; color: #fde68a; font-size: 0.78rem; border-top: 1px solid var(--border-color); margin-top: 20px; }
+        .booking-footer .footer-nav {
+            display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
+            gap: 2px 2px; margin-bottom: 10px;
+        }
+        .booking-footer a {
+            color: #ffffff !important; text-decoration: none !important; margin: 0;
+            font-size: 0.75rem; display: inline-flex; align-items: center; justify-content: center;
+            min-height: 36px; padding: 6px 10px; border-radius: 8px;
+        }
+        .booking-footer a:hover { color: var(--primary) !important; }
+        .booking-footer-toast {
+            position: fixed; left: 50%; bottom: 88px; transform: translateX(-50%);
+            z-index: 4000; max-width: min(90vw, 360px); padding: 10px 14px;
+            background: rgba(15,15,15,0.96); border: 1px solid var(--primary);
+            border-radius: 10px; color: var(--text-primary); font-size: 0.8rem; font-weight: 700;
+            text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.45); pointer-events: none;
+            opacity: 0; transition: opacity 0.2s;
+        }
+        .booking-footer-toast.show { opacity: 1; }
+    </style>
+</head>
+<body class="page-booking">
+    <header class="app-header">
+                <div class="logo">
+            <img class="salon-logo" src="../assets/images/logo.png" alt="Urban Nail Bar"
+                 onerror="this.onerror=null;this.src='../assets/brand/logo.png'">
+            <div class="logo-text">
+                <h1 class="brand-salon-name" id="brandName">Urban Nail Bar</h1>
+                <span class="brand-tagline"><span class="brand-ai-line">AI INTEGRATION</span><span class="brand-powered-line">Powered By <strong class="brand-gold">AI Salon Pro</strong></span></span>
+            </div>
+        </div>
+
+        <div class="header-family-wrap">
+            <p class="gallery-family header-gallery-family" id="bookingSalonFamily">The Urban Nail Bar Family</p>
+            <p class="salon-strip-note no-caps header-welcome-note" id="bookingSalonWelcome">
+                <span class="welcome-line">Would Like To Welcome You To Our Wonderful Family Friendly Environment</span>
+                <span class="welcome-line">Salon &amp; Spa Located in Scottsdale, Arizona.</span>
+            </p>
+        </div>
+
+        <!-- Filled by shared/app-nav.js (single source of truth) -->
+        <nav class="nav-tabs"></nav>
+
+        <div class="user-menu">
+            <span class="header-booking-tagline">Reserve your visit &middot; Scottsdale</span>
+            <button type="button" class="header-book-now" id="headerBookNow" onclick="goBookNow(event)">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i> Book Now
+            </button>
+        </div>
+    </header>
+
+    <div class="app-body">
+        <main class="content-area" style="overflow-y:auto;" id="qbMain">
+
+            <nav class="booking-side-nav" id="bookingSideNav" aria-label="Page sections">
+                <a href="#authCard" class="side-nav-book" data-jump="authCard">Sign In / Book Now</a>
+                <a href="#salonBlockInterior" data-jump="salonBlockInterior">Our Salon</a>
+                <a href="#salonBlockWork" data-jump="salonBlockWork">Our Craft &amp; Services</a>
+                <a href="#bookingDiscountsBlock" data-jump="bookingDiscountsBlock">Special Discounts</a>
+                <a href="#loginServiceMenuSection" data-jump="loginServiceMenuSection">Our Services</a>
+                <a href="#bookingReviewsSection" data-jump="bookingReviewsSection">Client Reviews</a>
+                <a href="#bookingContactUs" data-jump="bookingContactUs">Contact Us</a>
+            </nav>
+
+            <div id="qbInstallTip" style="display:none; margin:10px 16px 0; background:linear-gradient(135deg,#fbbf24,#f59e0b); color:#000; border-radius:10px; padding:10px 14px; font-size:0.8rem; font-weight:700; align-items:center; justify-content:space-between; gap:10px;">
+                <span id="qbInstallText">Add us to your home screen — book your next visit in two taps.</span>
+                <span style="display:flex; gap:8px; align-items:center;">
+                    <button id="qbInstallBtn" style="display:none; background:#000; color:#fbbf24; border:none; border-radius:6px; padding:6px 12px; font-weight:800; cursor:pointer;">Install</button>
+                    <button onclick="qbDismissInstall()" style="background:transparent; border:none; color:#000; font-weight:800; cursor:pointer; font-size:0.95rem;" aria-label="Dismiss">✕</button>
+                </span>
+            </div>
+
+            <!-- ===== BOOKING FLOW ===== -->
+            <div id="qbFlow">
+                <!-- Marketing + auth: phone login screen only (hidden after sign-in) -->
+                <div id="loginMarketing">
+                <div class="booking-mkt" id="bookingMktColumn">
+                    <div class="salon-strip" id="salonStripBooking">
+                        <div class="salon-block" id="salonBlockInterior">
+                            <div class="salon-strip-sub" id="bookingSalonSubhead" style="margin-top:10px;">Our Salon</div>
+                            <p class="salon-strip-note" id="bookingSalonSubnote">A Quick Look At Our Scottsdale Salon Space!</p>
+                            <div class="salon-photos" id="salonPhotosBooking"></div>
+                        </div>
+                    </div>
+
+                    <div class="salon-block" id="salonBlockWork">
+                        <div class="salon-strip-sub" id="bookingWorkTitle">Our Craft &amp; Services</div>
+                        <p class="salon-strip-note" id="bookingWorkSubnote">Premium nail art &amp; signature finished looks by our talented team.</p>
+                        <div class="salon-photos" id="workPhotosBooking"></div>
+                    </div>
+
+                    <div id="bookingDiscountsBlock">
+                        <div class="booking-promo" id="qbPromoBannerBooking"><span class="promo-emoji">✨</span> $5 OFF any Mani + Pedi Combo — Book Today! <span class="promo-emoji">✨</span></div>
+                        <div class="discount-ads-title"><i class="fas fa-tags"></i> SPECIAL DISCOUNTS</div>
+                        <div class="discount-ads" id="discountAdsStrip">
+                            <div class="discount-ad"><div class="t">New Client</div><div class="d">10% OFF your first visit</div></div>
+                            <div class="discount-ad"><div class="t">First Timer</div><div class="d">Welcome deal  10% OFF</div></div>
+                            <div class="discount-ad"><div class="t">Birthday</div><div class="d">Celebrate with 20% OFF</div></div>
+                            <div class="discount-ad"><div class="t">Senior</div><div class="d">15% OFF for seniors</div></div>
+                            <div class="discount-ad"><div class="t">Military</div><div class="d">25% OFF with ID</div></div>
+                            <div class="discount-ad"><div class="t">Ask Us</div><div class="d">Custom discounts available</div></div>
+                        </div>
+                    </div>
+
+                    <!-- Browse service menu — matches website Our Services -->
+                    <div class="login-service-menu" id="loginServiceMenuSection">
+                        <div class="qb-section-title" id="bookingServicesTitle">Our Services</div>
+                        <p class="booking-services-intro" id="bookingServicesIntro">Explore our manicure, pedicure, nail enhancement, and design options to find the services that best match your style, routine, and occasion. From simple upkeep to detailed sets and finishing touches, our menu gives you plenty of choices before you book online.</p>
+                        <p class="booking-services-categories" id="bookingServicesCategories">Manicure · Pedicure · Enhancements · Dip · Waxing · Lashes &amp; more</p>
+                        <div class="qb-search-wrap" id="loginMenuSearchWrap">
+                            <i class="fas fa-search qb-search-icon" aria-hidden="true"></i>
+                            <input type="search" class="qb-search" id="loginMenuSearch" placeholder="Search for Services" autocomplete="off" enterkeyhint="search" aria-label="Search for Services">
+                            <button type="button" class="qb-search-clear" id="loginMenuSearchClear" aria-label="Clear search"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="qb-search-hint" id="loginMenuSearchHint" style="display:none;"></div>
+                        <div class="booking-menu-dropdowns" id="loginMenuList"></div>
+                        <div class="services-book-wrap">
+                            <button type="button" class="btn btn-primary" style="padding:14px 28px;" onclick="goBookNow(event)">
+                                <i class="fas fa-calendar-alt" aria-hidden="true"></i> Book an Appointment
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="booking-hours" id="bookingHours"></div>
+
+                    <!-- Reviews — match website What Our Clients Say -->
+                    <div class="booking-reviews-wrap" id="bookingReviewsSection">
+                        <div class="booking-reviews-head">
+                            <h2>What Our Clients Say</h2>
+                            <p>Real reviews from Urban Nail Bar guests</p>
+                        </div>
+                        <div class="booking-rating-pill" id="bookingRatingPill"><i class="fas fa-star"></i> 4.8 / 5 · 1,150 reviews</div>
+                        <div class="booking-review-links" id="bookingReviewLinks"></div>
+                        <div class="booking-testimonials" id="bookingTestimonials"></div>
+                    </div>
+
+                    <!-- PHONE LOGIN GATE -->
+                    <div class="auth-card" id="authCard">
+                        <h2><i class="fas fa-user-circle"></i> Sign in to continue</h2>
+                        <p class="sub">Enter your phone number to access booking, menu, and services.<br>No password. New here? We'll ask your name once.</p>
+                        <div class="form-group"><input type="tel" class="form-input" id="loginPhone" placeholder="Phone number" autocomplete="tel" onkeydown="if(event.key==='Enter')doPhoneAuth()"></div>
+                        <label class="sms-consent" for="smsConsent">
+                            <input type="checkbox" id="smsConsent">
+                            <span>Input your number to consent to Urban Nail Bar_9290_Scottsdale_AZ SMS messages. Opt out with STOP.</span>
+                        </label>
+                        <div id="nameFields" style="display:none;">
+                            <div class="form-group"><input type="text" class="form-input" id="signupFirst" placeholder="First name" autocomplete="given-name"></div>
+                            <div class="form-group"><input type="text" class="form-input" id="signupLast" placeholder="Last name (optional)" autocomplete="family-name" onkeydown="if(event.key==='Enter')doPhoneAuth()"></div>
+                        </div>
+                        <div class="auth-error" id="loginError"></div>
+                        <button class="btn btn-primary" style="width:100%;" onclick="doPhoneAuth()"><i class="fas fa-arrow-right"></i> Continue</button>
+                        <div class="auth-info"><i class="fas fa-lock"></i> Login required to book.</div>
+                    </div>
+
+                    <div class="booking-social-links" id="bookingSocialLinks"></div>
+
+                    <section class="booking-contact-us" id="bookingContactUs" aria-label="Contact Us">
+                        <h2 class="contact-title">Contact Us</h2>
+                        <p class="contact-subtitle" id="bookingContactSubtitle">Start your journey now</p>
+                        <div class="contact-info-grid">
+                            <div class="contact-info-panel">
+                                <h3 id="bookingContactInfoLabel">Information</h3>
+                                <div class="contact-info-links" id="bookingContactInfoLinks"></div>
+                            </div>
+                            <div class="contact-hours-panel">
+                                <h3 id="bookingContactHoursLabel">Hours</h3>
+                                <div class="contact-hours-list" id="bookingContactHoursList"></div>
+                            </div>
+                        </div>
+                        <div class="contact-cards" id="bookingContactCards"></div>
+                        <div class="booking-map-wrap" id="bookingMapWrap">
+                            <iframe id="bookingMap" src="" width="100%" height="280" allowfullscreen loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade" title="Salon location map"></iframe>
+                            <div id="bookingMapFallback" style="display:none;padding:24px 16px;text-align:center;color:var(--text-secondary);background:#111;">
+                                <p style="margin:0 0 10px;"><i class="fas fa-map-marker-alt"></i> Map preview unavailable in this browser.</p>
+                                <a id="bookingMapFallbackLink" class="contact-action-btn" href="#" target="_blank" rel="noopener"><i class="fas fa-directions"></i> Open in Google Maps</a>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                </div><!-- /loginMarketing -->
+
+                <div id="postAuthContent" style="display:none;">
+                <div class="qb-hero">
+                    <h1><i class="fas fa-bolt"></i> Book in under a minute</h1>
+                    <p>Pick a service, pick a time, done.</p>
+                </div>
+
+                <div class="session-bar" id="sessionBar" style="display:flex;">
+                    <span class="who"><i class="fas fa-user-check"></i> <span id="sessionName"></span></span>
+                    <button type="button" onclick="clientLogout()"><i class="fas fa-sign-out-alt"></i> Log out</button>
+                </div>
+
+                <!-- STEP 1: SERVICE + CLIENTS -->
+                <div class="qb-section" id="qbSecService">
+                    <div class="qb-section-title"><span class="qb-num">1</span> Pick your service</div>
+                    <div class="qb-search-wrap" id="qbServiceSearchWrap">
+                        <i class="fas fa-search qb-search-icon" aria-hidden="true"></i>
+                        <input type="search" class="qb-search" id="qbServiceSearch" placeholder="Search for Services" autocomplete="off" enterkeyhint="search" aria-label="Search for Services">
+                        <button type="button" class="qb-search-clear" id="qbServiceSearchClear" aria-label="Clear search"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="qb-search-hint" id="qbServiceSearchHint" style="display:none;"></div>
+                    <div class="qb-pills qb-cat-pills" id="qbServiceCats"></div>
+                    <div class="qb-svc-panel">
+                    <div class="qb-services" id="qbServices"></div>
+                    </div>
+                    <p class="qb-pick-hint">Tap services for the highlighted client below.</p>
+                    <div class="qb-quick-card" id="qbQuickCard">
+                        <div id="qbAssignPanel"></div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: STAFF + TIME -->
+                <div class="qb-section" id="qbSecTime">
+                    <div class="qb-section-title">
+                        <span class="qb-num">2</span> Pick staff &amp; time
+                    </div>
+                    <div class="qb-pills" id="qbStaffPills"></div>
+                    <div class="qb-dates" id="qbDates"></div>
+                    <div class="qb-times" id="qbTimes"></div>
+                </div>
+
+                <!-- STEP 3: DETAILS + CONFIRM -->
+                <div class="qb-section qb-details" id="qbSecDetails">
+                    <div class="qb-section-title"><span class="qb-num">3</span> Confirm</div>
+                    <p style="color:var(--text-secondary); font-size:0.8rem; margin-bottom:10px;">
+                        Booking as <b id="bookingAsName" style="color:var(--text-primary);"></b>
+                    </p>
+                    <div class="form-group">
+                        <textarea class="form-textarea" id="qbNotes" rows="2" placeholder="Special requests (optional)"></textarea>
+                    </div>
+                    <button class="btn btn-success btn-lg qb-confirm-inline" id="qbConfirmBtn" onclick="qbConfirm()" disabled>
+                        <i class="fas fa-check"></i> Confirm booking
+                    </button>
+                        </div>
+                </div><!-- /postAuthContent -->
+            </div>
+
+            <!-- ===== SUCCESS ===== -->
+            <div id="qbSuccess">
+                <div class="card qb-success-card">
+                    <div class="big"><i class="fas fa-check-circle" style="color:var(--primary);"></i></div>
+                    <h2 style="color:var(--primary); margin-bottom:8px;">You're booked!</h2>
+                    <p style="color:var(--text-secondary); margin-bottom:20px;">We look forward to seeing you.</p>
+                    <div id="qbSuccessDetails" style="background:var(--bg-hover); border-radius:var(--radius-lg); padding:20px; margin-bottom:20px; text-align:left;"></div>
+                    <button class="btn btn-primary" onclick="qbReset()">
+                        <i class="fas fa-plus"></i> Book Another
+                    </button>
+                </div>
+            </div>
+
+            <!-- ===== STICKY SUMMARY (no confirm — CTA is under details) ===== -->
+            <div class="qb-bar" id="qbBar" style="display:none;">
+                <div class="qb-bar-info">
+                    <div class="qb-bar-summary" id="qbBarSummary">Select a service to get started</div>
+                    <div class="qb-bar-price" id="qbBarPrice"></div>
+                </div>
+            </div>
+
+            <footer class="booking-footer">
+                <div class="footer-nav">
+                    <a href="#" onclick="goOurSalon(event); return false;">Our Salon</a>
+                    <a href="website.html#about">About</a>
+                    <a href="website.html#services">Services</a>
+                    <a href="#" onclick="goReviews(event); return false;">Reviews</a>
+                    <a href="website.html#policy">Policy</a>
+                </div>
+                <p id="bookingFooterCopy">Copyright ©2026 Urban Nail Bar. Created, managed &amp; run by Urban Nail Bar.</p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="../shared/legacy-compat.js?v=20260805launch1"></script>
+    <script src="../shared/utils.js?v=20260815menu3"></script>
+    <script src="../shared/appt-status.js?v=20260810booked"></script>
+    <script src="../shared/data-manager.js?v=20260815menu3"></script>
+<script src="../shared/live-sync.js?v=20260815perf1"></script>
+    <script src="../shared/site-content.js?v=20260815menu3"></script>
+    <script src="../shared/unb-ai-assist.js?v=20260807unbAiEmoji"></script>
+    <script src="../shared/app-nav.js?v=20260810navhover"></script>
+    <script>
+        // ===== STATE =====
+        const qb = {
+            serviceId: null,
+            serviceIds: [],
+            staffId: 'any',   // 'any' = first available (primary / step 2)
+            date: null,
+            time: null,
+            resolvedStaffId: null,
+            partySize: 1,
+            guestNames: [],
+            party: [], // [{ name, staffId, serviceIds }]
+            activeClient: 0
+        };
+
+        const CLIENT_KEY = 'unb_client_session_v1';
+
+        function phoneDigits(p) {
+            let d = String(p || '').replace(/\D/g, '');
+            if (d.length === 11 && d.startsWith('1')) d = d.slice(1);
+            return d;
+        }
+        function clientSession() {
+            try { return JSON.parse(localStorage.getItem(CLIENT_KEY)) || null; }
+            catch (e) { return null; }
+        }
+        function saveClientSession(s) {
+            try { localStorage.setItem(CLIENT_KEY, JSON.stringify(s)); } catch (e) {}
+        }
+        function setLoginMarketingVisible(show) {
+            const mkt = document.getElementById('loginMarketing');
+            if (mkt) mkt.style.display = show ? '' : 'none';
+            document.body.classList.toggle('booking-mkt-on', !!show);
+        }
+        function sectionIsVisible(el) {
+            if (!el) return false;
+            let n = el;
+            while (n && n !== document.documentElement) {
+                const st = window.getComputedStyle(n);
+                if (st.display === 'none' || st.visibility === 'hidden') return false;
+                n = n.parentElement;
+            }
+            return true;
+        }
+        function forcePageTop() {
+            try {
+                if (location.hash) {
+                    history.replaceState(null, '', location.pathname + location.search);
+                }
+            } catch (e) { /* ignore */ }
+            const main = document.getElementById('qbMain');
+            if (main) main.scrollTop = 0;
+            window.scrollTo(0, 0);
+            try { document.documentElement.scrollTop = 0; document.body.scrollTop = 0; } catch (e2) {}
+        }
+        function scrollToVisibleId(id, behavior) {
+            const el = document.getElementById(id);
+            if (!el || !sectionIsVisible(el)) return false;
+            const main = document.getElementById('qbMain');
+            const mode = behavior || 'smooth';
+            if (main) {
+                const mainRect = main.getBoundingClientRect();
+                const elRect = el.getBoundingClientRect();
+                const top = main.scrollTop + (elRect.top - mainRect.top) - 16;
+                main.scrollTo({ top: Math.max(0, top), behavior: mode });
+            } else {
+                el.scrollIntoView({ behavior: mode, block: 'start' });
+            }
+            return true;
+        }
+        function goBookNow(e) {
+            if (e) e.preventDefault();
+            if (clientSession()) {
+                setLoginMarketingVisible(false);
+                const post = document.getElementById('postAuthContent');
+                if (post) post.style.display = 'block';
+                if (scrollToVisibleId('qbSecService') || scrollToVisibleId('postAuthContent')) return;
+            }
+            if (scrollToVisibleId('authCard')) return;
+            forcePageTop();
+        }
+        function bindBookingSideNav() {
+            const nav = document.getElementById('bookingSideNav');
+            if (!nav || nav._bound) return;
+            nav._bound = true;
+            nav.addEventListener('click', function (e) {
+                const a = e.target.closest('a[data-jump]');
+                if (!a) return;
+                e.preventDefault();
+                const id = a.getAttribute('data-jump');
+                nav.querySelectorAll('a').forEach(function (x) { x.classList.toggle('is-active', x === a); });
+                if (id === 'authCard') {
+                    goBookNow(e);
+                    return;
+                }
+                scrollToVisibleId(id);
+            });
+        }
+        function showFooterToast(msg) {
+            let toast = document.getElementById('bookingFooterToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'bookingFooterToast';
+                toast.className = 'booking-footer-toast';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(showFooterToast._t);
+            showFooterToast._t = setTimeout(() => toast.classList.remove('show'), 2800);
+        }
+        function goOurSalon(e) {
+            if (e) e.preventDefault();
+            if (scrollToVisibleId('salonBlockInterior') ||
+                scrollToVisibleId('salonStripBooking') ||
+                scrollToVisibleId('loginMarketing')) return;
+            location.href = 'website.html#gallery';
+        }
+        function goReviews(e) {
+            if (e) e.preventDefault();
+            if (scrollToVisibleId('bookingTestimonials')) return;
+            location.href = 'website.html#testimonials';
+        }
+        function showAuth(msg) {
+            document.getElementById('authCard').style.display = 'block';
+            document.getElementById('postAuthContent').style.display = 'none';
+            document.getElementById('qbBar').style.display = 'none';
+            setLoginMarketingVisible(true);
+            try { renderLoginServiceMenu(); } catch (e) {}
+            if (msg) {
+                document.getElementById('loginError').textContent = msg;
+                if (!scrollToVisibleId('authCard')) forcePageTop();
+            } else {
+                forcePageTop();
+            }
+        }
+        function showApp() {
+            const sess = clientSession();
+            if (!sess || !sess.phone) { showAuth(); return; }
+            document.getElementById('authCard').style.display = 'none';
+            setLoginMarketingVisible(false);
+            document.getElementById('postAuthContent').style.display = 'block';
+            document.getElementById('sessionBar').style.display = 'flex';
+            document.getElementById('sessionName').textContent = 'Hi, ' + (sess.firstName || 'there') + '!';
+            const asName = document.getElementById('bookingAsName');
+            if (asName) asName.textContent = sess.firstName || sess.phone;
+            document.getElementById('qbBar').style.display = 'flex';
+            qb.date = qb.date || Utils.today();
+            renderQbServices();
+            renderQbSelectedChips();
+            renderQbStaffPills();
+            renderQbDates();
+            renderQbTimes();
+            renderQbParty();
+            updateQbBar();
+        }
+        function clientLogout() {
+            try { localStorage.removeItem(CLIENT_KEY); } catch (e) {}
+            document.getElementById('loginError').textContent = '';
+            document.getElementById('nameFields').style.display = 'none';
+            qb.serviceId = null;
+            qb.serviceIds = [];
+            qb.partySize = 1;
+            qb.guestNames = [];
+            qb.party = [];
+            qb.activeClient = 0;
+            qb.time = null;
+            showAuth();
+        }
+        function doPhoneAuth() {
+            const phoneRaw = document.getElementById('loginPhone').value.trim();
+            const firstName = document.getElementById('signupFirst').value.trim();
+            const lastName = document.getElementById('signupLast').value.trim();
+            const err = document.getElementById('loginError');
+            err.textContent = '';
+            const consent = document.getElementById('smsConsent');
+            if (!consent || !consent.checked) {
+                err.textContent = 'Please check the SMS consent box to continue.';
+                return;
+            }
+            const digits = phoneDigits(phoneRaw);
+            if (digits.length < 7 || digits.length > 15) {
+                err.textContent = 'Enter a valid phone number.';
+                return;
+            }
+            let client = (DataManager.getClients() || []).find(c => phoneDigits(c.phone) === digits);
+            if (!client) {
+                if (!firstName) {
+                    document.getElementById('nameFields').style.display = 'block';
+                    err.textContent = 'First time here? Add your name to create your account.';
+                    document.getElementById('signupFirst').focus();
+                    return;
+                }
+                client = DataManager.addClient({ firstName, lastName, phone: digits, email: '' });
+            }
+            saveClientSession({
+                clientId: client.id,
+                firstName: client.firstName || firstName || 'there',
+                phone: digits,
+                token: 'local-' + client.id + '-' + digits
+            });
+            showApp();
+            if (typeof UI !== 'undefined' && UI.toast) UI.toast('Welcome, ' + (client.firstName || 'there') + '!', 'success');
+        }
+
+        function renderBookingMarketing() {
+            const c = (window.SiteContent && SiteContent.get()) || {};
+            const salonFallback = [
+                { url: '../assets/images/salon-1.jpg', caption: 'Pedi & mani stations' },
+                { url: '../assets/images/salon-2.jpg', caption: 'Inside the salon' },
+                { url: '../assets/images/salon-3.jpg', caption: 'Welcome desk & logo wall' },
+                { url: '../assets/images/salon-4.jpg', caption: 'Polish wall' },
+                { url: '../assets/images/salon-5.jpg', caption: 'Rinse & vanity area' }
+            ];
+            const workFallback = [
+                { url: '../assets/images/gallery-1.jpg', caption: 'Earthy French tips' },
+                { url: '../assets/images/gallery-2.jpg', caption: 'Lavender French' },
+                { url: '../assets/images/gallery-3.jpg', caption: 'Watercolor & crystals' },
+                { url: '../assets/images/gallery-4.jpg', caption: 'Marble & silver art' },
+                { url: '../assets/images/gallery-5.jpg', caption: 'Pink & teal glitter' },
+                { url: '../assets/images/gallery-6.jpg', caption: 'Blue glitter bridal' }
+            ];
+            const toJpg = (u) => String(u || '').replace(/\.(png)(\?|$)/i, '.jpg$2');
+            const salon = ((c.siteSalonGallery && c.siteSalonGallery.length) ? c.siteSalonGallery : salonFallback).map(function (p) {
+                return { url: toJpg(p.url), caption: p.caption || '' };
+            });
+            const work = ((c.siteWorkGallery && c.siteWorkGallery.length) ? c.siteWorkGallery : workFallback).map(function (p) {
+                return { url: toJpg(p.url), caption: p.caption || '' };
+            });
+            const fillStrip = (id, photos) => {
+                const box = document.getElementById(id);
+                if (!box) return;
+                box.innerHTML = photos.map(function (p, i) {
+                    const cap = String(p.caption || '').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+                    const src = String(p.url || '').replace(/"/g, '');
+                    const fb = '../assets/images/salon-' + ((i % 5) + 1) + '.jpg';
+                    return `
+                    <div class="salon-photo" role="button" tabindex="0" aria-label="${cap}"
+                         onclick="window.open('${src}','_blank')">
+                        <img src="${src}?v=20260805macfix" alt="" loading="lazy"
+                             onerror="this.onerror=null;this.src='${fb}?v=20260805macfix';">
+                        <div class="cap">${cap}</div>
+                    </div>`;
+                }).join('');
+            };
+            fillStrip('salonPhotosBooking', salon);
+            fillStrip('workPhotosBooking', work);
+
+            const setTxt = (id, val) => { const el = document.getElementById(id); if (el && val != null) el.textContent = val; };
+            const setWelcome = (raw) => {
+                const el = document.getElementById('bookingSalonWelcome');
+                if (!el) return;
+                const fallback = 'Would Like To Welcome You To Our Wonderful Family Friendly Environment Salon & Spa Located in Scottsdale, Arizona.';
+                const text = String(raw || fallback);
+                const marker = 'Salon & Spa Located';
+                const idx = text.indexOf(marker);
+                const top = idx >= 0 ? text.slice(0, idx).trim() : 'Would Like To Welcome You To Our Wonderful Family Friendly Environment';
+                const bottom = idx >= 0 ? text.slice(idx).trim() : 'Salon & Spa Located in Scottsdale, Arizona.';
+                el.innerHTML = '<span class="welcome-line">' + top.replace(/</g, '&lt;') + '</span>' +
+                    '<span class="welcome-line">' + bottom.replace(/</g, '&lt;') + '</span>';
+            };
+            setTxt('bookingSalonFamily', c.siteSalonFamily || 'The Urban Nail Bar Family');
+            setWelcome(c.siteSalonWelcome);
+            setTxt('bookingSalonSubhead', c.siteSalonSubhead || 'Our Salon');
+            setTxt('bookingSalonSubnote', c.siteSalonSubnote || 'A Quick Look At Our Scottsdale Salon Space!');
+            setTxt('bookingWorkTitle', c.siteWorkSectionTitle || 'Our Craft & Services');
+            setTxt('bookingWorkSubnote', c.siteWorkSubnote || 'Premium nail art & signature finished looks by our talented team.');
+            setTxt('bookingServicesTitle', 'Our Services');
+            setTxt('bookingServicesIntro', c.siteServicesIntro || '');
+            setTxt('bookingServicesCategories', c.siteServicesCategories || 'Manicure · Pedicure · Enhancements · Dip · Waxing · Lashes & more');
+
+            const adsStrip = document.getElementById('discountAdsStrip');
+            if (adsStrip) {
+                const ads = Array.isArray(c.discountAds) && c.discountAds.length
+                    ? c.discountAds
+                    : [
+                        { title: 'New Client', text: '10% OFF your first visit' },
+                        { title: 'First Timer', text: 'Welcome deal  10% OFF' },
+                        { title: 'Birthday', text: 'Celebrate with 20% OFF' },
+                        { title: 'Senior', text: '15% OFF for seniors' },
+                        { title: 'Military', text: '25% OFF with ID' },
+                        { title: 'Ask Us', text: 'Custom discounts available' }
+                    ];
+                adsStrip.innerHTML = ads.map((ad) => `
+                    <div class="discount-ad">
+                        <div class="t">${String(ad.title || '').replace(/</g, '&lt;')}</div>
+                        <div class="d">${String(ad.text || '').replace(/</g, '&lt;')}</div>
+                    </div>
+                `).join('');
+            }
+
+            const promoEl = document.getElementById('qbPromoBannerBooking');
+            if (promoEl) {
+                promoEl.innerHTML = String(c.siteAnnouncement
+                    || '✨ $5 OFF any Mani + Pedi Combo — Book Today! ✨')
+                    .replace(/</g, '&lt;')
+                    .replace(/✨/g, '<span class="promo-emoji">✨</span>');
+            }
+            const ratingPill = document.getElementById('bookingRatingPill');
+            if (ratingPill) {
+                const rating = c.siteRating || 4.8;
+                const count = c.siteReviewCount || 1150;
+                ratingPill.innerHTML = `<i class="fas fa-star"></i> ${rating} / 5 · ${Number(count).toLocaleString()} reviews`;
+            }
+            const tBox = document.getElementById('bookingTestimonials');
+            if (tBox && Array.isArray(c.siteTestimonials)) {
+                tBox.innerHTML = c.siteTestimonials.map(t => `
+                    <div class="t-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="quote">${String(t.text || '').replace(/</g, '&lt;')}</div>
+                        <div class="meta"><strong style="color:var(--primary);">${String(t.name || '').replace(/</g, '&lt;')}</strong>${t.date ? ' · ' + t.date : ''}</div>
+                    </div>
+                `).join('');
+            }
+            const reviewLinks = document.getElementById('bookingReviewLinks');
+            if (reviewLinks && Array.isArray(c.siteReviewLinks)) {
+                reviewLinks.innerHTML = c.siteReviewLinks.map(l => `
+                    <a class="booking-contact-btn" href="${String(l.url || '').replace(/"/g, '')}" target="_blank" rel="noopener noreferrer">
+                        <i class="fab ${String(l.icon || 'fa-star').replace(/"/g, '')}"></i> ${String(l.label || l.shortLabel || 'Reviews').replace(/</g, '&lt;')}
+                    </a>
+                `).join('');
+            }
+            const weekdayLabel = c.siteHoursWeekdayLabel || 'Mon - Sat';
+            const weekdayHours = c.siteHoursWeekday || '9:30AM - 6:30PM';
+            const sundayLabel = c.siteHoursSundayLabel || 'Sun';
+            const sundayHours = c.siteHoursSunday || '11:00AM - 5:00PM';
+            const hoursBox = document.getElementById('bookingHours');
+            if (hoursBox) {
+                hoursBox.innerHTML = `<strong>Hours</strong> · ${weekdayLabel} ${weekdayHours} · ${sundayLabel} ${sundayHours}`;
+            }
+
+            const phone = c.sitePhone || c.salonPhone || (DataManager.settings && DataManager.settings.salonPhone) || '(480) 291-5440';
+            const tel = String(phone).replace(/[^0-9+]/g, '');
+            const email = c.siteEmail || c.salonEmail || (DataManager.settings && DataManager.settings.salonEmail) || '';
+            const address = c.salonAddress || (DataManager.settings && DataManager.settings.salonAddress) || '';
+            const directions = c.siteDirectionsUrl || c.siteMapUrl ||
+                'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(address || 'Urban Nail Bar Scottsdale');
+            const mapEmbed = c.siteMapEmbedUrl ||
+                ('https://maps.google.com/maps?q=' + encodeURIComponent(`Urban Nail Bar ${address}`.trim()) + '&output=embed');
+
+            const subEl = document.getElementById('bookingContactSubtitle');
+            if (subEl) subEl.textContent = c.siteContactTitle || 'Start your journey now';
+            const infoLabel = document.getElementById('bookingContactInfoLabel');
+            if (infoLabel) infoLabel.textContent = c.siteContactInfoLabel || 'Information';
+            const hoursLabel = document.getElementById('bookingContactHoursLabel');
+            if (hoursLabel) hoursLabel.textContent = c.siteHoursLabel || 'Hours';
+
+            const hoursList = document.getElementById('bookingContactHoursList');
+            if (hoursList) {
+                hoursList.innerHTML = `
+                    <div class="contact-hours-row"><span class="day">${weekdayLabel}</span><span class="time">${weekdayHours}</span></div>
+                    <div class="contact-hours-row"><span class="day">${sundayLabel}</span><span class="time">${sundayHours}</span></div>`;
+            }
+
+            const infoLinks = document.getElementById('bookingContactInfoLinks');
+            if (infoLinks) {
+                const social = [
+                    ...(Array.isArray(c.siteReviewLinks) ? c.siteReviewLinks : []),
+                    ...(Array.isArray(c.siteSocialLinks) ? c.siteSocialLinks : [])
+                ];
+                // Phone + reviews/social for Urban Nail Bar Scottsdale
+                const order = ['facebook', 'instagram', 'google', 'yelp', 'tiktok'];
+                const byId = {};
+                social.forEach(l => { if (l && l.id) byId[l.id] = l; });
+                const parts = [];
+                if (phone) {
+                    parts.push(`<a href="tel:${tel}"><i class="fas fa-phone"></i> ${(typeof Utils !== 'undefined' && Utils.formatPhone) ? Utils.formatPhone(phone).replace(/</g, '&lt;') : String(phone).replace(/</g, '&lt;')}</a>`);
+                }
+                order.forEach(id => {
+                    const l = byId[id];
+                    if (!l || !l.url) return;
+                    const label = String(l.shortLabel || l.label || id).replace(/</g, '&lt;');
+                    const icon = String(l.icon || 'fa-link').replace(/"/g, '');
+                    parts.push(`<a href="${String(l.url).replace(/"/g, '')}" target="_blank" rel="noopener noreferrer"><i class="fab ${icon}"></i> ${label}</a>`);
+                });
+                social.forEach(l => {
+                    if (!l || !l.url || order.indexOf(l.id) >= 0) return;
+                    const label = String(l.shortLabel || l.label || 'Reviews').replace(/</g, '&lt;');
+                    const icon = String(l.icon || 'fa-link').replace(/"/g, '');
+                    parts.push(`<a href="${String(l.url).replace(/"/g, '')}" target="_blank" rel="noopener noreferrer"><i class="fab ${icon}"></i> ${label}</a>`);
+                });
+                infoLinks.innerHTML = parts.join('');
+            }
+
+            const cards = document.getElementById('bookingContactCards');
+            if (cards) {
+                const addrHtml = address ? String(address).split(',').map(p => p.trim()).filter(Boolean).join('<br>') : 'Scottsdale, AZ';
+                const emailCard = email
+                    ? `<div>
+                        <div class="ico"><i class="fas fa-envelope"></i></div>
+                        <h4>Email Us</h4>
+                        <p><a href="mailto:${email}" style="color:inherit;text-decoration:none;">${String(email).replace(/</g, '&lt;')}</a><br>We reply within 24 hours</p>
+                        <a class="contact-action-btn" href="mailto:${email}"><i class="fas fa-envelope"></i> Email Us</a>
+                       </div>`
+                    : `<div>
+                        <div class="ico"><i class="fas fa-envelope"></i></div>
+                        <h4>Email Us</h4>
+                        <p>Send us a message on the website contact page<br>We reply within 24 hours</p>
+                        <a class="contact-action-btn" href="website.html#contact"><i class="fas fa-envelope"></i> Email Us</a>
+                       </div>`;
+                cards.innerHTML = `
+                    <div>
+                        <div class="ico"><i class="fas fa-map-marker-alt"></i></div>
+                        <h4>Visit Us</h4>
+                        <p>${addrHtml}</p>
+                        <a class="contact-action-btn" href="${directions}" target="_blank" rel="noopener"><i class="fas fa-directions"></i> Get Directions</a>
+                    </div>
+                    <div>
+                        <div class="ico"><i class="fas fa-phone"></i></div>
+                        <h4>Call Us</h4>
+                        <p><a href="tel:${tel}" style="color:inherit;text-decoration:none;">${(typeof Utils !== 'undefined' && Utils.formatPhone) ? Utils.formatPhone(phone).replace(/</g, '&lt;') : String(phone).replace(/</g, '&lt;')}</a><br>${weekdayLabel} ${weekdayHours}<br>${sundayLabel} ${sundayHours}</p>
+                        <a class="contact-action-btn" href="tel:${tel}"><i class="fas fa-phone"></i> Call Us</a>
+                    </div>
+                    ${emailCard}`;
+            }
+
+            const mapEl = document.getElementById('bookingMap');
+            const mapFb = document.getElementById('bookingMapFallback');
+            const mapFbLink = document.getElementById('bookingMapFallbackLink');
+            if (mapFbLink) mapFbLink.href = directions || (c.siteMapUrl || '#');
+            if (mapEl && mapEmbed) {
+                mapEl.src = mapEmbed;
+                // iframe has no reliable onerror — show directions fallback after a short wait if still blank
+                setTimeout(function () {
+                    try {
+                        if (!mapEl.getAttribute('src') && mapFb) mapFb.style.display = 'block';
+                    } catch (e) {}
+                }, 2500);
+                mapEl.onerror = function () {
+                    if (mapFb) mapFb.style.display = 'block';
+                    mapEl.style.display = 'none';
+                };
+            } else if (mapFb) {
+                mapFb.style.display = 'block';
+                if (mapEl) mapEl.style.display = 'none';
+            }
+
+            const socialBox = document.getElementById('bookingSocialLinks');
+            if (socialBox && Array.isArray(c.siteSocialLinks)) {
+                socialBox.innerHTML = c.siteSocialLinks.map(l => `
+                    <a class="booking-contact-btn" href="${String(l.url || '').replace(/"/g, '')}" target="_blank" rel="noopener noreferrer">
+                        <i class="fab ${String(l.icon || 'fa-link').replace(/"/g, '')}"></i> ${String(l.label || l.shortLabel || 'Social').replace(/</g, '&lt;')}
+                    </a>
+                `).join('');
+            }
+            const foot = document.getElementById('bookingFooterCopy');
+            if (foot) foot.textContent = c.siteFooterCopyright || 'Copyright ©2026 Urban Nail Bar. Created, managed & run by Urban Nail Bar.';
+        }
+
+        // ===== PRE-LOGIN SERVICE MENU (browse-only, matches website dropdowns) =====
+        let loginMenuCat = null;
+        let loginMenuQuery = '';
+        let loginAddonsOpen = {};
+
+        function loginEscAttr(v) {
+            return String(v || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        }
+        function loginToggleMenuCat(cat) {
+            loginMenuCat = (loginMenuCat === cat) ? null : cat;
+            renderLoginServiceMenu();
+        }
+        window.loginToggleMenuCat = loginToggleMenuCat;
+        function loginToggleAddons(cat) {
+            loginAddonsOpen[cat] = !loginAddonsOpen[cat];
+            renderLoginServiceMenu();
+        }
+        window.loginToggleAddons = loginToggleAddons;
+        function loginMenuRow(s, isAddon) {
+            const price = s.price === 0 ? 'Free' : Utils.formatCurrency(s.price);
+            const note = s.priceNote || '';
+            const dur = s.duration ? Utils.formatDuration(s.duration) : '—';
+            return `
+                <div class="menu-row ${isAddon ? 'addon' : ''}">
+                    <div class="m-info">
+                        <div class="m-name">${Utils.serviceDisplayNameHtml ? Utils.serviceDisplayNameHtml(s) : (Utils.serviceDisplayName ? Utils.serviceDisplayName(s) : s.name)}${s.popular ? ' · <span class="svc-popular">Popular</span>' : ''}</div>
+                        ${s.description ? `<div class="m-desc">${s.description}</div>` : ''}
+                    </div>
+                    <div class="m-dur">${dur}</div>
+                    <div class="m-price">${price}${note}</div>
+                </div>`;
+        }
+        function renderLoginServiceMenu() {
+            const services = DataManager.getServices() || [];
+            const sections = Utils.serviceCategories(services);
+            const searchEl = document.getElementById('loginMenuSearch');
+            if (searchEl && document.activeElement === searchEl) loginMenuQuery = searchEl.value || '';
+            const q = String(loginMenuQuery || '').trim();
+            const searching = q.length > 0;
+            const listEl = document.getElementById('loginMenuList');
+            const wrap = document.getElementById('loginMenuSearchWrap');
+            const hint = document.getElementById('loginMenuSearchHint');
+            if (!listEl) return;
+            if (wrap) wrap.classList.toggle('has-query', searching);
+            if (searchEl && document.activeElement !== searchEl) searchEl.value = loginMenuQuery || '';
+
+            const colLabels = `
+                <div class="menu-col-labels">
+                    <span>Service</span>
+                    <span class="c-dur">Duration</span>
+                    <span class="c-price">Price</span>
+                </div>`;
+
+            if (searching) {
+                const matches = services.filter(s => Utils.serviceMatchesQuery(s, q));
+                if (hint) {
+                    hint.style.display = '';
+                    hint.textContent = matches.length
+                        ? `${matches.length} result${matches.length === 1 ? '' : 's'} for "${q}"`
+                        : `No results for "${q}"`;
+                }
+                if (!matches.length) {
+                    listEl.innerHTML = '<div style="color:#ffffff;font-size:0.85rem;padding:12px;text-align:center;">No services match your search.</div>';
+                    return;
+                }
+                const groups = Utils.groupServicesByCategory(matches, { includeHidden: true });
+                listEl.innerHTML = groups.map(g => {
+                    const mains = g.services.filter(s => !Utils.isServiceAddon(s));
+                    const addons = g.services.filter(s => Utils.isServiceAddon(s));
+                    return `<div class="menu-dropdown open">
+                        <div class="menu-dropdown-toggle"><h3>${g.category}</h3></div>
+                        <div class="menu-dropdown-panel">${colLabels}${mains.map(s => loginMenuRow(s, false)).join('')}${addons.length ? `<div class="menu-addons-label">Add-ons</div>${addons.map(s => loginMenuRow(s, true)).join('')}` : ''}</div>
+                    </div>`;
+                }).join('');
+                return;
+            }
+
+            if (hint) hint.style.display = 'none';
+            const groups = Utils.groupServicesByCategory(services)
+                .filter(g => !sections.length || sections.includes(g.category))
+                .sort((a, b) => {
+                    const ia = sections.indexOf(a.category);
+                    const ib = sections.indexOf(b.category);
+                    return (ia < 0 ? 999 : ia) - (ib < 0 ? 999 : ib);
+                });
+
+            listEl.innerHTML = groups.map(g => {
+                const mains = g.services.filter(s => !Utils.isServiceAddon(s));
+                const addons = g.services.filter(s => Utils.isServiceAddon(s));
+                const isOpen = loginMenuCat === g.category;
+                const addonsOpen = !!loginAddonsOpen[g.category];
+                const esc = loginEscAttr(g.category);
+                const addonsHtml = !addons.length ? '' : (
+                    addonsOpen
+                        ? `<button type="button" class="menu-addons-toggle" onclick="event.stopPropagation(); loginToggleAddons('${esc}')"><i class="fas fa-minus"></i> Hide add-ons (${addons.length})</button><div class="menu-addons-label">Add-ons</div>${addons.map(s => loginMenuRow(s, true)).join('')}`
+                        : `<button type="button" class="menu-addons-toggle" onclick="event.stopPropagation(); loginToggleAddons('${esc}')"><i class="fas fa-plus"></i> Show add-ons (${addons.length})</button>`
+                );
+                return `
+                    <div class="menu-dropdown ${isOpen ? 'open' : ''}">
+                        <button type="button" class="menu-dropdown-toggle" aria-expanded="${isOpen ? 'true' : 'false'}" onclick="loginToggleMenuCat('${esc}')">
+                            <h3>${g.category}</h3>
+                            <span class="count">${mains.length} services${addons.length ? ` · ${addons.length} add-ons` : ''}</span>
+                            <span class="chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
+                        </button>
+                        <div class="menu-dropdown-panel">
+                            ${colLabels}
+                            ${mains.map(s => loginMenuRow(s, false)).join('')}
+                            ${addonsHtml}
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+        function bindLoginMenuSearch() {
+            const input = document.getElementById('loginMenuSearch');
+            const clearBtn = document.getElementById('loginMenuSearchClear');
+            if (!input || input.dataset.bound === '1') return;
+            input.dataset.bound = '1';
+            const apply = () => { loginMenuQuery = input.value || ''; renderLoginServiceMenu(); };
+            input.addEventListener('input', apply);
+            input.addEventListener('keyup', apply);
+            input.addEventListener('change', apply);
+            input.addEventListener('search', apply);
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    loginMenuQuery = '';
+                    input.value = '';
+                    renderLoginServiceMenu();
+                    input.focus();
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Branding from shared settings
+            const salonName = (DataManager.settings && DataManager.settings.salonName) || 'Urban Nail Bar';
+            document.title = salonName + ' - Book Online';
+            var brandEl0 = document.getElementById('brandName');
+            if (brandEl0) brandEl0.textContent = salonName;
+
+            try {
+                qb.date = (typeof Utils !== 'undefined' && Utils.today) ? Utils.today() : new Date().toISOString().slice(0, 10);
+            } catch (e) {
+                qb.date = new Date().toISOString().slice(0, 10);
+            }
+            // Contact Us + Service Menu must run even if later helpers throw (Sierra Safari)
+            try { renderBookingMarketing(); } catch (e) {}
+            try { bindLoginMenuSearch(); } catch (e) {}
+            try { renderLoginServiceMenu(); } catch (e) {}
+
+            DataManager.addListener(function (type) {
+                if (type === 'data' || type === 'settings' || type === 'staff') {
+                    const salonName2 = (DataManager.settings && DataManager.settings.salonName) || 'Urban Nail Bar';
+                    document.title = salonName2 + ' - Book Online';
+                    const brandEl = document.getElementById('brandName');
+                    if (brandEl) brandEl.textContent = salonName2;
+                    try { renderBookingMarketing(); } catch (e) {}
+                    if (clientSession()) {
+                        try { renderQbServices(); } catch (e) {}
+                        try { renderQbStaffPills(); } catch (e) {}
+                        try { renderQbDates(); } catch (e) {}
+                        try { renderQbTimes(); } catch (e) {}
+                        try { updateQbBar(); } catch (e) {}
+                    } else {
+                        try { renderLoginServiceMenu(); } catch (e) {}
+                    }
+                }
+            });
+            window.addEventListener('unb:staff-changed', function () {
+                if (!clientSession()) return;
+                try { renderQbStaffPills(); } catch (e) {}
+                try { renderQbTimes(); } catch (e) {}
+            });
+
+            try { initBookingPwa(); } catch (e) {}
+            try { bindBookingSideNav(); } catch (e) {}
+            // Must login with phone before accessing the page
+            if (clientSession()) showApp(); else showAuth();
+            // Always open at the top of the marketing page (do not jump to Sign In)
+            forcePageTop();
+            requestAnimationFrame(forcePageTop);
+            setTimeout(forcePageTop, 50);
+            setTimeout(forcePageTop, 250);
+        });
+
+        // ===================== PWA (installable "Book Now" app) =====================
+
+        // Register the service worker when served over http(s) → file:// can't.
+        if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw-booking.js', { scope: './' }).catch(() => {});
+            });
+        }
+
+        let qbDeferredInstall = null;
+
+        function qbShowInstallTip(text, showBtn) {
+            if (localStorage.getItem('qbInstallDismissed')) return;
+            const tip = document.getElementById('qbInstallTip');
+            if (!tip) return;
+            tip.style.display = 'flex';
+            if (text) document.getElementById('qbInstallText').textContent = text;
+            document.getElementById('qbInstallBtn').style.display = showBtn ? 'block' : 'none';
+        }
+
+        function qbDismissInstall() {
+            try { localStorage.setItem('qbInstallDismissed', '1'); } catch (e) {}
+            const tip = document.getElementById('qbInstallTip');
+            if (tip) tip.style.display = 'none';
+        }
+
+        function initBookingPwa() {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                qbDeferredInstall = e;
+                qbShowInstallTip(null, true);
+            });
+            document.getElementById('qbInstallBtn').addEventListener('click', async () => {
+                if (!qbDeferredInstall) return;
+                qbDeferredInstall.prompt();
+                try { await qbDeferredInstall.userChoice; } catch (e) {}
+                qbDeferredInstall = null;
+                qbDismissInstall();
+            });
+            const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+            const inStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
+            if (isIOS && !inStandalone && /^https?:$/.test(location.protocol)) {
+                qbShowInstallTip('Tap the Share button, then "Add to Home Screen" — book your next visit in two taps.', false);
+            }
+        }
+
+        // ===== 1. SERVICES (sectioned by category) =====
+        qb.serviceCat = qb.serviceCat || 'Manicure';
+        qb.serviceQuery = qb.serviceQuery || '';
+        qb.addonsOpen = qb.addonsOpen || {};
+        qb.serviceIds = Array.isArray(qb.serviceIds) ? qb.serviceIds : (qb.serviceId ? [qb.serviceId] : []);
+
+        function qbEscAttr(v) {
+            return String(v || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        }
+
+        function qbIsSelected(id) {
+            qbEnsureParty();
+            const ai = Math.min((qb.partySize || 1) - 1, Math.max(0, Number(qb.activeClient) || 0));
+            const member = qb.party[ai];
+            if (member) return (member.serviceIds || []).some(x => Number(x) === Number(id));
+            return (qb.serviceIds || []).some(x => Number(x) === Number(id));
+        }
+
+        function selectedServices() {
+            const all = DataManager.getServices() || [];
+            return (qb.serviceIds || []).map(id => all.find(s => Number(s.id) === Number(id))).filter(Boolean);
+        }
+
+        function qbServiceRow(s, isAddon) {
+            const price = s.price === 0 ? 'Free' : Utils.formatCurrency(s.price);
+            const note = s.priceNote || '';
+            const dur = s.duration ? Utils.formatDuration(s.duration) : '—';
+            const on = qbIsSelected(s.id);
+            return `
+                <div class="qb-service ${isAddon ? 'addon' : ''} ${on ? 'selected' : ''}"
+                     onclick="qbPickService(${s.id})" role="button" tabindex="0" aria-pressed="${on}">
+                    <div class="s-name"><i class="fas fa-check s-check" aria-hidden="true"></i>${Utils.serviceDisplayNameHtml ? Utils.serviceDisplayNameHtml(s) : (Utils.serviceDisplayName ? Utils.serviceDisplayName(s) : s.name)}${s.popular ? ' · <span class="svc-popular">Popular</span>' : ''}</div>
+                    <div class="s-dur">${dur}</div>
+                    <div class="s-price">${price}${note}</div>
+                </div>`;
+        }
+
+        function qbAddonsBlock(cat, addons, forceOpen) {
+            if (!addons.length) return '';
+            const open = forceOpen || !!qb.addonsOpen[cat];
+            const esc = qbEscAttr(cat);
+            if (!open) {
+                return `<button type="button" class="qb-addons-toggle" onclick="event.stopPropagation(); qbToggleAddons('${esc}')">
+                    <i class="fas fa-plus"></i> Show add-ons (${addons.length})
+                </button>`;
+            }
+            return `<button type="button" class="qb-addons-toggle" onclick="event.stopPropagation(); qbToggleAddons('${esc}')">
+                    <i class="fas fa-minus"></i> Hide add-ons (${addons.length})
+                </button>
+                <div class="qb-addons-label">Add-ons</div>
+                ${addons.map(s => qbServiceRow(s, true)).join('')}`;
+        }
+
+        function qbToggleAddons(cat) {
+            qb.addonsOpen[cat] = !qb.addonsOpen[cat];
+            renderQbServices();
+        }
+
+        function renderQbServices() {
+            const services = DataManager.getServices() || [];
+            const cats = Utils.serviceCategories(services);
+            if (!cats.includes(qb.serviceCat)) qb.serviceCat = cats[0] || 'Manicure';
+
+            const searchEl = document.getElementById('qbServiceSearch');
+            // Keep query in sync with the live input (avoids stale filter / overwritten field)
+            if (searchEl && (document.activeElement === searchEl || (searchEl.value || '') !== (qb.serviceQuery || ''))) {
+                if (document.activeElement === searchEl) qb.serviceQuery = searchEl.value || '';
+            }
+            const q = String(qb.serviceQuery || '').trim();
+            const searching = q.length > 0;
+
+            const wrap = document.getElementById('qbServiceSearchWrap');
+            if (wrap) wrap.classList.toggle('has-query', searching);
+            if (searchEl && document.activeElement !== searchEl) {
+                searchEl.value = qb.serviceQuery || '';
+            }
+
+            const hint = document.getElementById('qbServiceSearchHint');
+            const catEl = document.getElementById('qbServiceCats');
+            if (catEl) {
+                catEl.style.display = searching ? 'none' : '';
+                if (!searching) {
+                    catEl.innerHTML = cats.map(c => `
+                        <div class="qb-pill ${qb.serviceCat === c ? 'selected' : ''}" onclick="qbPickServiceCat('${qbEscAttr(c)}')">${c}</div>
+            `).join('');
+                }
+            }
+
+            const listEl = document.getElementById('qbServices');
+            if (!listEl) return;
+
+            if (searching) {
+                const matches = services.filter(s => Utils.serviceMatchesQuery(s, q));
+                if (hint) {
+                    hint.style.display = '';
+                    hint.textContent = matches.length
+                        ? `${matches.length} result${matches.length === 1 ? '' : 's'} for “${q}”`
+                        : `No results for “${q}”`;
+                }
+                if (!matches.length) {
+                    listEl.innerHTML = '<div class="qb-empty-msg">No services match your search.</div>';
+                    return;
+                }
+                const groups = Utils.groupServicesByCategory(matches, { includeHidden: true });
+                listEl.innerHTML = groups.map(g => {
+                    const mains = g.services.filter(s => !Utils.isServiceAddon(s));
+                    const addons = g.services.filter(s => Utils.isServiceAddon(s));
+                    return `<div class="qb-search-cat">${g.category}</div>`
+                        + (mains.length
+                            ? (Utils.servicesMenuHtml
+                                ? Utils.servicesMenuHtml(mains, s => qbServiceRow(s, false))
+                                : mains.map(s => qbServiceRow(s, false)).join(''))
+                            : '')
+                        + (addons.length
+                            ? `<div class="qb-addons-label">Add-ons</div>${addons.map(s => qbServiceRow(s, true)).join('')}`
+                            : '');
+                }).join('');
+                return;
+            }
+
+            if (hint) hint.style.display = 'none';
+            const list = services.filter(s => Utils.displayCategory(s) === qb.serviceCat);
+            const mains = list.filter(s => !Utils.isServiceAddon(s));
+            const addons = list.filter(s => Utils.isServiceAddon(s));
+            listEl.innerHTML =
+                (mains.length
+                    ? (Utils.servicesMenuHtml
+                        ? Utils.servicesMenuHtml(mains, s => qbServiceRow(s, false))
+                        : mains.map(s => qbServiceRow(s, false)).join(''))
+                    : '<div class="qb-empty-msg">No services in this section.</div>')
+                + qbAddonsBlock(qb.serviceCat, addons, false);
+        }
+
+        function qbPickServiceCat(cat) {
+            qb.serviceCat = cat;
+            qb.serviceQuery = '';
+            const searchEl = document.getElementById('qbServiceSearch');
+            if (searchEl) searchEl.value = '';
+            renderQbServices();
+        }
+
+        function qbBindServiceSearch() {
+            const input = document.getElementById('qbServiceSearch');
+            const clearBtn = document.getElementById('qbServiceSearchClear');
+            if (!input) return;
+            if (input.dataset.bound === '1') return;
+            input.dataset.bound = '1';
+            const apply = () => {
+                qb.serviceQuery = input.value || '';
+                renderQbServices();
+            };
+            input.addEventListener('input', apply);
+            input.addEventListener('keyup', apply);
+            input.addEventListener('change', apply);
+            input.addEventListener('search', apply);
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    qb.serviceQuery = '';
+                    input.value = '';
+                    renderQbServices();
+                    input.focus();
+                });
+            }
+        }
+        document.addEventListener('DOMContentLoaded', qbBindServiceSearch);
+        qbBindServiceSearch();
+
+        function qbRebuildServiceIds() {
+            const seen = new Set();
+            const ids = [];
+            (qb.party || []).forEach(p => {
+                (p.serviceIds || []).forEach(id => {
+                    const n = Number(id);
+                    if (!Number.isFinite(n) || !n || seen.has(n)) return;
+                    seen.add(n);
+                    ids.push(n);
+                });
+            });
+            qb.serviceIds = ids;
+            qb.serviceId = ids[0] || null;
+        }
+
+        function qbActiveIndex() {
+            qbEnsureParty();
+            const max = Math.max(0, (qb.partySize || 1) - 1);
+            let ai = Number(qb.activeClient);
+            if (!Number.isFinite(ai)) ai = 0;
+            ai = Math.min(max, Math.max(0, ai));
+            qb.activeClient = ai;
+            return ai;
+        }
+
+        function qbPickService(id) {
+            if (!clientSession()) {
+                showAuth('Sign in with your phone to book this service.');
+                return;
+            }
+            id = Number(id);
+            if (!Number.isFinite(id) || !id) return;
+            qbEnsureParty();
+            const ai = qbActiveIndex();
+            const member = qb.party[ai];
+            if (!member) return;
+            member.serviceIds = (member.serviceIds || []).map(Number);
+            member.serviceIds.push(id);
+            qbRebuildServiceIds();
+            document.getElementById('qbSecService').classList.toggle('done', qb.serviceIds.length > 0);
+            renderQbServices();
+            renderQbSelectedChips();
+            renderQbStaffPills();
+            renderQbParty();
+            if (qb.time && !(qb.staffId === 'any'
+                ? freeStaffAt(qb.date, qb.time).length
+                : staffFreeAt(qb.staffId, qb.date, qb.time))) {
+                qb.time = null;
+                qb.resolvedStaffId = null;
+                document.getElementById('qbSecTime').classList.remove('done');
+            }
+            renderQbTimes();
+            updateQbBar();
+            if (qb.serviceIds.length === 1 && (qb.partySize || 1) === 1) {
+            document.getElementById('qbSecTime').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function qbFocusAddService() {
+            const sec = document.getElementById('qbSecService');
+            if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const search = document.getElementById('qbServiceSearch');
+            if (search) setTimeout(() => search.focus(), 300);
+        }
+
+        function qbGuestLabel(i) {
+            const sess = (typeof clientSession === 'function' && clientSession()) || {};
+            const booker = (sess.firstName || 'You').trim() || 'You';
+            if (i === 0) return booker;
+            const n = (qb.party[i] && qb.party[i].name) || '';
+            if (n.trim() && !(typeof Utils !== 'undefined' && Utils.isGenericPartyGuestName && Utils.isGenericPartyGuestName(n))) return n.trim();
+            return (typeof Utils !== 'undefined' && Utils.partySeatName) ? Utils.partySeatName(booker, i) : (booker + ' #' + (i + 1));
+        }
+
+        function qbEnsureParty() {
+            const size = Math.min(6, Math.max(1, Number(qb.partySize) || 1));
+            qb.partySize = size;
+            qb.party = Array.isArray(qb.party) ? qb.party : [];
+            while (qb.party.length < size) {
+                const i = qb.party.length;
+                qb.party.push({
+                    name: i === 0 ? '' : ((qb.guestNames && qb.guestNames[i - 1]) || ''),
+                    staffId: i === 0 ? (qb.staffId || 'any') : 'any',
+                    serviceIds: []
+                });
+            }
+            qb.party = qb.party.slice(0, size);
+            qb.party.forEach((p, i) => {
+                if (!Array.isArray(p.serviceIds)) p.serviceIds = [];
+                if (p.staffId == null) p.staffId = i === 0 ? (qb.staffId || 'any') : 'any';
+                if (i > 0 && qb.guestNames && qb.guestNames[i - 1] != null && !p.name) {
+                    p.name = qb.guestNames[i - 1] || '';
+                }
+            });
+            if (qb.party[0] && (qb.staffId == null || qb.staffId === '')) {
+                qb.staffId = qb.party[0].staffId || 'any';
+            }
+            qb.guestNames = qb.party.slice(1).map(p => p.name || '');
+            if (qb.activeClient == null || qb.activeClient > size - 1) qb.activeClient = Math.max(0, size - 1);
+            if (qb.activeClient < 0) qb.activeClient = 0;
+        }
+
+        function qbSyncPartyServices() {
+            qbEnsureParty();
+            qbRebuildServiceIds();
+        }
+
+        function qbStaffOptionsForGuest(guestIndex) {
+            qbEnsureParty();
+            const member = qb.party[guestIndex] || {};
+            const all = DataManager.getServices() || [];
+            const ids = (member.serviceIds && member.serviceIds.length) ? member.serviceIds : [];
+            const svcs = ids.map(id => all.find(s => Number(s.id) === Number(id))).filter(Boolean);
+            let techs;
+            if (typeof DataManager.getBookableStaff === 'function') {
+                techs = DataManager.getBookableStaff().filter(s => s.status === 'active');
+            } else {
+                techs = (DataManager.getStaff() || []).filter(s =>
+                    s.status === 'active' && (s.role || '').toLowerCase().includes('tech'));
+            }
+            if (svcs.length && typeof Utils !== 'undefined' && Utils.staffCanDoService) {
+                techs = techs.filter(s => svcs.every(svc => Utils.staffCanDoService(s, svc)));
+            }
+            return techs;
+        }
+
+        function qbSetActiveClient(guestIndex, soft) {
+            qbEnsureParty();
+            const gi = Math.min((qb.partySize || 1) - 1, Math.max(0, Number(guestIndex) || 0));
+            if (Number(qb.activeClient) === gi) return;
+            qb.activeClient = gi;
+            renderQbServices();
+            if (soft) {
+                document.querySelectorAll('#qbAssignPanel .qb-client-line').forEach((el, i) => {
+                    el.classList.toggle('active', i === gi);
+                });
+                const hint = document.getElementById('qbActiveHint');
+                if (hint) hint.textContent = 'Tap a service above to add it to ' + qbGuestLabel(gi);
+                return;
+            }
+            renderQbParty();
+        }
+
+        function qbRemoveClientService(guestIndex, serviceId) {
+            qbEnsureParty();
+            const gi = Number(guestIndex);
+            const id = Number(serviceId);
+            if (!qb.party[gi]) return;
+            const ids = (qb.party[gi].serviceIds || []).map(Number);
+            const cut = ids.indexOf(id);
+            if (cut >= 0) ids.splice(cut, 1);
+            qb.party[gi].serviceIds = ids;
+            qbRebuildServiceIds();
+            document.getElementById('qbSecService').classList.toggle('done', qb.serviceIds.length > 0);
+            renderQbServices();
+            renderQbStaffPills();
+            renderQbParty();
+            renderQbTimes();
+            updateQbBar();
+        }
+
+        function qbSetGuestStaff(guestIndex, value) {
+            qbEnsureParty();
+            if (!qb.party[guestIndex]) return;
+            const sid = value === 'any' ? 'any' : Number(value);
+            qb.party[guestIndex].staffId = sid;
+            if (guestIndex === 0) qb.staffId = sid;
+            qb.time = null;
+            qb.resolvedStaffId = null;
+            renderQbStaffPills();
+            renderQbTimes();
+            renderQbParty();
+            updateQbBar();
+        }
+
+        function qbPartyDelta(delta) {
+            const prev = qb.partySize || 1;
+            const next = Math.min(6, Math.max(1, prev + delta));
+            qb.partySize = next;
+            qbEnsureParty();
+            if (next > prev) qb.activeClient = next - 1;
+            else if (qb.activeClient > next - 1) qb.activeClient = next - 1;
+            qbSyncPartyServices();
+            renderQbServices();
+            renderQbParty();
+            updateQbBar();
+        }
+
+        function qbAddPerson() {
+            if ((qb.partySize || 1) >= 6) return;
+            qbPartyDelta(1);
+            const card = document.getElementById('qbQuickCard');
+            if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function qbRemovePerson(guestIndex) {
+            qbEnsureParty();
+            const gi = Number(guestIndex);
+            if (!gi || gi < 1 || (qb.partySize || 1) <= 1) return;
+            qb.party.splice(gi, 1);
+            qb.partySize = Math.max(1, qb.party.length);
+            qb.guestNames = qb.party.slice(1).map(p => p.name || '');
+            if (qb.activeClient >= qb.partySize) qb.activeClient = qb.partySize - 1;
+            if (qb.activeClient === gi) qb.activeClient = Math.max(0, gi - 1);
+            qbRebuildServiceIds();
+            document.getElementById('qbSecService').classList.toggle('done', qb.serviceIds.length > 0);
+            renderQbServices();
+            renderQbParty();
+            updateQbBar();
+        }
+
+        function qbGuestNameInput(i, el) {
+            qbEnsureParty();
+            const name = (el && el.value) || '';
+            if (qb.party[i]) qb.party[i].name = name;
+            qb.guestNames = qb.party.slice(1).map(p => p.name || '');
+            const hint = document.getElementById('qbActiveHint');
+            if (hint && Number(qb.activeClient) === i) {
+                hint.textContent = 'Tap a service above to add it to ' + qbGuestLabel(i);
+            }
+        }
+
+        /** Scroll helper for AI / programmatic use — no UI button required. */
+        function qbContinueToTime() {
+            if (!(qb.serviceIds || []).length) return;
+            const sec = document.getElementById('qbSecTime');
+            if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function renderQbSelectedChips() {
+            renderQbParty();
+        }
+
+        function renderQbParty() {
+            qbSyncPartyServices();
+            const card = document.getElementById('qbQuickCard');
+            const panel = document.getElementById('qbAssignPanel');
+            const size = qb.partySize || 1;
+            const ai = qbActiveIndex();
+            const hasAnySvc = (qb.party || []).some(p => (p.serviceIds || []).length > 0);
+
+            if (!hasAnySvc && size <= 1) {
+                if (panel) panel.innerHTML = '';
+                if (card) card.style.display = 'none';
+                return;
+            }
+            if (card) card.style.display = '';
+
+            const all = DataManager.getServices() || [];
+            const subtotal = servicePriceTotal();
+            const activeName = qbGuestLabel(ai);
+
+            if (panel) {
+                panel.innerHTML = `
+                    <p class="qb-line-hint" id="qbActiveHint">Tap a service above to add it to ${qbEscAttr(activeName)}</p>
+                    <div class="qb-client-lines">
+                        ${qb.party.map((p, i) => {
+                            const staffVal = (p.staffId != null ? p.staffId : 'any');
+                            const techs = qbStaffOptionsForGuest(i);
+                            const svcIds = (p.serviceIds || []).map(Number);
+                            const chips = svcIds.map(id => {
+                                const s = all.find(x => Number(x.id) === id);
+                                if (!s) return '';
+                                return `<span class="qb-cl-chip"><span>${qbEscAttr(s.name)}</span>
+                                    <button type="button" onclick="event.stopPropagation(); qbRemoveClientService(${i}, ${id})" aria-label="Remove ${qbEscAttr(s.name)}">&times;</button></span>`;
+                            }).filter(Boolean).join('');
+                            const seatPh = qbGuestLabel(i);
+                            const nameCell = i === 0
+                                ? `<div class="cl-name">${qbEscAttr(qbGuestLabel(0))}</div>`
+                                : `<div class="cl-name"><input type="text" maxlength="40" placeholder="${qbEscAttr(seatPh)}"
+                                       value="${String(p.name || '').replace(/"/g, '&quot;')}"
+                                       onclick="event.stopPropagation()"
+                                       onfocus="qbSetActiveClient(${i}, true)"
+                                       oninput="qbGuestNameInput(${i}, this)" aria-label="${qbEscAttr(seatPh)}"></div>`;
+                            const rm = i === 0
+                                ? `<span class="rm-spacer" aria-hidden="true"></span>`
+                                : `<button type="button" class="rm" onclick="event.stopPropagation(); qbRemovePerson(${i})" aria-label="Remove client">&times;</button>`;
+                            return `
+                            <div class="qb-client-line ${i === ai ? 'active' : ''}" onclick="qbSetActiveClient(${i})" role="button" tabindex="0">
+                                ${nameCell}
+                                <div class="cl-svcs">${chips || '<span class="empty">Tap services above</span>'}</div>
+                                <select class="tech" onclick="event.stopPropagation()" onchange="qbSetGuestStaff(${i}, this.value)" aria-label="Staff for ${qbEscAttr(qbGuestLabel(i))}">
+                                    <option value="any" ${staffVal === 'any' ? 'selected' : ''}>First available</option>
+                                    ${techs.map(t => `<option value="${t.id}" ${Number(staffVal) === Number(t.id) ? 'selected' : ''}>${(t.name || 'Tech').split(' ')[0]}</option>`).join('')}
+                                </select>
+                                ${rm}
+                            </div>`;
+                        }).join('')}
+                    </div>
+                    <button type="button" class="qb-add-person" onclick="qbAddPerson()" ${(size >= 6) ? 'disabled' : ''}>+ Add client</button>
+                    <div class="qb-line-head">Clients coming: ${size} · <span class="sub">Subtotal ${Utils.formatCurrency(subtotal)}</span></div>
+                `;
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => { renderQbParty(); });
+        renderQbParty();
+
+        // ===== 2. STAFF / DATE / TIME =====
+        function activeStaff() {
+            // Only technicians are bookable (manager/admin/reception hidden unless also tech)
+            let techs;
+            if (typeof DataManager.getBookableStaff === 'function') {
+                techs = DataManager.getBookableStaff().filter(s => s.status === 'active');
+            } else if (typeof Utils !== 'undefined' && Utils.getBookableStaff) {
+                techs = Utils.getBookableStaff(DataManager.getStaff()).filter(s => s.status === 'active');
+            } else {
+                techs = DataManager.getStaff().filter(s =>
+                s.status === 'active' && (s.role || '').toLowerCase().includes('tech'));
+            }
+            const svcs = selectedServices();
+            if (svcs.length && typeof Utils !== 'undefined' && Utils.staffCanDoService) {
+                techs = techs.filter(s => svcs.every(svc => Utils.staffCanDoService(s, svc)));
+            }
+            return techs;
+        }
+
+        function renderQbStaffPills() {
+            const staff = activeStaff();
+            const el = document.getElementById('qbStaffPills');
+            if (!el) return;
+            if (qb.staffId !== 'any' && !staff.some(s => s.id === qb.staffId)) {
+                qb.staffId = 'any';
+            }
+            if (!staff.length) {
+                el.innerHTML = '<div class="qb-times-empty">No technicians offer this service right now — try another service.</div>';
+                return;
+            }
+            const pills = [`<div class="qb-pill ${qb.staffId === 'any' ? 'selected' : ''}" onclick="qbPickStaff('any')">First Available</div>`]
+                .concat(staff.map(s => {
+                    const label = (typeof Utils !== 'undefined' && Utils.formatStaffServiceLabels) ? Utils.formatStaffServiceLabels(s) : '';
+                    const tip = label && label !== 'All Services' ? ` title="${label}"` : '';
+                    const first = (s.name || 'Tech').split(' ')[0];
+                    return `<div class="qb-pill ${qb.staffId === s.id ? 'selected' : ''}" onclick="qbPickStaff(${s.id})"${tip}>${first}</div>`;
+                }));
+            el.innerHTML = pills.join('');
+        }
+
+        function qbPickStaff(id) {
+            qb.staffId = id;
+            qbEnsureParty();
+            if (qb.party[0]) qb.party[0].staffId = id;
+            qb.time = null; // availability changes
+            qb.resolvedStaffId = null;
+            renderQbStaffPills();
+            renderQbParty();
+            renderQbTimes();
+            updateQbBar();
+        }
+
+        function localDateStr(d) {
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        function renderQbDates() {
+            const today = new Date();
+            const chips = [];
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(today);
+                d.setDate(today.getDate() + i);
+                const dateStr = localDateStr(d); // LOCAL date, not UTC (toISOString shifts evening bookings to tomorrow)
+                const label = i === 0 ? 'Today' : i === 1 ? 'Tmrw' : d.toLocaleDateString('en-US', { weekday: 'short' });
+                chips.push(`
+                    <div class="qb-date ${qb.date === dateStr ? 'selected' : ''}" onclick="qbPickDate('${dateStr}')">
+                        <div class="d-label">${label}</div>
+                        <div class="d-day" onclick="event.stopPropagation(); qbOpenDatePicker('${dateStr}')">${d.getDate()}</div>
+                    </div>
+                `);
+            }
+            if (qb.date && !chips.join('').includes("qbPickDate('" + qb.date + "')")) {
+                const extra = new Date(qb.date + 'T12:00:00');
+                chips.push(`
+                    <div class="qb-date selected" onclick="qbPickDate('${qb.date}')">
+                        <div class="d-label">${extra.toLocaleDateString('en-US', { weekday: 'short' })}</div>
+                        <div class="d-day" onclick="event.stopPropagation(); qbOpenDatePicker('${qb.date}')">${extra.getDate()}</div>
+                    </div>
+                `);
+            }
+            const pickerHtml = `<div class="gold-date-wrap qb-cal-wrap"><input type="date" id="qbDatePicker" class="form-input gold-date" value="${qb.date || ''}" onchange="qbPickDate(this.value)" title="Pick a date"><i class="fas fa-calendar-alt gold-date-icon"></i></div>`;
+            document.getElementById('qbDates').innerHTML = pickerHtml + chips.join('');
+        }
+
+        function qbOpenDatePicker(dateStr) {
+            const picker = document.getElementById('qbDatePicker');
+            if (picker && dateStr) picker.value = dateStr;
+            if (picker && typeof openNativeDatePicker === 'function') {
+                openNativeDatePicker(picker);
+                return;
+            }
+            if (picker) {
+                try {
+                    if (typeof picker.showPicker === 'function') picker.showPicker();
+                    else picker.focus();
+                } catch (e) { try { picker.focus(); } catch (e2) {} }
+                return;
+            }
+            qbPickDate(dateStr);
+        }
+
+        function qbPickDate(dateStr) {
+            qb.date = dateStr;
+            qb.time = null;
+            qb.resolvedStaffId = null;
+            renderQbDates();
+            renderQbTimes();
+            updateQbBar();
+        }
+
+        // ===== AVAILABILITY (duration-aware) =====
+        function toMin(t) {
+            const [h, m] = String(t || '0:0').split(':').map(Number);
+            return h * 60 + m;
+        }
+        function fromMin(mins) {
+            const h = Math.floor(mins / 60);
+            const m = mins % 60;
+            return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
+        }
+
+        function selectedService() {
+            return selectedServices()[0] || null;
+        }
+
+        function serviceDuration() {
+            const svcs = selectedServices();
+            if (!svcs.length) return 30;
+            return Math.max(15, svcs.reduce((sum, s) => sum + (Number(s.duration) || 0), 0) || 30);
+        }
+
+        function servicePriceTotal() {
+            qbEnsureParty();
+            const all = DataManager.getServices() || [];
+            let sum = 0;
+            (qb.party || []).forEach(p => {
+                (p.serviceIds || []).forEach(id => {
+                    const s = all.find(x => Number(x.id) === Number(id));
+                    if (s) sum += Number(s.price) || 0;
+                });
+            });
+            if (!sum) return selectedServices().reduce((n, s) => n + (Number(s.price) || 0), 0);
+            return sum;
+        }
+
+        // A staff member is free only if the WHOLE service fits before their next appointment
+        function staffFreeAt(staffId, date, time, duration) {
+            const dur = duration || serviceDuration();
+            const start = toMin(time);
+            const end = start + dur;
+            return !DataManager.getAppointments(date, staffId).some(a => {
+                if (a.status === 'cancelled') return false;
+                const aStart = toMin(a.time);
+                const aEnd = aStart + (a.duration || 30);
+                return start < aEnd && aStart < end; // overlap
+            });
+        }
+
+        function freeStaffAt(date, time) {
+            return activeStaff().filter(s => staffFreeAt(s.id, date, time));
+        }
+
+        // Business hours for a given date (Sunday has shorter hours)
+        function businessHours(dateStr) {
+            const st = DataManager.settings;
+            const day = new Date(dateStr + 'T12:00:00').getDay(); // noon avoids TZ edge cases
+            if (day === 0 && st.sunOpenTime && st.sunCloseTime) {
+                return { open: st.sunOpenTime, close: st.sunCloseTime };
+            }
+            return { open: st.openTime, close: st.closeTime };
+        }
+
+        function renderQbTimes() {
+            const grid = document.getElementById('qbTimes');
+            if (!grid) return;
+            const staff = activeStaff();
+            if (!staff.length) {
+                grid.innerHTML = '<div class="qb-times-empty">No technicians on the book — try another service.</div>';
+                return;
+            }
+            if (!(qb.serviceIds || []).length) {
+                grid.innerHTML = '<div class="qb-times-empty">Pick a service above to see open times.</div>';
+                return;
+            }
+            if (!qb.date) {
+                grid.innerHTML = '<div class="qb-times-empty">Pick a date to see open times.</div>';
+                return;
+            }
+            const settings = DataManager.settings;
+            const dur = serviceDuration();
+            const hours = businessHours(qb.date);
+            if (!hours.open || !hours.close) {
+                grid.innerHTML = '<div class="qb-times-empty">Salon hours unavailable — please call.</div>';
+                return;
+            }
+            const closeMin = toMin(hours.close);
+            const slots = CalendarUtils.generateTimeSlots(hours.open, hours.close, settings.interval);
+
+            // Only genuinely bookable times: fits before closing AND someone is free
+            const available = slots
+                .filter(time => toMin(time) + dur <= closeMin)
+                .filter(time => {
+                    if (qb.date === Utils.today() && time < Utils.now()) return false;
+                    if (qb.staffId === 'any') return staff.some(s => staffFreeAt(s.id, qb.date, time, dur));
+                    return staffFreeAt(qb.staffId, qb.date, time, dur);
+                });
+
+            if (!available.length) {
+                grid.innerHTML = '<div class="qb-times-empty">No openings this day — try another date.</div>';
+                return;
+            }
+            grid.innerHTML = available.map(time => {
+                // Show WHO is available at this time
+                let who = '';
+                if (qb.staffId === 'any') {
+                    const free = freeStaffAt(qb.date, time).map(s => s.name.split(' ')[0]);
+                    who = free.length <= 2 ? free.join(' & ') : `${free[0]} +${free.length - 1}`;
+                }
+                return `
+                <div class="qb-time ${qb.time === time ? 'selected' : ''}" onclick="qbPickTime('${time}')">
+                    ${Utils.formatTime(time)}
+                    ${who ? `<span class="t-staff">${who}</span>` : ''}
+                </div>`;
+            }).join('');
+        }
+
+        function qbPickTime(time) {
+            qb.time = time;
+            // Resolve which stylist will take it (for display + confirm)
+            qb.resolvedStaffId = qb.staffId === 'any'
+                ? (function () { var free = freeStaffAt(qb.date, time); return (free[0] && free[0].id) || null; })()
+                : qb.staffId;
+            document.querySelectorAll('.qb-time').forEach(t => t.classList.remove('selected'));
+            const hit = document.querySelector('.qb-time[onclick*="' + time + '"]') ||
+                (typeof event !== 'undefined' && event && event.target && event.target.closest && event.target.closest('.qb-time'));
+            if (hit) hit.classList.add('selected');
+            const sec = document.getElementById('qbSecTime');
+            if (sec) sec.classList.add('done');
+            updateQbBar();
+            const details = document.getElementById('qbSecDetails');
+            if (details) details.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => {
+                const notes = document.getElementById('qbNotes');
+                if (notes) notes.focus();
+            }, 400);
+        }
+
+        // ===== STICKY BAR =====
+        function updateQbBar() {
+            const svcs = selectedServices();
+            const parts = [];
+            if (svcs.length === 1) parts.push(svcs[0].name);
+            else if (svcs.length > 1) parts.push(svcs.map(s => s.name).join(' + '));
+            if ((qb.partySize || 1) > 1) parts.push(`Party of ${qb.partySize}`);
+            if (qb.date && qb.time) parts.push(`${Utils.formatDate(qb.date)} · ${Utils.formatTime(qb.time)}`);
+            else if (qb.date) parts.push(Utils.formatDate(qb.date));
+            if (qb.time) {
+                const stylist = qb.resolvedStaffId ? DataManager.getStaff(qb.resolvedStaffId) : null;
+                if (stylist) parts.push(`with ${stylist.name.split(' ')[0]}`);
+            }
+
+            document.getElementById('qbBarSummary').textContent =
+                parts.length ? parts.join('  ·  ') : 'Select a service to get started';
+            const price = servicePriceTotal();
+            const notes = svcs.map(s => s.priceNote).filter(Boolean);
+            document.getElementById('qbBarPrice').textContent = svcs.length ? Utils.formatCurrency(price) + (notes.length === 1 ? notes[0] : '')
+                : '';
+            document.getElementById('qbConfirmBtn').disabled = !(svcs.length && qb.date && qb.time);
+        }
+
+        // ===== CONFIRM =====
+        function resolveStaffId() {
+            if (qb.staffId !== 'any') return qb.staffId;
+            const free = freeStaffAt(qb.date, qb.time)[0];
+            return free ? free.id : null;
+        }
+
+        function qbConfirm() {
+            const sess = clientSession();
+            if (!sess || !sess.phone) {
+                showAuth('Please sign in with your phone number to book.');
+                return;
+            }
+            const notes = (document.getElementById('qbNotes') && document.getElementById('qbNotes').value.trim()) || '';
+
+            const staffId = resolveStaffId();
+            if (!staffId) {
+                UI.toast('That time just got taken — please pick another', 'error');
+                renderQbTimes();
+                return;
+            }
+
+            let client = (DataManager.getClients() || []).find(c => c.id === sess.clientId)
+                || (DataManager.getClients() || []).find(c => phoneDigits(c.phone) === phoneDigits(sess.phone));
+            if (!client) {
+                client = DataManager.addClient({
+                    firstName: sess.firstName || 'Guest',
+                    lastName: '',
+                    phone: phoneDigits(sess.phone),
+                    email: ''
+                });
+                sess.clientId = client.id;
+                saveClientSession(sess);
+            }
+
+            const svcs = selectedServices();
+            if (!svcs.length) {
+                UI.toast('Pick at least one service', 'error');
+                return;
+            }
+            qbEnsureParty();
+            qbSyncPartyServices();
+            if (qb.party[0]) qb.party[0].staffId = qb.party[0].staffId || qb.staffId || 'any';
+            if (qb.party[0] && qb.party[0].staffId !== 'any') qb.staffId = qb.party[0].staffId;
+
+            const allSvcs = DataManager.getServices() || [];
+            // Only book guests who have at least one service assigned
+            let bookingParty = qb.party
+                .map((p, i) => ({ p, i }))
+                .filter(({ p }) => (p.serviceIds || []).length > 0);
+            if (!bookingParty.length) {
+                bookingParty = [{ p: qb.party[0] || { staffId: qb.staffId || 'any', serviceIds: qb.serviceIds }, i: 0 }];
+            }
+            const partySize = Math.min(6, Math.max(1, bookingParty.length));
+            const resolveGuestStaff = (pref, guestSvcs, claimed) => {
+                const explicit = !(pref === 'any' || pref == null || pref === '');
+                let sid = explicit ? Number(pref) : null;
+                if (sid != null && Number.isNaN(sid)) sid = null;
+                const dur = Math.max(15, guestSvcs.reduce((n, s) => n + (s.duration || 0), 0) || 30);
+                const candidates = (typeof DataManager.getBookableStaff === 'function' ? DataManager.getBookableStaff() : DataManager.getStaff() || []).filter(s => s.status === 'active');
+                const can = (s) => !guestSvcs.length || !Utils.staffCanDoService
+                    || guestSvcs.every(svc => Utils.staffCanDoService(s, svc));
+                if (sid) {
+                    const st = DataManager.getStaff(sid);
+                    if (!st || !can(st)) {
+                        sid = null;
+                    } else if (claimed && claimed.has(sid) && partySize > 1) {
+                        // Explicit same-tech party: keep tech (stagger times later).
+                        // Otherwise prefer a different free tech at the same start.
+                        if (!explicit) sid = null;
+                    } else if (!staffFreeAt(sid, qb.date, qb.time, dur)) {
+                        sid = null;
+                    }
+                }
+                if (!sid) {
+                    const free = candidates.find(s => can(s) && staffFreeAt(s.id, qb.date, qb.time, dur)
+                        && !(claimed && claimed.has(s.id) && partySize > 1));
+                    const fallback = candidates.find(s => can(s) && staffFreeAt(s.id, qb.date, qb.time, dur));
+                    sid = (free || fallback || { id: staffId }).id;
+                }
+                if (claimed) claimed.add(sid);
+                return sid;
+            };
+
+            const claimed = new Set();
+            const guestResolved = bookingParty.map(({ p, i }, ord) => {
+                const gIds = (p.serviceIds && p.serviceIds.length) ? p.serviceIds : qb.serviceIds;
+                const guestSvcs = gIds.map(id => allSvcs.find(s => Number(s.id) === Number(id))).filter(Boolean);
+                const useSvcs = guestSvcs.length ? guestSvcs : svcs;
+                const pref = p.staffId != null ? p.staffId : (i === 0 ? qb.staffId : 'any');
+                const sid = resolveGuestStaff(pref, useSvcs, claimed);
+                const st = DataManager.getStaff(sid);
+                const bookerName = ((client.firstName || '') + ' ' + (client.lastName || '')).trim() || 'Client';
+                return {
+                    name: i === 0 ? bookerName : ((typeof Utils !== 'undefined' && Utils.resolvePartySeatName) ? Utils.resolvePartySeatName(bookerName, i, String(p.name || '').trim()) : (String(p.name || '').trim() || (bookerName + ' #' + (i + 1)))),
+                    staffId: sid,
+                    staffName: st ? st.name : '',
+                    serviceIds: useSvcs.map(s => s.id),
+                    services: useSvcs,
+                    duration: Math.max(15, useSvcs.reduce((n, s) => n + (s.duration || 0), 0) || 30),
+                    price: useSvcs.reduce((n, s) => n + (s.price || 0), 0)
+                };
+            });
+
+            const partyPayload = guestResolved.map(g => ({
+                name: g.name, staffId: g.staffId, staffName: g.staffName, serviceIds: g.serviceIds
+            }));
+            const guestNames = partyPayload.slice(1).map(g => g.name).filter(Boolean);
+            // Always one calendar block per guest when party > 1 (same or different staff)
+            const useLinked = partySize > 1;
+            const duration = serviceDuration();
+            const price = guestResolved.reduce((n, g) => n + g.price, 0) || servicePriceTotal();
+            const name = ((client.firstName || '') + ' ' + (client.lastName || '')).trim();
+            const partyId = useLinked ? ('party_' + Date.now().toString(36)) : null;
+
+            const slotFree = (sid, date, time, dur, pending) => {
+                if (!staffFreeAt(sid, date, time, dur)) return false;
+                const start = toMin(time);
+                const end = start + dur;
+                return !(pending || []).some(b =>
+                    Number(b.staffId) === Number(sid) && b.date === date
+                    && start < toMin(b.time) + (b.duration || 30)
+                    && toMin(b.time) < end);
+            };
+
+            if (useLinked) {
+                const staffNextStart = {};
+                const pending = [];
+                const partySplitId = 'split_' + Date.now().toString(36);
+                const allPartyServices = [];
+                guestResolved.forEach((g, i) => {
+                    (g.services || []).forEach(s => {
+                        allPartyServices.push({
+                            id: s.id, serviceId: s.id, name: s.name,
+                            price: s.price || 0, duration: s.duration || 0,
+                            staffId: g.staffId, staffName: g.staffName, guestIndex: i
+                        });
+                    });
+                });
+                const allStaffIds = [];
+                const seenStaff = new Set();
+                guestResolved.forEach(g => {
+                    if (g.staffId == null) return;
+                    const k = String(g.staffId);
+                    if (seenStaff.has(k)) return;
+                    seenStaff.add(k);
+                    allStaffIds.push(g.staffId);
+                });
+                for (let i = 0; i < guestResolved.length; i++) {
+                    const g = guestResolved[i];
+                    const rows = (g.services && g.services.length) ? g.services : [];
+                    for (let si = 0; si < rows.length; si++) {
+                        const s = rows[si];
+                        const gDur = Math.max(15, Number(s.duration) || 30);
+                        let startMin = toMin(qb.time);
+                        if (staffNextStart[g.staffId] != null) startMin = staffNextStart[g.staffId];
+                        const guestTime = fromMin(startMin);
+                        if (!slotFree(g.staffId, qb.date, guestTime, gDur, pending)) {
+                            UI.toast('That time just got taken — please pick another (or different techs)', 'error');
+                            renderQbTimes();
+                            return;
+                        }
+                        staffNextStart[g.staffId] = startMin + gDur;
+                        pending.push({ staffId: g.staffId, date: qb.date, time: guestTime, duration: gDur });
+                        DataManager.addAppointment({
+                            clientId: client.id,
+                            clientName: g.name,
+                            staffId: g.staffId,
+                            staffIds: allStaffIds.slice(),
+                            serviceId: s.id,
+                            serviceName: s.name,
+                            services: [{
+                                id: s.id, serviceId: s.id, name: s.name,
+                                price: s.price || 0, duration: s.duration || 0,
+                                staffId: g.staffId, staffName: g.staffName, guestIndex: i
+                            }],
+                            groupServices: allPartyServices.map(x => Object.assign({}, x)),
+                            date: qb.date,
+                            time: guestTime,
+                            duration: gDur,
+                            price: Number(s.price) || 0,
+                            partySize,
+                            guestNames,
+                            party: partyPayload,
+                            partyId,
+                            partyIndex: i,
+                            splitGroupId: partySplitId,
+                            serviceGroupId: partySplitId,
+                            splitServiceId: String(s.id) + '_' + i + '_' + si,
+                            status: 'booked',
+                            source: 'online',
+                            notes: notes
+                        });
+                    }
+                }
+            } else {
+                const primaryStaff = guestResolved[0].staffId || staffId;
+                const servicesFlat = [];
+                guestResolved.forEach((g, i) => {
+                    g.services.forEach(s => {
+                        servicesFlat.push({
+                            id: s.id, serviceId: s.id, name: s.name,
+                            price: s.price || 0, duration: s.duration || 0,
+                            staffId: g.staffId, staffName: g.staffName, guestIndex: i
+                        });
+                    });
+                });
+                // 2+ services => one calendar block per service under that service's staff
+                if (servicesFlat.length > 1) {
+                    const groupId = 'svcgrp_' + Date.now().toString(36);
+                    const staffNextStart = {};
+                    const baseMin = toMin(qb.time);
+                    const pending = [];
+                    const allStaffIds = [];
+                    const seenStaff = new Set();
+                    servicesFlat.forEach(s => {
+                        const sid = s.staffId || primaryStaff;
+                        if (sid == null) return;
+                        const k = String(sid);
+                        if (seenStaff.has(k)) return;
+                        seenStaff.add(k);
+                        allStaffIds.push(sid);
+                    });
+                    for (let i = 0; i < servicesFlat.length; i++) {
+                        const s = servicesFlat[i];
+                        const sid = s.staffId || primaryStaff;
+                        const gDur = Math.max(15, Number(s.duration) || 30);
+                        let startMin = baseMin;
+                        if (staffNextStart[sid] != null) startMin = staffNextStart[sid];
+                        const gTime = fromMin(startMin);
+                        if (!slotFree(sid, qb.date, gTime, gDur, pending)) {
+                            UI.toast('That time just got taken — please pick another (or different techs)', 'error');
+                            renderQbTimes();
+                            return;
+                        }
+                        staffNextStart[sid] = startMin + gDur;
+                        pending.push({ staffId: sid, date: qb.date, time: gTime, duration: gDur });
+                        DataManager.addAppointment({
+                            clientId: client.id,
+                            clientName: name,
+                            staffId: sid,
+                            staffIds: allStaffIds.slice(),
+                            serviceId: s.id,
+                            serviceName: s.name,
+                            services: [Object.assign({}, s, { staffId: sid, serviceIndex: i })],
+                            groupServices: servicesFlat.map(x => Object.assign({}, x)),
+                            date: qb.date,
+                            time: gTime,
+                            duration: gDur,
+                            price: Number(s.price) || 0,
+                            partySize: 1,
+                            guestNames: [],
+                            party: partyPayload,
+                            splitGroupId: groupId,
+                            serviceGroupId: groupId,
+                            splitServiceId: s.id != null ? s.id : i,
+                            serviceIndex: i,
+                            serviceCount: servicesFlat.length,
+                            status: 'booked',
+                            source: 'online',
+                            notes: notes
+                        });
+                    }
+                } else {
+                    DataManager.addAppointment({
+                        clientId: client.id,
+                        clientName: name,
+                        staffId: primaryStaff,
+                        serviceId: svcs[0].id,
+                        serviceName: svcs.map(s => s.name).join(' + '),
+                        services: servicesFlat,
+                        date: qb.date,
+                        time: qb.time,
+                        duration,
+                        price,
+                        partySize,
+                        guestNames,
+                        party: partyPayload,
+                        status: 'booked',
+                        source: 'online',
+                        notes: notes
+                    });
+                }
+            }
+
+            const staff = DataManager.getStaff(guestResolved[0].staffId || staffId);
+            const distinctStaffCount = new Set(guestResolved.map(g => g.staffId)).size;
+            const matchLines = partyPayload.map((g, i) =>
+                `${g.name || ('Person ' + (i + 1))}: ${(g.staffName || 'Tech').split(' ')[0]} — ${(g.serviceIds || []).map(id => (allSvcs.find(s => Number(s.id) === Number(id)) || {}).name).filter(Boolean).join(', ') || 'services'}`
+            ).join('<br>');
+            const partyBadge = partySize > 1 ? Utils.partyBadgeHtml({ partySize, partyId : partyId || undefined }) : '';
+            document.getElementById('qbSuccessDetails').innerHTML = `
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <div><label class="form-label">Service${svcs.length > 1 ? 's' : ''}</label><p style="font-weight:600;">${svcs.map(s => s.name).join(' + ')}</p></div>
+                    <div><label class="form-label">Technician</label><p style="font-weight:600;">${(staff && staff.name) || 'First available'}${distinctStaffCount > 1 ? ' + matched techs' : ''}</p></div>
+                    <div><label class="form-label">Date</label><p style="font-weight:600;">${Utils.formatDate(qb.date)}</p></div>
+                    <div><label class="form-label">Time</label><p style="font-weight:600;">${Utils.formatTime(qb.time)} · ${Utils.formatDuration(duration)}</p></div>
+                    <div><label class="form-label">Name</label><p style="font-weight:600;">${name}${partyBadge}</p></div>
+                    <div><label class="form-label">Phone</label><p style="font-weight:600;">${Utils.formatPhone(sess.phone)}</p></div>
+                    ${partySize > 1 || partyPayload.length > 1 ? `<div style="grid-column:1/-1;"><label class="form-label">Party match</label><p style="font-weight:600;line-height:1.45;">${matchLines}</p></div>` : ''}
+                    <div><label class="form-label">Total</label><p style="font-weight:600; color:var(--primary);">${Utils.formatCurrency(price)}</p></div>
+                </div>
+            `;
+            document.getElementById('qbFlow').style.display = 'none';
+            document.getElementById('qbBar').style.display = 'none';
+            document.getElementById('qbSuccess').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            UI.toast('Appointment booked!', 'success');
+        }
+
+        function qbReset() {
+            qb.serviceId = null;
+            qb.serviceIds = [];
+            qb.staffId = 'any';
+            qb.date = Utils.today();
+            qb.time = null;
+            qb.resolvedStaffId = null;
+            qb.partySize = 1;
+            qb.guestNames = [];
+            qb.party = [];
+            qb.activeClient = 0;
+            qb.serviceQuery = '';
+
+            const notes = document.getElementById('qbNotes');
+            if (notes) notes.value = '';
+            const searchEl = document.getElementById('qbServiceSearch');
+            if (searchEl) searchEl.value = '';
+            document.getElementById('qbSecService').classList.remove('done');
+            document.getElementById('qbSecTime').classList.remove('done');
+
+            document.getElementById('qbSuccess').style.display = 'none';
+            document.getElementById('qbFlow').style.display = 'block';
+
+            renderQbSelectedChips();
+            renderQbParty();
+            showApp();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ===== UNB AI ASSISTANT (floating widget + booking helpers) =====
+        let bkAiVoice = null;
+
+        function bkAiTryLocalAction(text) {
+            const lower = String(text || '').toLowerCase();
+            const services = DataManager.getServices() || [];
+            const staff = (typeof activeStaff === 'function' ? activeStaff() : DataManager.getStaff() || []);
+            const svc = services.find(s => s.name && lower.includes(String(s.name).toLowerCase()));
+            if (svc && (lower.includes('book') || lower.includes('select') || lower.includes('want') || lower.includes('get') || lower.includes('choose') || lower.startsWith(svc.name.toLowerCase()))) {
+                if (typeof qbPickService === 'function') qbPickService(svc.id);
+                return '<strong>Done!</strong> Selected <strong>' + svc.name + '</strong> ($' + (svc.price || 0) + '). on the booking form. Next pick a date and time' +
+                    (qb.date && qb.time ? ' — or say <em>confirm</em> when ready.' : '.') +
+                    ' You can also say a technician name or a time like "2:30pm".';
+            }
+            const withStaff = text.match(/\bwith\s+([A-Za-z]+)/i);
+            if (withStaff && typeof qbPickStaff === 'function') {
+                const st = staff.find(s => (s.name || '').toLowerCase().includes(withStaff[1].toLowerCase()));
+                if (st) {
+                    qbPickStaff(st.id);
+                    return '<strong>Done!</strong> Preferred tech set to <strong>' + st.name + '</strong>. Pick a service and time if you haven\'t yet.';
+                }
+            }
+            if ((lower.includes('today') || lower.includes('tomorrow')) && typeof qbPickDate === 'function') {
+                const d = new Date();
+                if (lower.includes('tomorrow')) d.setDate(d.getDate() + 1);
+                const dateStr = localDateStr(d);
+                qbPickDate(dateStr);
+                return '<strong>Done!</strong> Date set to <strong>' + dateStr + '</strong>. Choose a time slot (or say one, like "3pm").';
+            }
+            const timeMatch = String(text).match(/\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)\b/i);
+            if (timeMatch && typeof qbPickTime === 'function' && (qb.serviceIds || []).length && qb.date) {
+                let h = parseInt(timeMatch[1], 10);
+                const m = timeMatch[2] || '00';
+                const ap = timeMatch[3].toLowerCase();
+                if (ap === 'pm' && h < 12) h += 12;
+                if (ap === 'am' && h === 12) h = 0;
+                const time24 = String(h).padStart(2, '0') + ':' + m;
+                const slotEl = document.querySelector('.qb-time[onclick*="' + time24 + '"]');
+                if (slotEl) {
+                    qbPickTime(time24);
+                    return '<strong>Done!</strong> Time set to <strong>' + Utils.formatTime(time24) + '</strong>. Fill your details below and tap Confirm, or ask me anything else.';
+                }
+                return '<strong>That time isn\'t open</strong> for your selection. Pick another from the available slots, or try another date.';
+            }
+            if (/\b(add another (person|guest|people)|another person|one more (person|guest))\b/.test(lower)
+                && typeof qbAddPerson === 'function') {
+                qbAddPerson();
+                (function () { var el = document.getElementById('qbQuickCard'); if (el) el.scrollIntoView(true); })();
+                return '<strong>Done!</strong> Added another client — party of <strong>' + (qb.partySize || 1) + '</strong>. Tap services above to add them to the highlighted client, then pick their staff.';
+            }
+            if (/\b(add another service|another service|one more service)\b/.test(lower)) {
+                if (typeof qbFocusAddService === 'function') qbFocusAddService();
+                return 'Tap a service in the menu above — it goes on the highlighted client. Switch clients by tapping their row.';
+            }
+            if (/\b(party|group|guests?|people|how many)\b/.test(lower)) {
+                const n = lower.match(/\b([2-6])\b/);
+                if (n && typeof qb !== 'undefined' && typeof qbPartyDelta === 'function') {
+                    const target = parseInt(n[1], 10);
+                    const cur = qb.partySize || 1;
+                    qbPartyDelta(target - cur);
+                    return '<strong>Done!</strong> Party size set to <strong>' + (qb.partySize || target) + '</strong>. Tap each client row, add their services from the menu, then pick staff &amp; time below.';
+                }
+                (function () { var el = document.getElementById('qbQuickCard'); if (el) el.scrollIntoView(true); })();
+                return 'Tap <strong>+ Add client</strong>, then tap services above for the highlighted person. Each row has its own staff picker.';
+            }
+            if ((lower.includes('confirm') || lower.includes('book it') || lower.includes('finish')) && (qb.serviceIds || []).length && qb.date && qb.time) {
+                const btn = document.getElementById('qbConfirmBtn');
+                if (btn && !btn.disabled) {
+                    (function () { var el = document.getElementById('qbSecDetails'); if (el) el.scrollIntoView(true); })();
+                    return '<strong>Almost there:</strong> Your service, date, and time are selected. Enter your name &amp; phone in the form, then tap <strong>Confirm Booking</strong>.';
+                }
+            }
+            return null;
+        }
+
+        (function initBookingAI() {
+            if (window.UnbAiAssist) UnbAiAssist.injectSharedCss();
+            const profile = (window.UnbAiAssist && UnbAiAssist.getPageProfile)
+                ? UnbAiAssist.getPageProfile('booking')
+                : { welcomeHtml: 'Hi! I\'m <strong>UNB AI ASSISTANT</strong>. Tap <strong>Voice</strong> or type.', placeholder: 'Ask or say a service…' };
+            const fabEmoji = (window.UnbAiAssist && UnbAiAssist.FAB_EMOJI) || '\u2728';
+            const css = `
+                #bkAiBtn { position:fixed; bottom:84px; right:16px; width:56px; height:56px; border-radius:999px;
+                    background:#000; border:2px solid #fbbf24; cursor:pointer;
+                    font-size:1.45rem; color:#fbbf24; padding:0;
+                    box-shadow:0 4px 20px rgba(0,0,0,0.5),0 0 12px rgba(251,191,36,0.25); z-index:1000; transition:transform 0.2s,box-shadow 0.2s;
+                    display:flex; align-items:center; justify-content:center; line-height:1; }
+                #bkAiBtn:hover { transform:scale(1.05); box-shadow:0 6px 24px rgba(0,0,0,0.55),0 0 16px rgba(251,191,36,0.4); }
+                #bkAiPanel { position:fixed; bottom:152px; right:16px; width:340px; max-width:calc(100vw - 32px); height:440px;
+                    background:#1a1a1a; border:2px solid var(--primary,#fbbf24); border-radius:12px; z-index:1000;
+                    display:none; flex-direction:column; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,0.5); }
+                #bkAiPanel.open { display:flex; }
+                #bkAiPanel .bk-head { background:var(--gradient-primary, linear-gradient(135deg,#fbbf24,#d97706)); color:#000;
+                    padding:10px 14px; font-weight:900; font-size:0.78rem; letter-spacing:0.02em; display:flex; justify-content:space-between; align-items:center; }
+                #bkAiPanel .bk-head button { background:none; border:none; cursor:pointer; font-size:1rem; color:#000; }
+                #bkAiMsgs { flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:8px; background:#111; }
+                #bkAiMsgs .m { padding:8px 12px; border-radius:10px; font-size:0.85rem; line-height:1.4; max-width:85%; }
+                #bkAiMsgs .m.user { background:var(--primary,#fbbf24); color:#000; align-self:flex-end; }
+                #bkAiMsgs .m.bot { background:#2a2a2a; color:#e5e5e5; align-self:flex-start; }
+                #bkAiChips { display:flex; gap:6px; padding:8px 12px; flex-wrap:wrap; background:#111; }
+                #bkAiChips button { background:transparent; border:1px solid var(--primary,#fbbf24); color:var(--primary,#fbbf24);
+                    border-radius:20px; padding:4px 10px; font-size:0.7rem; cursor:pointer; }
+                #bkAiChips button:hover { background:var(--primary,#fbbf24); color:#000; }
+                #bkAiInputRow { display:flex; gap:6px; padding:10px; background:#1a1a1a; border-top:1px solid #333; align-items:center; flex-wrap:wrap; }
+                #bkAiInput { flex:1; min-width:100px; background:#0f0f0f; border:1px solid #333; border-radius:8px; color:#fff; padding:8px 10px; font-size:0.85rem; }
+                #bkAiSend { background:var(--gradient-primary, linear-gradient(135deg,#fbbf24,#d97706)); border:none; border-radius:8px;
+                    width:38px; height:38px; cursor:pointer; color:#000; }
+                #bkAiVoice { background:#000; color:#fbbf24; border-color:#fbbf24; }
+            `;
+            const style = document.createElement('style');
+            style.textContent = css;
+            document.head.appendChild(style);
+
+            document.body.insertAdjacentHTML('beforeend', `
+                <button id="bkAiBtn" type="button" title="UNB AI ASSISTANT" aria-label="Open UNB AI ASSISTANT"><span class="unb-ai-fab-emoji" aria-hidden="true">${fabEmoji}</span></button>
+                <div id="bkAiPanel">
+                    <div class="bk-head">
+                        <span>✨ UNB AI ASSISTANT</span>
+                        <button type="button" onclick="document.getElementById('bkAiPanel').classList.remove('open')" aria-label="Close"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div id="bkAiMsgs">
+                        <div class="m bot">${profile.welcomeHtml}</div>
+                    </div>
+                    <div id="bkAiChips">
+                        <button type="button" onclick="bkAiAsk('What services do you offer?')">Services</button>
+                        <button type="button" onclick="bkAiAsk('What are your prices?')">Prices</button>
+                        <button type="button" onclick="bkAiAsk('What are your hours and location?')">Hours</button>
+                        <button type="button" onclick="bkAiAsk('How do I book an appointment?')">How to book</button>
+                    </div>
+                    <div id="bkAiInputRow">
+                        <button type="button" id="bkAiVoice" class="unb-ai-voice-btn" title="Voice" aria-label="Voice"><i class="fas fa-microphone"></i> <span class="unb-ai-btn-label">Voice</span></button>
+                        <input id="bkAiInput" placeholder="${profile.placeholder || 'Ask or say a service…'}" onkeydown="if(event.key==='Enter') bkAiSend()" aria-label="Message UNB AI ASSISTANT">
+                        <button id="bkAiSend" type="button" onclick="bkAiSend()" aria-label="Send"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            `);
+
+            document.getElementById('bkAiBtn').addEventListener('click', () => {
+                document.getElementById('bkAiPanel').classList.toggle('open');
+            });
+
+            if (window.UnbAiAssist) {
+                bkAiVoice = UnbAiAssist.wireChatVoice({
+                    input: document.getElementById('bkAiInput'),
+                    voiceBtn: document.getElementById('bkAiVoice'),
+                    autoSpeak: true,
+                    placeholder: profile.placeholder || 'Ask or say a service…',
+                    onSend: bkAiSend
+                });
+            }
+        })();
+
+        function bkAiContext() {
+            if (window.UnbAiAssist && UnbAiAssist.buildSalonContext) {
+                const profile = UnbAiAssist.getPageProfile('booking');
+                const sel = qb.serviceId ? (DataManager.getServices().find(s => s.id === qb.serviceId) || {}) : {};
+                return UnbAiAssist.buildSalonContext(
+                    (profile.contextExtra || '') +
+                    ' Current selection: service=' + (sel.name || 'none') + ', date=' + (qb.date || 'none') +
+                    ', time=' + (qb.time || 'none') + ', staff=' + (qb.staffId || 'any') + '.'
+                );
+            }
+            return 'UNB AI ASSISTANT for Urban Nail Bar booking page.';
+        }
+
+        function bkAiAsk(text) {
+            document.getElementById('bkAiInput').value = text;
+            bkAiSend();
+        }
+
+        async function bkAiSend() {
+            const input = document.getElementById('bkAiInput');
+            const msgs = document.getElementById('bkAiMsgs');
+            const text = input.value.trim();
+            if (!text) return;
+            if (bkAiVoice) bkAiVoice.stopSpeak();
+
+            msgs.insertAdjacentHTML('beforeend', `<div class="m user"></div>`);
+            msgs.lastElementChild.textContent = text;
+            input.value = '';
+
+            const thinking = document.createElement('div');
+            thinking.className = 'm bot';
+            thinking.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Thinking...';
+            msgs.appendChild(thinking);
+            msgs.scrollTop = msgs.scrollHeight;
+
+            try {
+                const local = bkAiTryLocalAction(text);
+                let reply = local;
+                if (!reply && window.UnbAiAssist && UnbAiAssist.tryLocalFaq) {
+                    reply = UnbAiAssist.tryLocalFaq(text);
+                }
+                if (!reply && window.GeminiAI) {
+                    try {
+                        reply = await GeminiAI.generateResponse(text, bkAiContext());
+                    } catch (aiErr) {
+                        console.warn('AI proxy unavailable, using local booking help:', aiErr);
+                    }
+                }
+                if (!reply) {
+                    reply = 'Say a <strong>service name</strong> to select it, or ask about <strong>hours</strong>, <strong>prices</strong>, or <strong>how to book</strong>. Tap Voice to speak.';
+                }
+                thinking.innerHTML = reply;
+            msgs.scrollTop = msgs.scrollHeight;
+                if (bkAiVoice) bkAiVoice.maybeAutoSpeak(reply);
+            } catch (e) {
+                const fallback = (window.UnbAiAssist && UnbAiAssist.tryLocalFaq && UnbAiAssist.tryLocalFaq(text)) ||
+                    'I\'m having trouble right now. Please try again or call the salon.';
+                thinking.innerHTML = fallback;
+            }
+        }
+    </script>
+</body>
+</html>

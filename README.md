@@ -1,10 +1,7 @@
 # Urban Nail Bar — AI Salon Pro
 
-<<<<<<< HEAD
 **GitHub:** https://github.com/F03F03s44s/AI-SALON-BRO-Urban-Nail-Bar-
 
-=======
->>>>>>> 2f23706cd8508a6fbfd27a35d77282f4ba763b6c
 Three matching OS packages, one shared data hub:
 
 - `Urban Nail Bar (macOS High Sierra)` — primary

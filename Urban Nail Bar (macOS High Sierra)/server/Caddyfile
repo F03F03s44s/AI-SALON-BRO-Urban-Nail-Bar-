@@ -1,0 +1,30 @@
+# Urban Nail Bar — public reverse proxy (Caddy + DNS Exit)
+# Domain: urban-nail-bar.work.gd  (DNS at DNS Exit — see docs/DNS-EXIT-DOMAIN.md)
+#
+# Routing (same as the old tunnel):
+#   Customer booking APIs + booking/confirm pages → localhost:3002
+#   Everything else (website, scheduler, staff, home) → localhost:3001
+#
+# Start with: scripts\RUN-PERMANENT-TUNNEL.bat  (run as Administrator)
+# Requires: router port-forward TCP 80 + 443 → this PC
+
+urban-nail-bar.work.gd {
+	encode gzip
+
+	@public_booking {
+		path /api/public/*
+		path /booking.html
+		path /confirm.html
+		path /confirm-appointment.html
+		path /manifest.webmanifest
+		path /sw.js
+	}
+
+	handle @public_booking {
+		reverse_proxy 127.0.0.1:3002
+	}
+
+	handle {
+		reverse_proxy 127.0.0.1:3001
+	}
+}

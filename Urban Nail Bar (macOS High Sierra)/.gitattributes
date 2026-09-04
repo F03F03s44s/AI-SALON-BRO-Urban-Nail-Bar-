@@ -1,0 +1,7 @@
+# Keep Mac double-click launchers as Unix LF (CRLF breaks #!/bin/bash)
+*.command text eol=lf
+*.sh text eol=lf
+
+# Windows batch files keep CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf

@@ -1,0 +1,16 @@
+{
+  "name": "Book Appointment — Urban Nail Bar",
+  "short_name": "Book Now",
+  "description": "Book your nail appointment online in under a minute — pick a service, pick a time, done.",
+  "start_url": "./booking.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a0a",
+  "theme_color": "#fbbf24",
+  "icons": [
+    { "src": "/assets/pwa/booking-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/pwa/booking-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/pwa/booking-icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

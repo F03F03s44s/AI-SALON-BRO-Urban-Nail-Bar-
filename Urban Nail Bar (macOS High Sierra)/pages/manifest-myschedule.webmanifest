@@ -1,0 +1,16 @@
+{
+  "name": "My Schedule — Urban Nail Bar",
+  "short_name": "My Schedule",
+  "description": "Your own appointments, at a glance. Staff-only schedule for Urban Nail Bar.",
+  "start_url": "./my-schedule.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a0a",
+  "theme_color": "#fbbf24",
+  "icons": [
+    { "src": "../assets/pwa/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "../assets/pwa/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "../assets/pwa/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

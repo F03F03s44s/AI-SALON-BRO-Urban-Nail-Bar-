@@ -1,0 +1,10 @@
+{
+  "name": "ai-salon-pro",
+  "version": "3.0.0",
+  "description": "Urban Nail Bar salon management system",
+  "private": true,
+  "scripts": {
+    "dev": "node static-server.js",
+    "validate": "node validate.js"
+  }
+}

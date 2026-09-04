@@ -1,0 +1,3018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Nail Bar - Manager Interface</title>
+    <link rel="stylesheet" href="../shared/styles.css?v=20260815brand3">
+    <link href="../shared/vendor/fontawesome/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .stat-card.clickable { cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; }
+        .stat-card.clickable:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,0.35); }
+        .stat-card.clickable .stat-label::after { content: '  \f054'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 0.6rem; opacity: 0.6; }
+        .breakdown-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .breakdown-table th, .breakdown-table td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .breakdown-table th { color: var(--text-secondary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .breakdown-table tfoot td { font-weight: 700; color: var(--primary); border-top: 2px solid var(--border-color); border-bottom: none; }
+        .detail-section { margin-bottom: 20px; }
+        .detail-section-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--primary); margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border-color); }
+        .mini-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 16px; }
+        .mini-stat { background: var(--bg-secondary, #1a1a1a); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; text-align: center; }
+        .mini-stat .ms-value { font-size: 1.2rem; font-weight: 800; color: var(--primary); }
+        .mini-stat .ms-label { font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; }
+        .duty-board-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; }
+        .star-filled { color: #fbbf24; }
+        .star-empty { color: #4b5563; }
+        .type-pill { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase; }
+        .type-walkin { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid #fbbf24; }
+        .type-appt { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid #3b82f6; }
+    </style>
+<script>document.documentElement.classList.add('salon-auth-locked');</script>
+<style>html.salon-auth-locked body{visibility:hidden!important;}</style>
+</head>
+<body>
+    <header class="app-header">
+                <div class="logo">
+            <img class="salon-logo" src="../assets/images/logo.png" alt="Urban Nail Bar"
+                 onerror="this.onerror=null;this.src='../assets/brand/logo.png'">
+            <div class="logo-text">
+                <h1 class="brand-salon-name">Urban Nail Bar</h1>
+                <span class="brand-tagline"><span class="brand-ai-line">AI INTEGRATION</span><span class="brand-powered-line">Powered By <strong class="brand-gold">AI Salon Pro</strong></span></span>
+            </div>
+        </div>
+
+        <!-- Filled by shared/app-nav.js (single source of truth) -->
+        <nav class="nav-tabs"></nav>
+
+        <div class="user-menu">
+            <span id="currentUserName" style="font-size:0.85rem; color:var(--text-secondary);">Not logged in</span>
+            <button class="btn btn-sm btn-secondary" id="notifBell" onclick="toggleManagerNotifications()" style="display:none; position:relative;">
+                <i class="fas fa-bell"></i>
+                <span id="notifBadge" style="display:none; position:absolute; top:-6px; right:-6px; background:var(--danger); color:#fff; border-radius:50%; font-size:0.65rem; font-weight:700; padding:2px 6px;">0</span>
+            </button>
+            <button class="btn btn-sm btn-primary" id="loginBtn" onclick="showModal('loginModal')">
+                <i class="fas fa-lock"></i> Login
+            </button>
+            <button class="btn btn-sm btn-secondary" id="logoutBtn" onclick="logout()" style="display:none;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </header>
+
+    <!-- Notification Panel -->
+    <div id="notifPanel" style="display:none; position:fixed; top:64px; right:20px; width:360px; max-height:420px; overflow-y:auto; background:#1a1a1a; border:1px solid var(--border-color); border-radius:8px; z-index:500; box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+        <div style="padding:12px 14px; font-weight:700; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+            <span><i class="fas fa-bell" style="color:var(--primary);"></i> Manager Notifications</span>
+            <button onclick="document.getElementById('notifPanel').style.display='none'" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:0.9rem;"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="notifList"></div>
+    </div>
+
+    <div class="app-body">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title"><span><i class="fas fa-th-large"></i> ALL PAGES</span></div>
+                <div id="sidebarAppPortal"></div>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title"><span><i class="fas fa-user-tie"></i> Manager Tools</span></div>
+                <button class="sidebar-btn active" data-page="dashboard" onclick="showPage('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </button>
+                <button class="sidebar-btn" data-page="schedule" onclick="showPage('schedule')">
+                    <i class="fas fa-calendar"></i> Schedule
+                </button>
+                <button class="sidebar-btn" data-page="staff" onclick="showPage('staff')">
+                    <i class="fas fa-users"></i> Staff
+                </button>
+                <button class="sidebar-btn" data-page="services" onclick="showPage('services')">
+                    <i class="fas fa-tags"></i> Services &amp; Categories
+                </button>
+                <button class="sidebar-btn" data-page="clients" onclick="showPage('clients')">
+                    <i class="fas fa-user-friends"></i> Clients
+                </button>
+                <button class="sidebar-btn" data-page="reports" onclick="showPage('reports')">
+                    <i class="fas fa-chart-bar"></i> Reports
+                </button>
+                <button class="sidebar-btn" data-page="closeout" onclick="showPage('closeout')">
+                    <i class="fas fa-cash-register"></i> Closeout
+                </button>
+                <button class="sidebar-btn" data-page="inventory" onclick="showPage('inventory')">
+                    <i class="fas fa-boxes"></i> Inventory
+                </button>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            <!-- Dashboard -->
+            <div id="dashboardPage" class="page-content">
+                <div style="display:flex; justify-content:flex-end; gap:8px; margin-bottom:8px;">
+                    <button class="btn btn-sm btn-secondary" onclick="loadDemoDayManager()" title="Load a realistic demo day for training or presentations">
+                        <i class="fas fa-magic"></i> Demo Day
+                    </button>
+                    <button class="btn btn-sm btn-secondary" onclick="clearDemoData()" title="Wipe demo data only  -  real data is never touched">
+                        <i class="fas fa-eraser"></i> Clear Demo
+                    </button>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card clickable" onclick="openDetailModal('appointments')">
+                        <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                        <div class="stat-value" id="dashTodayAppts">0</div>
+                        <div class="stat-label">Today's Appointments</div>
+                    </div>
+                    <div class="stat-card clickable" onclick="openDetailModal('revenue')">
+                        <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+                        <div class="stat-value" id="dashTodayRevenue">$0</div>
+                        <div class="stat-label">Today's Revenue</div>
+                    </div>
+                    <div class="stat-card clickable" onclick="openDetailModal('staff')">
+                        <div class="stat-icon"><i class="fas fa-user-tie"></i></div>
+                        <div class="stat-value" id="dashActiveStaff">0</div>
+                        <div class="stat-label">Staff On Duty</div>
+                    </div>
+                    <div class="stat-card clickable" onclick="openDetailModal('rating')">
+                        <div class="stat-icon"><i class="fas fa-star"></i></div>
+                        <div class="stat-value" id="dashAvgRating">0.0</div>
+                        <div class="stat-label">Avg Rating</div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom:16px;" id="dashCompletionCard">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <span style="font-weight:700;"><i class="fas fa-tasks" style="color:var(--primary);"></i> Today's Completion</span>
+                        <span id="dashCompletionText" style="font-weight:700; color:var(--primary);">0 of 0 done</span>
+                    </div>
+                    <div style="height:12px; background:var(--bg-hover); border-radius:6px; overflow:hidden;">
+                        <div id="dashCompletionBar" style="width:0%; height:100%; background:var(--gradient-primary); border-radius:6px; transition:width 0.4s;"></div>
+                    </div>
+                    <div id="dashCompletionNote" style="margin-top:6px; font-size:0.8rem; color:var(--text-secondary);"></div>
+                    <div style="margin-top:14px; border-top:1px solid var(--border-color); padding-top:12px;">
+                        <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">Last 7 Days</div>
+                        <div id="weekCompletion" style="display:flex; gap:8px; align-items:flex-end; height:90px;"></div>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-calendar-day"></i> Today's Schedule</div>
+                        <div id="todaySchedule" style="margin-top:12px;"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-chart-pie"></i> Revenue by Service (Today)</div>
+                        <div class="chart-container" style="height:250px;">
+                            <canvas id="revenueByServiceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:16px;">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title"><i class="fas fa-check-double"></i> Approvals</div>
+                            <div class="card-subtitle">Appointment requests booked by staff and time-off requests  -  approve or deny with your manager/admin PIN. Everything syncs back to the Staff page and Scheduler instantly.</div>
+                        </div>
+                        <span class="badge" id="approvalsBadge" style="background:#f9731620; color:#f97316;">0 pending</span>
+                    </div>
+                    <div id="approvalsList" style="margin-top:12px;"></div>
+                </div>
+            </div>
+
+            <!-- Schedule -->
+            <div id="schedulePage" class="page-content" style="display:none;">
+                <div class="stats-grid" style="grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));">
+                    <div class="stat-card"><div class="stat-icon"><i class="fas fa-user-check"></i></div><div class="stat-value" id="schedClockedIn">0</div><div class="stat-label">Clocked In</div></div>
+                    <div class="stat-card"><div class="stat-icon"><i class="fas fa-user-clock"></i></div><div class="stat-value" id="schedNotIn">0</div><div class="stat-label">Not Clocked In</div></div>
+                    <div class="stat-card"><div class="stat-icon"><i class="fas fa-clock"></i></div><div class="stat-value" id="schedLate">0</div><div class="stat-label">Late</div></div>
+                    <div class="stat-card"><div class="stat-icon"><i class="fas fa-notes-medical"></i></div><div class="stat-value" id="schedSick">0</div><div class="stat-label">Sick</div></div>
+                    <div class="stat-card"><div class="stat-icon"><i class="fas fa-umbrella-beach"></i></div><div class="stat-value" id="schedVacation">0</div><div class="stat-label">Vacation</div></div>
+                    <div class="stat-card"><div class="stat-icon"><i class="fas fa-phone-slash"></i></div><div class="stat-value" id="schedCalledOff">0</div><div class="stat-label">Called Off</div></div>
+                </div>
+
+                <div class="card" style="margin-top:16px;">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title"><i class="fas fa-clipboard-list"></i> Today's Duty Board</div>
+                            <div class="card-subtitle">Who is clocked in, late, sick, on vacation, or called off  -  synced live with the Staff page time clock</div>
+                        </div>
+                    </div>
+                    <div id="dutyBoard" style="margin-top:8px;"></div>
+                </div>
+
+                <div class="card" style="margin-top:16px;">
+                    <div class="card-title"><i class="fas fa-dollar-sign"></i> Staff Earnings Breakdown</div>
+                    <div class="card-subtitle">Completed-service sales per staff member (gross before commission)</div>
+                    <div style="overflow-x:auto; margin-top:12px;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Staff</th>
+                                    <th>Today</th>
+                                    <th>This Week</th>
+                                    <th>This Month</th>
+                                    <th>This Year</th>
+                                    <th>Appts (Month)</th>
+                                    <th>Avg Ticket (Month)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="staffEarningsTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:16px;">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title"><i class="fas fa-calendar"></i> Staff Shifts</div>
+                            <div class="card-subtitle">Weekly recurring shifts  -  late arrivals are detected automatically from these</div>
+                        </div>
+                        <button class="btn btn-primary" onclick="openAddShiftModal()">
+                            <i class="fas fa-plus"></i> Add Shift
+                        </button>
+                    </div>
+                    <div id="staffSchedule" style="margin-top:8px;"></div>
+                </div>
+            </div>
+
+            <!-- Staff -->
+            <div id="staffPage" class="page-content" style="display:none;">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title"><i class="fas fa-users"></i> Staff Overview</div>
+                            <div class="card-subtitle">Synced live with the Admin and Scheduler pages  -  add, edit, or remove staff here and it updates everywhere</div>
+                        </div>
+                        <button class="btn btn-primary" onclick="StaffQuickAdd.openAdd()">
+                            <i class="fas fa-plus"></i> Add Staff
+                        </button>
+                    </div>
+                    <div style="overflow-x:auto; margin-top:16px;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Today's Appts</th>
+                                    <th>Today's Revenue</th>
+                                    <th>Week Revenue</th>
+                                    <th>Commission</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="managerStaffTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clients -->
+            <div id="clientsPage" class="page-content" style="display:none;">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title"><i class="fas fa-user-friends"></i> Client List</div>
+                            <div class="card-subtitle">Identical to the Admin page client list  -  imports, adds, edits and deletes sync both ways</div>
+                        </div>
+                        <button class="btn btn-primary" onclick="showModal('addClientModal')">
+                            <i class="fas fa-plus"></i> Add Client
+                        </button>
+                    </div>
+                    <div class="search-box" style="margin-bottom:16px;">
+                        <input type="text" class="form-input" id="clientSearch" placeholder="Search by first name, last name, phone, last 4 digits, or email..." oninput="searchClients()">
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Last Visit</th>
+                                    <th>Total Visits</th>
+                                    <th>Total Spent</th>
+                                    <th>Points</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="managerClientTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports -->
+            <div id="reportsPage" class="page-content" style="display:none;">
+                <div class="card">
+                    <div class="card-title"><i class="fas fa-chart-bar"></i> Reports</div>
+                    <div class="card-subtitle">Full breakdowns of revenue, services, staff, and commissions  -  everything is tracked and backed up automatically</div>
+                    <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+                        <button class="btn btn-primary" onclick="generateDailyReport()">
+                            <i class="fas fa-file-alt"></i> Daily Report
+                        </button>
+                        <button class="btn btn-primary" onclick="generateWeeklyReport()">
+                            <i class="fas fa-file-alt"></i> Weekly Report
+                        </button>
+                        <button class="btn btn-primary" onclick="generateMonthlyReport()">
+                            <i class="fas fa-file-alt"></i> Monthly Report
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportReport()">
+                            <i class="fas fa-download"></i> Export to CSV
+                        </button>
+                    </div>
+                    <div id="reportContent" style="margin-top:20px;"></div>
+                </div>
+            </div>
+
+            <!-- Closeout -->
+            <div id="closeoutPage" class="page-content" style="display:none;">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title"><i class="fas fa-cash-register"></i> End-of-Day Closeout</div>
+                            <div class="card-subtitle">Submitting a closeout sends it directly to the Admin page where it is kept on record forever (daily / weekly / monthly / yearly)</div>
+                        </div>
+                    </div>
+                    <div style="margin-top:16px; display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                        <div class="form-group">
+                            <label class="form-label">Closeout Date</label>
+                            <div class="gold-date-wrap"><input type="date" class="form-input gold-date" id="closeoutDateInput" onchange="previewCloseout()"><i class="fas fa-calendar-alt gold-date-icon"></i></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Closed By</label>
+                            <input type="text" class="form-input" id="closeoutBy" placeholder="Manager name">
+                        </div>
+                    </div>
+
+                    <div class="stats-grid" style="margin:8px 0 16px;">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                            <div class="stat-value" id="coTotalAppts">0</div>
+                            <div class="stat-label">Appointments</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-check-double"></i></div>
+                            <div class="stat-value" id="coCompleted">0</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-ban"></i></div>
+                            <div class="stat-value" id="coCancelled">0</div>
+                            <div class="stat-label">Cancelled</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+                            <div class="stat-value" id="coRevenuePreview">$0</div>
+                            <div class="stat-label">Expected Revenue</div>
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+                        <div class="form-group">
+                            <label class="form-label">Cash Total ($)</label>
+                            <input type="number" class="form-input" id="coCash" value="0" min="0" step="0.01" oninput="updateCloseoutTotal()">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Card Total ($)</label>
+                            <input type="number" class="form-input" id="coCard" value="0" min="0" step="0.01" oninput="updateCloseoutTotal()">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Grand Total ($)</label>
+                            <input type="text" class="form-input" id="coGrandTotal" value="$0.00" readonly style="font-weight:700; color:var(--primary);">
+                        </div>
+                    </div>
+
+                    <div id="coMismatchWarning" style="display:none; background:rgba(220,38,38,0.1); border:1px solid var(--danger); border-radius:8px; padding:12px 16px; margin-bottom:16px; font-size:0.85rem;">
+                        <strong style="color:var(--danger);"><i class="fas fa-exclamation-triangle"></i> Register does not match expected revenue</strong>
+                        <div id="coMismatchDetail" style="color:var(--text-secondary); margin-top:4px;"></div>
+                        <div style="color:var(--text-secondary); margin-top:4px;">The closeout <strong>cannot be submitted</strong> until the numbers match  -  or an <strong>Admin PIN</strong> is entered to override.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Notes</label>
+                        <input type="text" class="form-input" id="coNotes" placeholder="Any notes about today's closeout...">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Manager or Admin PIN (required to submit)</label>
+                        <input type="password" class="form-input" id="coPin" maxlength="4" placeholder="" style="max-width:180px;">
+                    </div>
+
+                    <button class="btn btn-primary" onclick="submitCloseout()">
+                        <i class="fas fa-paper-plane"></i> Submit Closeout to Admin
+                    </button>
+                </div>
+
+                <div class="card" style="margin-top:16px;">
+                    <div class="card-title"><i class="fas fa-history"></i> Submitted Closeouts (kept on record forever)</div>
+                    <div style="overflow-x:auto; margin-top:12px;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Closed By</th>
+                                    <th>Completed</th>
+                                    <th>Cash</th>
+                                    <th>Card</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="managerCloseoutTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services / Menu Prices -->
+            <div id="servicesPage" class="page-content" style="display:none;">
+                <div id="managerServicePricesRoot"></div>
+            </div>
+
+            <!-- Inventory -->
+            <div id="inventoryPage" class="page-content" style="display:none;">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title"><i class="fas fa-boxes"></i> Inventory</div>
+                            <div class="card-subtitle">Polish bottles tracked by brand, color name, and polish number  -  plus all other products and supplies</div>
+                        </div>
+                        <div style="display:flex; gap:8px;">
+                            <button class="btn btn-primary" onclick="openAddPolishModal()">
+                                <i class="fas fa-paint-brush"></i> Quick Add Polish
+                            </button>
+                            <button class="btn btn-secondary" onclick="showModal('addInventoryModal')">
+                                <i class="fas fa-plus"></i> Add Item
+                            </button>
+                        </div>
+                    </div>
+                    <div class="search-box" style="margin-bottom:12px;">
+                        <input type="text" class="form-input" id="inventorySearch" placeholder="Search by name, brand, color, or polish number..." oninput="renderInventory()">
+                    </div>
+                    <div style="overflow-x:auto; margin-top:4px;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Brand</th>
+                                    <th>Color</th>
+                                    <th>Polish #</th>
+                                    <th>Category</th>
+                                    <th>Quantity</th>
+                                    <th>Min Level</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal" style="max-width:400px;">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fas fa-lock"></i> Manager Login</span>
+                <button class="modal-close" onclick="hideModal('loginModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <p style="color:var(--text-secondary); margin-bottom:16px;">Enter your PIN</p>
+                <div class="pin-input">
+                    <input type="password" id="pinInput" maxlength="4" placeholder="" style="width:120px; text-align:center; font-size:1.5rem; letter-spacing:8px;">
+                </div>
+                <div id="loginError" style="color:var(--danger); font-size:0.85rem; margin-top:8px; display:none;">Invalid PIN</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="doLogin()" style="width:100%;">
+                    <i class="fas fa-unlock"></i> Login
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generic Drill-Down Detail Modal -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal" style="max-width:900px; width:95%; max-height:90vh; display:flex; flex-direction:column;">
+            <div class="modal-header">
+                <span class="modal-title" id="detailModalTitle"><i class="fas fa-chart-bar"></i> Details</span>
+                <button class="modal-close" onclick="hideModal('detailModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="detailModalBody" style="overflow-y:auto; flex:1;"></div>
+        </div>
+    </div>
+
+    <!-- Add Client Modal -->
+    <div class="modal-overlay" id="addClientModal">
+        <div class="modal" style="max-width:500px;">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fas fa-user-plus"></i> Add Client</span>
+                <button class="modal-close" onclick="hideModal('addClientModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">First Name *</label>
+                    <input type="text" class="form-input" id="clientFirstName" placeholder="First name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Last Name <span style="opacity:.7;font-weight:500;">(optional)</span></label>
+                    <input type="text" class="form-input" id="clientLastName" placeholder="Last name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" class="form-input" id="clientPhone" placeholder="(555) 123-4567">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="clientEmail" placeholder="client@email.com">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('addClientModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="addNewClient()">Add Client</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Client Modal -->
+    <div class="modal-overlay" id="editClientModal">
+        <div class="modal" style="max-width:500px;">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fas fa-user-edit"></i> Edit Client</span>
+                <button class="modal-close" onclick="hideModal('editClientModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editClientId">
+                <div class="form-group">
+                    <label class="form-label">First Name *</label>
+                    <input type="text" class="form-input" id="editClientFirstName">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Last Name <span style="opacity:.7;font-weight:500;">(optional)</span></label>
+                    <input type="text" class="form-input" id="editClientLastName">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" class="form-input" id="editClientPhone">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="editClientEmail">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('editClientModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveClientEdit()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Staff Modal -->
+    <div class="modal-overlay" id="addStaffModal">
+        <div class="modal" style="max-width:500px;">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fas fa-user-plus"></i> Add Staff Member</span>
+                <button class="modal-close" onclick="hideModal('addStaffModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" id="newStaffName" placeholder="Full name">
+                </div>
+                <div class="form-group" id="newStaffRoles">
+                    <label class="form-label">Roles <span style="font-weight:500;opacity:.7;">(select all that apply)</span></label>
+                    <div style="display:flex;flex-wrap:wrap;gap:12px 16px;margin-top:6px;">
+                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.85rem;"><input type="checkbox" data-role="technician" checked> Technician</label>
+                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.85rem;"><input type="checkbox" data-role="manager"> Manager</label>
+                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.85rem;"><input type="checkbox" data-role="admin"> Admin</label>
+                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.85rem;"><input type="checkbox" data-role="receptionist"> Receptionist</label>
+                    </div>
+                    <div style="font-size:0.7rem;color:var(--text-secondary);margin-top:6px;">Only Technicians appear on booking, Meet the Team, and the schedule grid.</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Staff's Services</label>
+                    <div id="newStaffServiceCategories" style="display:flex;flex-wrap:wrap;gap:10px 14px;margin-top:6px;"></div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">4-Digit PIN</label>
+                    <input type="text" class="form-input" id="newStaffPin" maxlength="4" placeholder="e.g. 5555">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" class="form-input" id="newStaffPhone" placeholder="(555) 123-4567">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="newStaffEmail" placeholder="staff@salon.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Commission %</label>
+                    <input type="number" class="form-input" id="newStaffCommission" value="50" min="0" max="100">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('addStaffModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="addNewStaff()">Add Staff</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Shift Modal -->
+    <div class="modal-overlay" id="addShiftModal">
+        <div class="modal" style="max-width:500px;">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fas fa-calendar-plus"></i> Add Shift</span>
+                <button class="modal-close" onclick="hideModal('addShiftModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Staff Member</label>
+                    <select class="form-select" id="shiftStaff"></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Day of Week</label>
+                    <select class="form-select" id="shiftDay">
+                        <option value="1">Monday</option>
+                        <option value="2">Tuesday</option>
+                        <option value="3">Wednesday</option>
+                        <option value="4">Thursday</option>
+                        <option value="5">Friday</option>
+                        <option value="6">Saturday</option>
+                        <option value="0">Sunday</option>
+                    </select>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <div class="form-group">
+                        <label class="form-label">Start Time</label>
+                        <input type="time" class="form-input" id="shiftStart" value="09:00">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">End Time</label>
+                        <input type="time" class="form-input" id="shiftEnd" value="17:00">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('addShiftModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="addNewShift()">Add Shift</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Inventory Item Modal -->
+    <div class="modal-overlay" id="addInventoryModal">
+        <div class="modal" style="max-width:500px;">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fas fa-plus"></i> Add Inventory Item</span>
+                <button class="modal-close" onclick="hideModal('addInventoryModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Item Name</label>
+                    <input type="text" class="form-input" id="invName" placeholder="Item name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" id="invCategory">
+                        <option>Products</option>
+                        <option>Color</option>
+                        <option>Nails</option>
+                        <option>Polish</option>
+                        <option>Tools</option>
+                        <option>Supplies</option>
+                    </select>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+                    <div class="form-group">
+                        <label class="form-label">Brand (optional)</label>
+                        <input type="text" class="form-input" id="invBrand" placeholder="OPI, CND...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Color (optional)</label>
+                        <input type="text" class="form-input" id="invColor" placeholder="Bubble Bath">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Polish # (optional)</label>
+                        <input type="text" class="form-input" id="invPolishNumber" placeholder="NL S86">
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+                    <div class="form-group">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" class="form-input" id="invQuantity" value="10">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Min Level</label>
+                        <input type="number" class="form-input" id="invMinLevel" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Price</label>
+                        <input type="number" class="form-input" id="invPrice" value="0" step="0.01">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('addInventoryModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="addInventoryItem()">Add Item</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Add Polish Modal -->
+    <div class="modal-overlay" id="addPolishModal">
+        <div class="modal" style="max-width:480px;">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fas fa-paint-brush"></i> Quick Add Polish Bottle</span>
+                <button class="modal-close" onclick="hideModal('addPolishModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Brand *</label>
+                    <input type="text" class="form-input" id="polishBrand" placeholder="OPI, CND, Essie, Kiara Sky..." list="polishBrandList">
+                    <datalist id="polishBrandList">
+                        <option value="OPI"></option>
+                        <option value="CND"></option>
+                        <option value="Essie"></option>
+                        <option value="Kiara Sky"></option>
+                        <option value="DND"></option>
+                        <option value="Gelish"></option>
+                        <option value="SNS"></option>
+                        <option value="Beetles"></option>
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Color Name *</label>
+                    <input type="text" class="form-input" id="polishColor" placeholder="e.g. Bubble Bath">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Polish / Bottle Number *</label>
+                    <input type="text" class="form-input" id="polishNumber" placeholder="e.g. NL S86, #405">
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+                    <div class="form-group">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" class="form-input" id="polishQuantity" value="1" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Min Level</label>
+                        <input type="number" class="form-input" id="polishMinLevel" value="1" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Price</label>
+                        <input type="number" class="form-input" id="polishPrice" value="12" step="0.01" min="0">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideModal('addPolishModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="addPolishItem()"><i class="fas fa-check"></i> Add Polish</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Inventory Modal -->
+    <div class="modal-overlay" id="editInventoryModal">
+        <div class="modal" style="max-width:480px;">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fas fa-edit"></i> Edit Inventory Item</span>
+                <button class="modal-close" onclick="hideModal('editInventoryModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editInvId">
+                <div class="form-group">
+                    <label class="form-label">Item Name</label>
+                    <input type="text" class="form-input" id="editInvName">
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+                    <div class="form-group">
+                        <label class="form-label">Brand</label>
+                        <input type="text" class="form-input" id="editInvBrand">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Color</label>
+                        <input type="text" class="form-input" id="editInvColor">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Polish #</label>
+                        <input type="text" class="form-input" id="editInvPolishNumber">
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+                    <div class="form-group">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" class="form-input" id="editInvQuantity" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Min Level</label>
+                        <input type="number" class="form-input" id="editInvMinLevel" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Price</label>
+                        <input type="number" class="form-input" id="editInvPrice" step="0.01" min="0">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" onclick="deleteInventoryItem()"><i class="fas fa-trash"></i> Delete</button>
+                <button class="btn btn-secondary" onclick="hideModal('editInventoryModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveInventoryEdit()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Approval PIN Modal -->
+    <div class="modal-overlay" id="approvalPinModal">
+        <div class="modal" style="max-width:400px;">
+            <div class="modal-header">
+                <span class="modal-title"><i class="fas fa-user-shield"></i> <span id="approvalPinTitle">Confirm Approval</span></span>
+                <button class="modal-close" onclick="UI.hideModal('approvalPinModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <p style="color:var(--text-secondary); margin-bottom:16px;" id="approvalPinMessage">Enter your manager or admin PIN to confirm.</p>
+                <input type="password" id="approvalPinInput" maxlength="4" placeholder="" style="width:120px; text-align:center; font-size:1.5rem; letter-spacing:8px;" onkeypress="if(event.key==='Enter')submitApprovalPin()">
+                <div id="approvalPinError" style="color:var(--danger); font-size:0.85rem; margin-top:8px; display:none;">Invalid manager/admin PIN</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="UI.hideModal('approvalPinModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="submitApprovalPin()"><i class="fas fa-check"></i> Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../shared/legacy-compat.js?v=20260805sierra2"></script>
+    <script src="../shared/utils.js?v=20260815menu3"></script>
+    <script src="../shared/appt-status.js?v=20260810booked"></script>
+    <script src="../shared/data-manager.js?v=20260815menu3"></script>
+<script src="../shared/live-sync.js?v=20260815perf1"></script>
+    <script src="../shared/auth.js?v=20260801navSync1"></script>
+    <script src="../shared/staff-quick-add.js?v=20260807staffSync2"></script>
+<script src="../shared/app-nav.js?v=20260810navhover"></script>
+    <script src="../shared/service-prices.js?v=20260811svcgold1"></script>
+    <script>
+    // Staff-only page: only Manager & Admin may open this interface.
+    SalonAuth.guardPage(['admin', 'manager'], { pageName: 'Manager Interface' });
+    </script>
+    <script>
+        let revenueChart = null;
+        let currentDetail = null;   // which drill-down modal is open, so it live-refreshes
+        let lastReportRows = [];    // rows of the last generated report, for CSV export
+        let lastReportName = '';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initManager();
+
+            // Live sync: any change made on ANY page (Admin, Scheduler, Staff,
+            // Booking, Website) re-renders everything here within seconds
+            let _mgrRefreshTimer = null;
+            DataManager.addListener((type, data) => {
+                if (type === 'data' || type === 'staff') {
+                    clearTimeout(_mgrRefreshTimer);
+                    _mgrRefreshTimer = setTimeout(function () { refreshAllViews(); }, 80);
+                }
+            });
+            window.addEventListener('unb:staff-changed', function () {
+                clearTimeout(_mgrRefreshTimer);
+                _mgrRefreshTimer = setTimeout(function () {
+                    try { renderStaffTable(); } catch (e) {}
+                    try { if (typeof renderSchedulePage === 'function') renderSchedulePage(); } catch (e) {}
+                }, 40);
+            });
+            document.addEventListener('visibilitychange', function () {
+                if (document.visibilityState !== 'visible') return;
+                clearTimeout(_mgrRefreshTimer);
+                _mgrRefreshTimer = setTimeout(function () {
+                    try { if (typeof refreshSalonStaffUIs === 'function') refreshSalonStaffUIs({ action: 'focus' }); }
+                    catch (e) { try { renderStaffTable(); } catch (e2) {} }
+                }, 50);
+            });
+
+            // Close the notification panel when clicking anywhere else
+            document.addEventListener('click', (e) => {
+                const panel = document.getElementById('notifPanel');
+                const bell = document.getElementById('notifBell');
+                if (panel && panel.style.display !== 'none' &&
+                    !panel.contains(e.target) && !(bell && bell.contains && bell.contains(e.target))) {
+                    panel.style.display = 'none';
+                }
+            });
+
+            // Sunday 4 PM payday reminder + daily after-closing closeout reminder
+            // + January tax-season reminder
+            checkPayrollReminder();
+            checkCloseoutReminder();
+            checkTaxSeasonReminder();
+            setInterval(() => {
+                checkPayrollReminder();
+                checkCloseoutReminder();
+                checkTaxSeasonReminder();
+            }, 30 * 60 * 1000);
+        });
+
+        // Local-time timestamp (YYYY-MM-DDTHH:MM:SS)  matches how reminders
+        // dedupe by date, regardless of timezone
+        function localTimestamp(d) {
+            const p = n => String(n).padStart(2, '0');
+            return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+        }
+
+        // Sunday 4 PM payday reminder: if it's Sunday after 4 PM and no payroll
+        // run covers this week, ping the managers' bell (once per day)
+        function checkPayrollReminder(nowOverride) {
+            const cfg = DataManager.getReminderSettings();
+            if (!cfg.payrollEnabled) return;
+            const now = nowOverride || new Date();
+            if (now.getDay() !== ((cfg.payrollDay != null ? cfg.payrollDay : 0)) || now.getHours() < ((cfg.payrollHour != null ? cfg.payrollHour : 16))) return; // configured day/hour or later
+
+            const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+            // A payroll run already covers this week  -  nothing to nag about
+            const hasRun = (DataManager.data.payroll || []).some(p =>
+                (p.startDate || '') <= today && (p.endDate || '') >= today
+            );
+            if (hasRun) return;
+
+            // Only one reminder per day
+            const alreadySent = (DataManager.data.notifications || []).some(n =>
+                n.type === 'payroll_reminder' && (n.timestamp || '').startsWith(today)
+            );
+            if (alreadySent) return;
+
+            DataManager.notifyManagers('payroll_reminder',
+                `Payday reminder: it's past payroll time and no payroll run has been generated for this week yet. Head to Admin -> Payroll to run it.`,
+                localTimestamp(now));
+        }
+
+        // Daily closeout reminder: 30 minutes past closing time with no closeout
+        // submitted for today → ping the managers' bell (once per day)
+        function checkCloseoutReminder(nowOverride) {
+            const cfg = DataManager.getReminderSettings();
+            if (!cfg.closeoutEnabled) return;
+            const now = nowOverride || new Date();
+            const [ch, cm] = (DataManager.settings.closeTime || '19:00').split(':').map(Number);
+            const closeMinutes = ch * 60 + (cm || 0);
+            const nowMinutes = now.getHours() * 60 + now.getMinutes();
+            if (nowMinutes < closeMinutes + ((cfg.closeoutGrace != null ? cfg.closeoutGrace : 30))) return; // grace period after closing
+
+            const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+            // Today's closeout already submitted  -  nothing to nag about
+            const hasCloseout = (DataManager.data.closeouts || []).some(c => c.date === today);
+            if (hasCloseout) return;
+
+            // Only one reminder per day
+            const alreadySent = (DataManager.data.notifications || []).some(n =>
+                n.type === 'closeout_reminder' && (n.timestamp || '').startsWith(today)
+            );
+            if (alreadySent) return;
+
+            DataManager.notifyManagers('closeout_reminder',
+                `Closeout reminder: it's past closing time and no closeout has been submitted for today. Wrap up on the Manager -> Closeout page so the day goes on record.`,
+                localTimestamp(now));
+        }
+
+        // January tax-season reminder (Jan 1  -  15): if any staff member is still
+        // missing SSN, address, or form type for their W-2/1099, nag the
+        // managers' bell once per day until it's all filled in
+        function checkTaxSeasonReminder(nowOverride) {
+            const cfg = DataManager.getReminderSettings();
+            if (!cfg.taxSeasonEnabled) return;
+            const now = nowOverride || new Date();
+            if (now.getMonth() !== 0 || now.getDate() > ((cfg.taxSeasonEndDay != null ? cfg.taxSeasonEndDay : 15))) return; // Jan 1 through configured day
+
+            const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+            const incomplete = (DataManager.data.staff || []).filter(s =>
+                !(s.ssn || '').trim() || !(s.address || '').trim() || !s.employmentType
+            );
+            if (incomplete.length === 0) return;
+
+            // Only one reminder per day
+            const alreadySent = (DataManager.data.notifications || []).some(n =>
+                n.type === 'tax_season_reminder' && (n.timestamp || '').startsWith(today)
+            );
+            if (alreadySent) return;
+
+            const names = incomplete.slice(0, 4).map(s => s.name).join(', ') +
+                (incomplete.length > 4 ? ` +${incomplete.length - 4} more` : '');
+            DataManager.notifyManagers('tax_season_reminder',
+                `Tax season prep: ${incomplete.length} staff member${incomplete.length > 1 ? 's are' : ' is'} missing SSN, address, or form type for W-2/1099 filing (${names}). Fix them on Admin -> Tax Center -> Readiness Checklist.`,
+                localTimestamp(now));
+        }
+
+        function initManager() {
+            refreshAllViews();
+        }
+
+        function showPage(page) {
+            document.querySelectorAll('.page-content').forEach(p => p.style.display = 'none');
+            const pageEl = document.getElementById(page + 'Page');
+            if (pageEl) pageEl.style.display = 'block';
+            UI.setActiveSidebar(page);
+            refreshPage(page);
+        }
+
+        function refreshPage(page) {
+            if (page === 'dashboard') renderDashboard();
+            if (page === 'schedule') renderSchedulePage();
+            if (page === 'staff') renderStaffTable();
+            if (page === 'services') renderServicePrices();
+            if (page === 'clients') renderClients();
+            if (page === 'inventory') renderInventory();
+            if (page === 'closeout') initCloseoutPage();
+        }
+
+        function renderServicePrices() {
+            if (typeof ServicePrices !== 'undefined' && ServicePrices.mount) {
+                ServicePrices.mount('managerServicePricesRoot');
+            }
+        }
+
+        function refreshAllViews() {
+            renderDashboard();
+            renderSchedulePage();
+            renderStaffTable();
+            renderClients();
+            renderInventory();
+            renderManagerCloseouts();
+            renderManagerNotifications();
+            renderApprovals();
+            if (typeof ServicePrices !== 'undefined' && ServicePrices.refreshAll) ServicePrices.refreshAll();
+            else renderServicePrices();
+            // If a drill-down modal is open, refresh its contents live too
+            if (currentDetail && document.getElementById('detailModal').classList.contains('active')) {
+                openDetailModal(currentDetail);
+            }
+        }
+
+        // ===================== APPROVALS (staff bookings + time off) =====================
+        // Staff-booked appointments (status 'pending') and time-off requests land
+        // here. Approving/denying requires a manager or admin PIN, and every
+        // decision is written to the shared audit log so Admin can see it too.
+
+        let approvalPinCallback = null;
+
+        function requireApprovalPin(title, message, onApproved) {
+            approvalPinCallback = onApproved;
+            document.getElementById('approvalPinTitle').textContent = title;
+            document.getElementById('approvalPinMessage').textContent = message;
+            document.getElementById('approvalPinInput').value = '';
+            document.getElementById('approvalPinError').style.display = 'none';
+            UI.showModal('approvalPinModal');
+        }
+
+        function submitApprovalPin() {
+            const pin = document.getElementById('approvalPinInput').value.trim();
+            if (!Auth.verifyPin(pin, 'manager')) {
+                document.getElementById('approvalPinError').style.display = 'block';
+                document.getElementById('approvalPinInput').value = '';
+                return;
+            }
+            const approver = pin === DataManager.settings.adminPin
+                ? 'admin'
+                : (((DataManager.getStaff() || []).find(function(s){ return s.pin === pin; }) || {}).name || 'manager');
+            UI.hideModal('approvalPinModal');
+            const cb = approvalPinCallback;
+            approvalPinCallback = null;
+            if (cb) cb(approver);
+        }
+
+        function renderApprovals() {
+            const list = document.getElementById('approvalsList');
+            const badge = document.getElementById('approvalsBadge');
+            if (!list) return;
+
+            const pendingAppts = (DataManager.data.appointments || [])
+                .filter(a => a.status === 'pending')
+                .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+            const pendingLeave = (DataManager.getLeaveRequests ? DataManager.getLeaveRequests() : (DataManager.data.leaveRequests || []))
+                .filter(r => r.status === 'pending')
+                .sort((a, b) => (a.startDate || '').localeCompare(b.startDate || ''));
+
+            const total = pendingAppts.length + pendingLeave.length;
+            if (badge) badge.textContent = `${total} pending`;
+
+            if (total === 0) {
+                list.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:16px;">Nothing waiting for approval right now.</p>';
+                return;
+            }
+
+            let html = '';
+            if (pendingAppts.length > 0) {
+                html += '<div class="mini-label" style="margin:8px 0; font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Appointment requests from staff</div>';
+                html += pendingAppts.map(a => {
+                    const staff = DataManager.getStaff(a.staffId);
+                    const client = a.clientId ? DataManager.getClient(a.clientId) : null;
+                    const clientName = client ? `${client.firstName || ''} ${client.lastName || ''}`.trim() : (a.clientName || 'Walk-In');
+                    const svc = DataManager.getServices().find(s => s.id === a.serviceId);
+                    return `
+                        <div style="display:flex; justify-content:space-between; align-items:center; border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px; margin-bottom:8px;">
+                            <div>
+                                <strong>${esc(clientName)}${(typeof Utils !== 'undefined' && Utils.partyBadgeHtml) ? Utils.partyBadgeHtml(a) : ''}</strong>
+                                <span style="color:var(--text-secondary); font-size:0.85rem;">  ${esc(svc ? svc.name : 'Service')} (${Utils.formatCurrency(a.price)})</span>
+                                <div style="color:var(--text-muted); font-size:0.8rem;">${Utils.formatDate(a.date)} at ${Utils.formatTime(a.time)}  requested by ${esc(a.requestedBy || (staff ? staff.name : 'staff'))}</div>
+                                ${a.notes ? `<div style="color:var(--text-muted); font-size:0.8rem;">"${esc(a.notes)}"</div>` : ''}
+                            </div>
+                            <div style="display:flex; gap:8px;">
+                                <button class="btn btn-sm btn-success" onclick="approveAppointment(${a.id})"><i class="fas fa-check"></i> Approve</button>
+                                <button class="btn btn-sm btn-danger" onclick="denyAppointment(${a.id})"><i class="fas fa-times"></i> Deny</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            if (pendingLeave.length > 0) {
+                html += '<div class="mini-label" style="margin:12px 0 8px; font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Time-off requests</div>';
+                html += pendingLeave.map(r => {
+                    const partial = DataManager.isPartialLeave && DataManager.isPartialLeave(r);
+                    const when = DataManager.formatLeaveWindow ? DataManager.formatLeaveWindow(r)
+                        : (Utils.formatDate(r.startDate) + (r.endDate && r.endDate !== r.startDate ? ' → ' + Utils.formatDate(r.endDate) : ''));
+                    const typeLabel = partial && (r.type === 'step-out' || !r.type) ? 'Quick step-out' : r.type;
+                    return `
+                    <div style="display:flex; justify-content:space-between; align-items:center; border:1px solid var(--border-color); border-radius:var(--radius-md); padding:12px; margin-bottom:8px;">
+                        <div>
+                            <strong>${esc(r.staffName || 'Staff')}</strong>
+                            <span style="color:var(--text-secondary); font-size:0.85rem; text-transform:capitalize;">  ${esc(typeLabel)}</span>
+                            <div style="color:var(--text-muted); font-size:0.8rem;">${esc(when)}</div>
+                            ${r.reason ? `<div style="color:var(--text-muted); font-size:0.8rem;">"${esc(r.reason)}"</div>` : ''}
+                        </div>
+                        <div style="display:flex; gap:8px;">
+                            <button class="btn btn-sm btn-success" onclick="approveLeave(${r.id})"><i class="fas fa-check"></i> Approve</button>
+                            <button class="btn btn-sm btn-danger" onclick="denyLeave(${r.id})"><i class="fas fa-times"></i> Deny</button>
+                        </div>
+                    </div>
+                `;
+                }).join('');
+            }
+            list.innerHTML = html;
+        }
+
+        function approveAppointment(id) {
+            requireApprovalPin('Approve Appointment', 'Enter your manager/admin PIN to approve this appointment.', (approver) => {
+                DataManager.updateAppointment(id, { status: 'booked', needsApproval: false, approvedBy: approver, approvedAt: new Date().toISOString() });
+                DataManager.logAudit('appointment_approved', `Appointment #${id} approved by ${approver}.`);
+                DataManager.saveData();
+                UI.toast('Appointment approved  -  it is now confirmed everywhere', 'success');
+                renderApprovals();
+            });
+        }
+
+        function denyAppointment(id) {
+            requireApprovalPin('Deny Appointment', 'Enter your manager/admin PIN to deny (cancel) this appointment request.', (approver) => {
+                DataManager.updateAppointment(id, { status: 'cancelled', needsApproval: false, deniedBy: approver, deniedAt: new Date().toISOString() });
+                DataManager.logAudit('appointment_denied', `Appointment #${id} denied by ${approver}.`);
+                DataManager.saveData();
+                UI.toast('Appointment request denied', 'info');
+                renderApprovals();
+            });
+        }
+
+        function approveLeave(id) {
+            const req = (DataManager.getLeaveRequests ? DataManager.getLeaveRequests() : []).find(r => r.id === id);
+            const partial = req && DataManager.isPartialLeave && DataManager.isPartialLeave(req);
+            const pinMsg = partial
+                ? 'Enter your manager/admin PIN to approve this step-out. That time will be blocked on the Scheduler so they can come back after.'
+                : 'Enter your manager/admin PIN to approve this time-off request. The duty board will be marked automatically.';
+            requireApprovalPin(partial ? 'Approve Step-Out' : 'Approve Time Off', pinMsg, (approver) => {
+                DataManager.approveLeaveRequest(id, approver);
+                UI.toast(partial ? 'Step-out approved — that time is blocked on the Scheduler' : 'Time off approved  -  duty board updated', 'success');
+                renderApprovals();
+                if (typeof renderSchedulePage === 'function') renderSchedulePage();
+            });
+        }
+
+        function denyLeave(id) {
+            requireApprovalPin('Deny Time Off', 'Enter your manager/admin PIN to deny this time-off request.', (approver) => {
+                DataManager.denyLeaveRequest(id, approver);
+                UI.toast('Time-off request denied', 'info');
+                renderApprovals();
+            });
+        }
+
+        // ===================== SHARED BREAKDOWN HELPERS =====================
+        // These are the single source of truth for every breakdown on this page,
+        // so the dashboard, reports, and closeout always agree with each other
+        // and with the Scheduler/Admin pages (same shared data layer).
+
+        function esc(s) {
+            return String((s != null ? s : '')).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        // Services of an appointment: full array when the Scheduler synced it,
+        // otherwise fall back to the single serviceId + total price.
+        // Each entry may carry the staff member who performed that service.
+        function apptServices(a) {
+            if (Array.isArray(a.services) && a.services.length > 0) {
+                return a.services.map(s => ({ name: s.name || 'Service', price: s.price || 0, staffId: s.staffId || null, staffName: s.staffName || '' }));
+            }
+            const svc = DataManager.getServices().find(s => s.id === a.serviceId);
+            return [{ name: svc ? svc.name : 'Service', price: a.price || 0, staffId: a.staffId || null, staffName: '' }];
+        }
+
+        // Exact per-staff dollar shares of one appointment.
+        // Priority: per-service staff assignments > splits array > single staffId.
+        function apptStaffShares(a) {
+            const svcWithStaff = (a.services || []).filter(s => s.staffId || s.staffName);
+            if (svcWithStaff.length > 0) {
+                const groups = {};
+                svcWithStaff.forEach(s => {
+                    const key = s.staffId ? 'id_' + s.staffId : 'name_' + s.staffName;
+                    if (!groups[key]) groups[key] = { staffId: s.staffId || null, name: s.staffName || apptStaffName(a), amount: 0, svcCount: 0 };
+                    groups[key].amount += s.price || 0;
+                    groups[key].svcCount++;
+                });
+                // Services with no staff tag go to the appointment's primary staff
+                const untagged = (a.services || []).filter(s => !s.staffId && !s.staffName);
+                if (untagged.length > 0) {
+                    const key = a.staffId ? 'id_' + a.staffId : 'name_' + apptStaffName(a);
+                    if (!groups[key]) groups[key] = { staffId: a.staffId || null, name: apptStaffName(a), amount: 0, svcCount: 0 };
+                    untagged.forEach(s => { groups[key].amount += s.price || 0; groups[key].svcCount++; });
+                }
+                return Object.values(groups);
+            }
+            if (Array.isArray(a.splits) && a.splits.length > 0) {
+                return a.splits.map(sp => ({
+                    staffId: sp.staffId || null,
+                    name: sp.staffName || (sp.staffId ? ((DataManager.getStaff(sp.staffId) || {}).name) : null) || 'Unassigned',
+                    amount: sp.amount || 0,
+                    svcCount: 1
+                }));
+            }
+            return [{ staffId: a.staffId || null, name: apptStaffName(a), amount: a.price || 0, svcCount: 1 }];
+        }
+
+        // Commission rate for a staff id, falling back to the appointment's staff / salon default
+        function rateForStaffId(staffId, fallbackAppt) {
+            const st = staffId ? DataManager.getStaff(staffId) : null;
+            if (st) return (st.commission != null ? st.commission : (DataManager.settings.commission != null ? DataManager.settings.commission : 50));
+            return fallbackAppt ? staffCommissionRate(fallbackAppt) : (DataManager.settings.commission != null ? DataManager.settings.commission : 50);
+        }
+
+        // Service list cell: "Gel Manicure ($35)  Lisa" per line
+        function svcListHtml(a) {
+            return apptServices(a).map(s =>
+                `${esc(s.name)} <span style="color:var(--text-secondary);">(${Utils.formatCurrency(s.price)})</span>${s.staffName ? ` <span style="color:var(--primary); font-size:0.75rem;"> ${esc(s.staffName)}</span>` : ''}`
+            ).join('<br>');
+        }
+
+        // One transaction row with exact per-staff commission math  -  shared by the
+        // revenue drill-down and the daily/weekly/monthly reports so they always agree
+        function transactionRowHtml(a, showDate) {
+            const gross = a.price || 0;
+            const shares = apptStaffShares(a);
+            const staffCut = shares.reduce((sum, sh) => sum + sh.amount * rateForStaffId(sh.staffId, a) / 100, 0);
+            const staffCell = shares.map(sh =>
+                `${esc(sh.name)} <span style="font-size:0.7rem; color:var(--text-secondary);">${Utils.formatCurrency(sh.amount)} @ ${rateForStaffId(sh.staffId, a)}%</span>`
+            ).join('<br>');
+            return `
+                <tr>
+                    ${showDate ? `<td>${Utils.formatDate(a.date)}</td>` : ''}
+                    <td>${Utils.formatTime(a.time)}</td>
+                    <td><strong>${esc(apptClientName(a))}</strong><br><span class="type-pill ${isWalkinAppt(a) ? 'type-walkin' : 'type-appt'}">${isWalkinAppt(a) ? 'Walk-In' : 'Appt'}</span></td>
+                    <td>${svcListHtml(a)}</td>
+                    <td>${staffCell}</td>
+                    <td style="font-weight:700;">${Utils.formatCurrency(gross)}</td>
+                    <td style="color:var(--success);">${Utils.formatCurrency(staffCut)}</td>
+                    <td style="color:var(--primary);">${Utils.formatCurrency(gross - staffCut)}</td>
+                </tr>`;
+        }
+
+        function apptClientName(a) {
+            const client = a.clientId ? DataManager.getClient(a.clientId) : null;
+            if (client) return `${client.firstName || ''} ${client.lastName || ''}`.trim() || 'Client';
+            return a.clientName || 'Walk-In';
+        }
+
+        function apptStaffName(a) {
+            const staff = a.staffId ? DataManager.getStaff(a.staffId) : null;
+            return staff ? staff.name : (a.staffName || 'Unassigned');
+        }
+
+        function isWalkinAppt(a) {
+            if (typeof ApptStatus !== 'undefined' && typeof ApptStatus.isWalkIn === 'function') {
+                return ApptStatus.isWalkIn(a) || !a.clientId;
+            }
+            return a.isWalkIn === true || !a.clientId;
+        }
+
+        function isClosedAppt(a) {
+            if (typeof ApptStatus !== 'undefined' && typeof ApptStatus.isClosedAppt === 'function') {
+                return ApptStatus.isClosedAppt(a);
+            }
+            return ['complete', 'cancelled', 'noshow', 'completed'].includes(String((a && a.status) || '').toLowerCase());
+        }
+
+        function isCompleteAppt(a) {
+            const st = (typeof ApptStatus !== 'undefined' && ApptStatus.normalize) ? ApptStatus.normalize(a && a.status) : String((a && a.status) || '').toLowerCase();
+            return st === 'complete';
+        }
+
+        function staffCommissionRate(a) {
+            const staff = a.staffId ? DataManager.getStaff(a.staffId) : null;
+            return staff ? (staff.commission != null ? staff.commission : (DataManager.settings.commission != null ? DataManager.settings.commission : 50)) : (DataManager.settings.commission != null ? DataManager.settings.commission : 50);
+        }
+
+        function apptsInRange(startDate, endDate) {
+            return DataManager.data.appointments.filter(a => a.date >= startDate && a.date <= endDate);
+        }
+
+        function completedInRange(startDate, endDate) {
+            return apptsInRange(startDate, endDate).filter(a => a.status === 'complete');
+        }
+
+        function weekStart(dateStr) {
+            const d = new Date(dateStr + 'T00:00:00');
+            d.setDate(d.getDate() - d.getDay());
+            return d.toISOString().split('T')[0];
+        }
+
+        function monthStart(dateStr) { return dateStr.slice(0, 8) + '01'; }
+        function yearStart(dateStr) { return dateStr.slice(0, 4) + '-01-01'; }
+
+        // Full breakdown for a set of appointments  -  used by the dashboard
+        // drill-downs AND the daily/weekly/monthly reports so numbers always match
+        function buildBreakdown(appts) {
+            const completed = appts.filter(a => a.status === 'complete');
+            const walkins = appts.filter(isWalkinAppt);
+            const booked = appts.filter(a => !isWalkinAppt(a));
+            const completedWalkins = completed.filter(isWalkinAppt);
+            const completedBooked = completed.filter(a => !isWalkinAppt(a));
+
+            // Per-service totals (completed only)
+            const serviceMap = {};
+            completed.forEach(a => {
+                apptServices(a).forEach(s => {
+                    if (!serviceMap[s.name]) serviceMap[s.name] = { name: s.name, count: 0, total: 0 };
+                    serviceMap[s.name].count++;
+                    serviceMap[s.name].total += s.price;
+                });
+            });
+            const services = Object.values(serviceMap).sort((x, y) => y.total - x.total);
+
+            // Per-staff totals with commission split (completed only).
+            // Uses exact per-service / per-split attribution, so when two techs
+            // share one client each one is credited only for what they did.
+            const staffMap = {};
+            completed.forEach(a => {
+                const clientName = apptClientName(a);
+                apptStaffShares(a).forEach(sh => {
+                    const key = sh.staffId ? 'id_' + sh.staffId : 'name_' + sh.name;
+                    if (!staffMap[key]) {
+                        staffMap[key] = { name: sh.name, appts: 0, clients: new Set(), gross: 0, rate: rateForStaffId(sh.staffId, a) };
+                    }
+                    staffMap[key].appts += sh.svcCount;
+                    staffMap[key].clients.add(clientName);
+                    staffMap[key].gross += sh.amount;
+                });
+            });
+            const staffRows = Object.values(staffMap).map(s => ({
+                ...s,
+                clientCount: s.clients.size,
+                staffCut: s.gross * (s.rate / 100),
+                salonCut: s.gross * (1 - s.rate / 100)
+            })).sort((x, y) => y.gross - x.gross);
+
+            const gross = completed.reduce((sum, a) => sum + (a.price || 0), 0);
+            const totalStaffCut = staffRows.reduce((sum, s) => sum + s.staffCut, 0);
+
+            return {
+                total: appts.length,
+                completed: completed.length,
+                pending: appts.filter(a => a.status === 'booked' || a.status === 'confirmed').length,
+                cancelled: appts.filter(a => a.status === 'cancelled').length,
+                walkinCount: walkins.length,
+                bookedCount: booked.length,
+                walkinRevenue: completedWalkins.reduce((s, a) => s + (a.price || 0), 0),
+                bookedRevenue: completedBooked.reduce((s, a) => s + (a.price || 0), 0),
+                completedWalkinCount: completedWalkins.length,
+                completedBookedCount: completedBooked.length,
+                services,
+                staffRows,
+                gross,
+                totalStaffCut,
+                totalSalonCut: gross - totalStaffCut,
+                completedAppts: completed
+            };
+        }
+
+        function starsHtml(rating) {
+            let out = '';
+            for (let i = 1; i <= 5; i++) {
+                out += `<i class="fas fa-star ${i <= rating ? 'star-filled' : 'star-empty'}"></i>`;
+            }
+            return out;
+        }
+
+        // ===================== DASHBOARD =====================
+        function renderDashboard() {
+            const today = Utils.today();
+            const appts = DataManager.getAppointments(today);
+            const bd = buildBreakdown(appts);
+
+            document.getElementById('dashTodayAppts').textContent = bd.total;
+            document.getElementById('dashTodayRevenue').textContent = Utils.formatCurrency(bd.gross);
+
+            const activeStaff = DataManager.getStaff().filter(s => s.isClockedIn).length;
+            document.getElementById('dashActiveStaff').textContent = activeStaff;
+
+            const reviews = DataManager.data.reviews || [];
+            const avgRating = reviews.length > 0
+                ? (reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length).toFixed(1)
+                : '0.0';
+            document.getElementById('dashAvgRating').textContent = avgRating;
+
+            renderCompletion(appts);
+            renderCompletionWeek();
+            renderTodaySchedule();
+            renderRevenueChart(bd);
+        }
+
+        // Last 7 days of completion as mini bars  -  spot strong vs lagging days
+        function renderCompletionWeek() {
+            const container = document.getElementById('weekCompletion');
+            if (!container) return;
+
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const bars = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const ds = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                const appts = DataManager.getAppointments(ds);
+                const total = appts.length;
+                const done = appts.filter(a => a.status === 'complete').length;
+                const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+                const isToday = i === 0;
+
+                bars.push(`
+                    <div onclick="openDetailModal('day:${ds}')" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; height:100%; justify-content:flex-end; cursor:pointer;" title="${ds}: ${done}/${total} completed (${pct}%)  click for breakdown" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">
+                        <div style="font-size:0.65rem; color:var(--text-muted); font-weight:700;">${total > 0 ? done + '/' + total : '-'}</div>
+                        <div style="width:100%; height:${total > 0 ? Math.max(6, pct * 0.6) : 4}px; border-radius:4px; background:${total === 0 ? 'var(--bg-hover)' : pct === 100 ? 'var(--success)' : pct >= 50 ? 'var(--primary)' : 'var(--warning)'}; ${isToday ? 'outline :2px solid var(--primary); outline-offset:1px;' : ''}"></div>
+                        <div style="font-size:0.65rem; color:${isToday ? 'var(--primary)' : 'var(--text-muted)'}; font-weight:${isToday ? '800' : '600'};">${dayNames[d.getDay()]}</div>
+                    </div>
+                `);
+            }
+            container.innerHTML = bars.join('');
+        }
+
+        // Salon-wide completion: done vs still open, with a progress bar
+        function renderCompletion(appts) {
+            const total = appts.length;
+            const done = appts.filter(isCompleteAppt).length;
+            const open = appts.filter(a => !isClosedAppt(a)).length;
+
+            const textEl = document.getElementById('dashCompletionText');
+            const barEl = document.getElementById('dashCompletionBar');
+            const noteEl = document.getElementById('dashCompletionNote');
+            if (!textEl) return;
+
+            if (total === 0) {
+                textEl.textContent = 'No appointments today';
+                barEl.style.width = '0%';
+                noteEl.textContent = '';
+                return;
+            }
+
+            const pct = Math.round((done / total) * 100);
+            barEl.style.width = pct + '%';
+
+            if (open === 0) {
+                textEl.innerHTML = `<span style="color:var(--success);">? ${done} of ${total} done  -  day complete!</span>`;
+                barEl.style.background = 'var(--success)';
+                noteEl.textContent = 'Every appointment is finished or cancelled. Ready for closeout.';
+            } else {
+                textEl.textContent = `${done} of ${total} done`;
+                barEl.style.background = 'var(--gradient-primary)';
+                noteEl.textContent = `${open} still open (${pct}% complete)`;
+            }
+        }
+
+        function renderTodaySchedule() {
+            const today = Utils.today();
+            const appts = DataManager.getAppointments(today);
+            const container = document.getElementById('todaySchedule');
+
+            if (appts.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:20px;">No appointments today</p>';
+                return;
+            }
+
+            container.innerHTML = appts.map(a => {
+                const svcNames = apptServices(a).map(s => s.name).join(' + ');
+                const walkin = isWalkinAppt(a);
+                return `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border-color); gap:8px;">
+                        <div>
+                            <div style="font-weight:600;">${Utils.formatTime(a.time)} - ${esc(apptClientName(a))}${(typeof Utils !== 'undefined' && Utils.partyBadgeHtml) ? Utils.partyBadgeHtml(a) : ''}
+                                <span class="type-pill ${walkin ? 'type-walkin' : 'type-appt'}">${walkin ? 'Walk-In' : 'Appt'}</span>
+                            </div>
+                            <div style="font-size:0.8rem; color:var(--text-secondary);">${esc(svcNames)} with ${esc(apptStaffName(a))}</div>
+                        </div>
+                        ${typeof ApptStatus !== 'undefined' ? ApptStatus.badgeHtml(a.status) : ('<span class="badge">' + (a.status || '') + '</span>')}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderRevenueChart(bd) {
+            const ctx = (document.getElementById('revenueByServiceChart') && document.getElementById('revenueByServiceChart').getContext('2d'));
+            if (!ctx) return;
+
+            if (revenueChart) revenueChart.destroy();
+
+            const services = bd.services;
+            if (services.length === 0) {
+                revenueChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: { labels: ['No completed services yet'], datasets: [{ data: [1], backgroundColor: ['#333'] }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#9ca3af', font: { size: 11 } } } } }
+                });
+                return;
+            }
+
+            revenueChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: services.map(s => s.name),
+                    datasets: [{
+                        data: services.map(s => s.total),
+                        backgroundColor: ['#fbbf24', '#3b82f6', '#10b981', '#8b5cf6', '#ec4899', '#06b6d4', '#f97316', '#ef4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { color: '#e5e7eb', font: { size: 11 } } },
+                        tooltip: {
+                            callbacks: {
+                                label: (item) => ` ${item.label}: ${Utils.formatCurrency(item.parsed)}`
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ===================== DRILL-DOWN DETAIL MODAL =====================
+        function openDetailModal(kind) {
+            currentDetail = kind;
+            // Day drill-down from the 7-day completion bars: openDetailModal('day:2026-07-27')
+            if (typeof kind === 'string' && kind.startsWith('day:')) {
+                const ds = kind.slice(4);
+                document.getElementById('detailModalTitle').innerHTML = `<i class="fas fa-calendar-day"></i> ${Utils.formatDate(ds)}  Appointment Breakdown`;
+                document.getElementById('detailModalBody').innerHTML = buildDayDetail(ds);
+                showModal('detailModal');
+                return;
+            }
+            const titles = {
+                appointments: '<i class="fas fa-calendar-day"></i> Today\'s Appointments  -  Full Breakdown',
+                revenue: '<i class="fas fa-dollar-sign"></i> Today\'s Revenue  -  Full Breakdown',
+                staff: '<i class="fas fa-users"></i> Staff On Duty  -  Live Status',
+                rating: '<i class="fas fa-star"></i> Average Rating  -  Full Breakdown'
+            };
+            const builders = {
+                appointments: buildAppointmentsDetail,
+                revenue: buildRevenueDetail,
+                staff: buildStaffOnDutyDetail,
+                rating: buildRatingDetail
+            };
+            document.getElementById('detailModalTitle').innerHTML = titles[kind] || 'Details';
+            document.getElementById('detailModalBody').innerHTML = builders[kind]();
+            showModal('detailModal');
+        }
+
+        // ----- Single-day drill-down (from the 7-day completion bars) -----
+        function buildDayDetail(ds) {
+            const appts = DataManager.getAppointments(ds);
+            if (appts.length === 0) {
+                return `<p style="text-align:center; padding:30px; color:var(--text-secondary);">No appointments on ${Utils.formatDate(ds)}</p>`;
+            }
+
+            const open = appts.filter(a => !isClosedAppt(a));
+            const rows = appts.map(a => {
+                const client = a.clientId ? DataManager.getClient(a.clientId) : null;
+                const clientName = client ? `${client.firstName || ''} ${client.lastName || ''}`.trim() : (a.clientName || (a.isWalkIn ? 'Walk-In' : 'Client'));
+                const staff = a.staffId ? DataManager.getStaff(a.staffId) : null;
+                const svc = DataManager.getServices().find(s => s.id === a.serviceId);
+                const svcName = Array.isArray(a.services) && a.services.length ? a.services.map(s => s.name).join(', ') : ((svc && svc.name) || 'Service');
+                const isOpen = !isClosedAppt(a);
+                return `<tr style="${isOpen ? 'background:rgba(251,191,36,0.08);' : ''}">
+                    <td><strong>${Utils.formatTime(a.time)}</strong></td>
+                    <td>${esc(clientName)}</td>
+                    <td>${esc(svcName)}</td>
+                    <td>${staff ? esc(staff.name) : '-'}</td>
+                    <td>${Utils.formatCurrency(a.price || 0)}</td>
+                    <td>${typeof ApptStatus !== 'undefined' ? ApptStatus.badgeHtml(a.status) : ('<span class="badge">' + (a.status || '') + '</span>')}</td>
+                </tr>`;
+            }).join('');
+
+            return `
+                ${open.length > 0 ? `<div style="background:rgba(251,191,36,0.1); border:1px solid var(--warning); border-radius:8px; padding:10px 14px; margin-bottom:12px; font-size:0.85rem;">
+                    <i class="fas fa-exclamation-triangle" style="color:var(--warning);"></i> <strong>${open.length} appointment${open.length > 1 ? 's' : ''}</strong> left open on this day (highlighted below)
+                </div>` : `<div style="background:rgba(16,185,129,0.1); border:1px solid var(--success); border-radius:8px; padding:10px 14px; margin-bottom:12px; font-size:0.85rem; color:var(--success);">
+                    <i class="fas fa-check-circle"></i> Everything on this day was completed or cancelled.
+                </div>`}
+                <div style="overflow-x:auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Time</th><th>Client</th><th>Service</th><th>Tech</th><th>Price</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        // ----- Today's Appointments drill-down -----
+        function buildAppointmentsDetail() {
+            const today = Utils.today();
+            const appts = DataManager.getAppointments(today);
+            const bd = buildBreakdown(appts);
+
+            const rowHtml = (a) => {
+                const walkin = isWalkinAppt(a);
+                const staffNames = [...new Set(apptStaffShares(a).map(sh => sh.name))].join(', ');
+                return `
+                    <tr>
+                        <td>${Utils.formatTime(a.time)}</td>
+                        <td><strong>${esc(apptClientName(a))}</strong></td>
+                        <td>${svcListHtml(a)}</td>
+                        <td>${esc(staffNames)}</td>
+                        <td><span class="type-pill ${walkin ? 'type-walkin' : 'type-appt'}">${walkin ? 'Walk-In' : 'Appointment'}</span></td>
+                        <td>${typeof ApptStatus !== 'undefined' ? ApptStatus.badgeHtml(a.status) : ('<span class="badge">' + (a.status || '') + '</span>')}</td>
+                        <td style="font-weight:700; color:var(--primary);">${Utils.formatCurrency(a.price || 0)}</td>
+                    </tr>
+                `;
+            };
+
+            const walkins = appts.filter(isWalkinAppt);
+            const booked = appts.filter(a => !isWalkinAppt(a));
+
+            return `
+                <div class="mini-stat-grid">
+                    <div class="mini-stat"><div class="ms-value">${bd.total}</div><div class="ms-label">Total Today</div></div>
+                    <div class="mini-stat"><div class="ms-value">${bd.completedBookedCount}</div><div class="ms-label">Appts Completed</div></div>
+                    <div class="mini-stat"><div class="ms-value">${bd.completedWalkinCount}</div><div class="ms-label">Walk-Ins Completed</div></div>
+                    <div class="mini-stat"><div class="ms-value">${bd.pending}</div><div class="ms-label">Still Pending</div></div>
+                    <div class="mini-stat"><div class="ms-value">${bd.cancelled}</div><div class="ms-label">Cancelled</div></div>
+                    <div class="mini-stat"><div class="ms-value">${Utils.formatCurrency(bd.gross)}</div><div class="ms-label">Completed Revenue</div></div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Appointments (${booked.length})  ${Utils.formatCurrency(bd.bookedRevenue)} completed</div>
+                    ${booked.length === 0 ? '<p style="color:var(--text-secondary); padding:8px 0;">No booked appointments today</p>' : `
+                    <table class="breakdown-table">
+                        <thead><tr><th>Time</th><th>Client</th><th>Services (price each)</th><th>Staff</th><th>Type</th><th>Status</th><th>Total</th></tr></thead>
+                        <tbody>${booked.map(rowHtml).join('')}</tbody>
+                    </table>`}
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Walk-Ins (${walkins.length})  ${Utils.formatCurrency(bd.walkinRevenue)} completed</div>
+                    ${walkins.length === 0 ? '<p style="color:var(--text-secondary); padding:8px 0;">No walk-ins today</p>' : `
+                    <table class="breakdown-table">
+                        <thead><tr><th>Time</th><th>Client</th><th>Services (price each)</th><th>Staff</th><th>Type</th><th>Status</th><th>Total</th></tr></thead>
+                        <tbody>${walkins.map(rowHtml).join('')}</tbody>
+                    </table>`}
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Completed Services Breakdown (what was done, how many, how much)</div>
+                    ${bd.services.length === 0 ? '<p style="color:var(--text-secondary); padding:8px 0;">No completed services yet today</p>' : `
+                    <table class="breakdown-table">
+                        <thead><tr><th>Service</th><th>Times Done</th><th>Total Revenue</th></tr></thead>
+                        <tbody>${bd.services.map(s => `
+                            <tr><td>${esc(s.name)}</td><td>${s.count}</td><td>${Utils.formatCurrency(s.total)}</td></tr>
+                        `).join('')}</tbody>
+                        <tfoot><tr><td>Total</td><td>${bd.services.reduce((n, s) => n + s.count, 0)}</td><td>${Utils.formatCurrency(bd.gross)}</td></tr></tfoot>
+                    </table>`}
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Which Staff Did Which Clients (completed)</div>
+                    ${bd.staffRows.length === 0 ? '<p style="color:var(--text-secondary); padding:8px 0;">No completed transactions yet</p>' : `
+                    <table class="breakdown-table">
+                        <thead><tr><th>Staff</th><th>Clients Served</th><th>Services Done</th><th>Total Sales</th></tr></thead>
+                        <tbody>${bd.staffRows.map(s => `
+                            <tr><td><strong>${esc(s.name)}</strong></td><td>${s.clientCount}</td><td>${s.appts}</td><td>${Utils.formatCurrency(s.gross)}</td></tr>
+                        `).join('')}</tbody>
+                    </table>`}
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Today's Total = Walk-Ins + Appointments</div>
+                    <table class="breakdown-table">
+                        <tbody>
+                            <tr><td>Appointments (booked)</td><td>${bd.bookedCount} total / ${bd.completedBookedCount} completed</td><td>${Utils.formatCurrency(bd.bookedRevenue)}</td></tr>
+                            <tr><td>Walk-Ins</td><td>${bd.walkinCount} total / ${bd.completedWalkinCount} completed</td><td>${Utils.formatCurrency(bd.walkinRevenue)}</td></tr>
+                        </tbody>
+                        <tfoot>
+                            <tr><td>Today's Total</td><td>${bd.total} total / ${bd.completed} completed</td><td>${Utils.formatCurrency(bd.gross)}</td></tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+        }
+
+        // ----- Today's Revenue drill-down -----
+        function buildRevenueDetail() {
+            const today = Utils.today();
+            const bd = buildBreakdown(DataManager.getAppointments(today));
+
+            return `
+                <div class="mini-stat-grid">
+                    <div class="mini-stat"><div class="ms-value">${Utils.formatCurrency(bd.gross)}</div><div class="ms-label">Total Revenue (before commission)</div></div>
+                    <div class="mini-stat"><div class="ms-value">${Utils.formatCurrency(bd.totalStaffCut)}</div><div class="ms-label">Staff Commission Total</div></div>
+                    <div class="mini-stat"><div class="ms-value">${Utils.formatCurrency(bd.totalSalonCut)}</div><div class="ms-label">Salon Keeps (after commission)</div></div>
+                    <div class="mini-stat"><div class="ms-value">${bd.completed}</div><div class="ms-label">Clients Served</div></div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Every Completed Transaction Today (before ? after commission)</div>
+                    ${bd.completedAppts.length === 0 ? '<p style="color:var(--text-secondary); padding:8px 0;">No completed transactions yet today</p>' : `
+                    <table class="breakdown-table">
+                        <thead><tr><th>Time</th><th>Client</th><th>Services (price each)</th><th>Staff</th><th>Gross</th><th>Staff Cut</th><th>Salon Cut</th></tr></thead>
+                        <tbody>${bd.completedAppts.map(a => transactionRowHtml(a, false)).join('')}</tbody>
+                        <tfoot><tr><td colspan="4">Totals</td><td>${Utils.formatCurrency(bd.gross)}</td><td>${Utils.formatCurrency(bd.totalStaffCut)}</td><td>${Utils.formatCurrency(bd.totalSalonCut)}</td></tr></tfoot>
+                    </table>`}
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Per-Staff Commission Split (how much each made vs. the salon)</div>
+                    ${bd.staffRows.length === 0 ? '<p style="color:var(--text-secondary); padding:8px 0;">No staff sales yet today</p>' : `
+                    <table class="breakdown-table">
+                        <thead><tr><th>Staff</th><th>Clients</th><th>Services</th><th>Gross (before comm.)</th><th>Rate</th><th>Staff Made</th><th>Salon Made</th></tr></thead>
+                        <tbody>${bd.staffRows.map(s => `
+                            <tr>
+                                <td><strong>${esc(s.name)}</strong></td>
+                                <td>${s.clientCount}</td>
+                                <td>${s.appts}</td>
+                                <td>${Utils.formatCurrency(s.gross)}</td>
+                                <td>${s.rate}%</td>
+                                <td style="color:var(--success); font-weight:700;">${Utils.formatCurrency(s.staffCut)}</td>
+                                <td style="color:var(--primary); font-weight:700;">${Utils.formatCurrency(s.salonCut)}</td>
+                            </tr>
+                        `).join('')}</tbody>
+                        <tfoot><tr><td>Total</td><td>${bd.staffRows.reduce((n, s) => n + s.clientCount, 0)}</td><td>${bd.staffRows.reduce((n, s) => n + s.appts, 0)}</td><td>${Utils.formatCurrency(bd.gross)}</td><td>-</td><td>${Utils.formatCurrency(bd.totalStaffCut)}</td><td>${Utils.formatCurrency(bd.totalSalonCut)}</td></tr></tfoot>
+                    </table>`}
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Per-Service Revenue (which services made what)</div>
+                    ${bd.services.length === 0 ? '<p style="color:var(--text-secondary); padding:8px 0;">No completed services yet</p>' : `
+                    <table class="breakdown-table">
+                        <thead><tr><th>Service</th><th>Times Done</th><th>Revenue</th><th>% of Today</th></tr></thead>
+                        <tbody>${bd.services.map(s => `
+                            <tr><td>${esc(s.name)}</td><td>${s.count}</td><td>${Utils.formatCurrency(s.total)}</td><td>${bd.gross > 0 ? ((s.total / bd.gross) * 100).toFixed(1) : 0}%</td></tr>
+                        `).join('')}</tbody>
+                        <tfoot><tr><td>Total</td><td>${bd.services.reduce((n, s) => n + s.count, 0)}</td><td>${Utils.formatCurrency(bd.gross)}</td><td>100%</td></tr></tfoot>
+                    </table>`}
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Walk-Ins vs Appointments Revenue</div>
+                    <table class="breakdown-table">
+                        <tbody>
+                            <tr><td>Appointments</td><td>${bd.completedBookedCount} clients</td><td>${Utils.formatCurrency(bd.bookedRevenue)}</td></tr>
+                            <tr><td>Walk-Ins</td><td>${bd.completedWalkinCount} clients</td><td>${Utils.formatCurrency(bd.walkinRevenue)}</td></tr>
+                        </tbody>
+                        <tfoot><tr><td>Total Revenue</td><td>${bd.completed} clients</td><td>${Utils.formatCurrency(bd.gross)}</td></tr></tfoot>
+                    </table>
+                </div>
+            `;
+        }
+
+        // ----- Staff On Duty drill-down -----
+        function buildStaffOnDutyDetail() {
+            const today = Utils.today();
+            const staff = DataManager.getStaff();
+            const clockedIn = staff.filter(s => s.isClockedIn);
+            const notIn = staff.filter(s => !s.isClockedIn);
+            const dayStatuses = DataManager.getDayStatuses(today);
+
+            const lastClockIn = (staffId) => {
+                const entries = (DataManager.data.timeClock || [])
+                    .filter(t => t.staffId === staffId && t.date === today && t.type === 'in');
+                return entries.length ? entries[entries.length - 1].time : null;
+            };
+
+            const hoursToday = (staffId) => {
+                const entries = (DataManager.data.timeClock || []).filter(t => t.staffId === staffId && t.date === today);
+                let hours = 0;
+                for (let i = 0; i < entries.length; i += 2) {
+                    if (entries[i].type === 'in') {
+                        const start = new Date(entries[i].timestamp);
+                        const end = entries[i + 1] && entries[i + 1].type === 'out'
+                            ? new Date(entries[i + 1].timestamp) : new Date();
+                        hours += (end - start) / 3600000;
+                    }
+                }
+                return hours;
+            };
+
+            const statusBadge = (s) => {
+                const ds = dayStatuses[s.id];
+                if (ds) {
+                    const map = { late: ['Late', 'warning'], sick: ['Sick', 'danger'], vacation: ['Vacation', 'secondary'], 'called-off': ['Called Off', 'danger'] };
+                    const [label, color] = map[ds.status] || [ds.status, 'secondary'];
+                    return `<span class="badge badge-${color}">${label}</span>`;
+                }
+                // Same Booked / Busy / Available rules as Scheduler
+                if (typeof ApptStatus !== 'undefined' && ApptStatus.getStaffLiveStatus) {
+                    const live = ApptStatus.getStaffLiveStatus(s, {
+                        appointments: DataManager.getAppointments(today) || [],
+                        date: today
+                    });
+                    return ApptStatus.staffLiveBadgeHtml(live)
+                        + (s.isClockedIn ? '' : ' <span style="font-size:0.65rem;color:var(--text-secondary);">not in</span>');
+                }
+                return s.isClockedIn
+                    ? '<span class="badge badge-success">Clocked In</span>'
+                    : '<span class="badge badge-secondary">Not Clocked In</span>';
+            };
+
+            const rowHtml = (s) => {
+                const inTime = lastClockIn(s.id);
+                const todayAppts = DataManager.getAppointments(today).filter(a => a.staffId === s.id);
+                const todayGross = todayAppts.filter(a => a.status === 'complete').reduce((sum, a) => sum + (a.price || 0), 0);
+                return `
+                    <tr>
+                        <td><strong>${esc(s.name)}</strong><br><span style="font-size:0.7rem; color:var(--text-secondary);">${esc(typeof Utils !== 'undefined' && Utils.formatRoleLabel ? Utils.formatRoleLabel(s) : s.role)}</span></td>
+                        <td>${statusBadge(s)}</td>
+                        <td>${inTime ? Utils.formatTime(inTime) : '-'}</td>
+                        <td>${hoursToday(s.id).toFixed(2)}h</td>
+                        <td>${todayAppts.length}</td>
+                        <td>${Utils.formatCurrency(todayGross)}</td>
+                    </tr>
+                `;
+            };
+
+            return `
+                <div class="mini-stat-grid">
+                    <div class="mini-stat"><div class="ms-value">${clockedIn.length}</div><div class="ms-label">Clocked In Now</div></div>
+                    <div class="mini-stat"><div class="ms-value">${notIn.length}</div><div class="ms-label">Not Clocked In</div></div>
+                    <div class="mini-stat"><div class="ms-value">${staff.length}</div><div class="ms-label">Total Staff</div></div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">On Duty & Clocked In (${clockedIn.length})</div>
+                    ${clockedIn.length === 0 ? '<p style="color:var(--text-secondary); padding:8px 0;">Nobody is clocked in right now</p>' : `
+                    <table class="breakdown-table">
+                        <thead><tr><th>Staff</th><th>Status</th><th>Clocked In At</th><th>Hours Today</th><th>Today's Appts</th><th>Today's Sales</th></tr></thead>
+                        <tbody>${clockedIn.map(rowHtml).join('')}</tbody>
+                    </table>`}
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Not Clocked In (${notIn.length})</div>
+                    ${notIn.length === 0 ? '<p style="color:var(--text-secondary); padding:8px 0;">Everyone is clocked in</p>' : `
+                    <table class="breakdown-table">
+                        <thead><tr><th>Staff</th><th>Status</th><th>Clocked In At</th><th>Hours Today</th><th>Today's Appts</th><th>Today's Sales</th></tr></thead>
+                        <tbody>${notIn.map(rowHtml).join('')}</tbody>
+                    </table>`}
+                </div>
+                <p style="font-size:0.75rem; color:var(--text-secondary);">Live-synced with the Staff page time clock  -  when a staff member clocks in or out, this updates automatically. Mark late / sick / vacation / called-off from the Schedule page duty board.</p>
+            `;
+        }
+
+        // ----- Average Rating drill-down -----
+        function buildRatingDetail() {
+            const reviews = DataManager.data.reviews || [];
+            const staff = DataManager.getStaff();
+
+            if (reviews.length === 0) {
+                return '<p style="color:var(--text-secondary); text-align:center; padding:30px;">No reviews yet. Ratings left on the Scheduler page appear here instantly.</p>';
+            }
+
+            const total = reviews.reduce((sum, r) => sum + (r.rating || 0), 0);
+            const avg = total / reviews.length;
+
+            // Star distribution
+            const dist = [5, 4, 3, 2, 1].map(star => ({
+                star, count: reviews.filter(r => r.rating === star).length
+            }));
+
+            // Per-staff averages (match by staffId, fall back to staffName)
+            const staffGroups = {};
+            reviews.forEach(r => {
+                let key, name;
+                if (r.staffId) {
+                    const s = staff.find(x => x.id === r.staffId);
+                    key = 'id_' + r.staffId;
+                    name = s ? s.name : (r.staffName || 'Former Staff');
+                } else {
+                    key = 'name_' + (r.staffName || 'unknown');
+                    name = r.staffName || 'Unspecified';
+                }
+                if (!staffGroups[key]) staffGroups[key] = { name, ratings: [], comments: [] };
+                staffGroups[key].ratings.push(r.rating || 0);
+                staffGroups[key].comments.push(r);
+            });
+
+            const staffRows = Object.values(staffGroups).map(g => ({
+                ...g,
+                count: g.ratings.length,
+                avg: g.ratings.reduce((a, b) => a + b, 0) / g.ratings.length
+            })).sort((a, b) => b.avg - a.avg);
+
+            return `
+                <div class="mini-stat-grid">
+                    <div class="mini-stat"><div class="ms-value">${avg.toFixed(2)}</div><div class="ms-label">Average Rating</div></div>
+                    <div class="mini-stat"><div class="ms-value">${reviews.length}</div><div class="ms-label">Total Reviews</div></div>
+                    <div class="mini-stat"><div class="ms-value">${dist[0].count}</div><div class="ms-label">5-Star Reviews</div></div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">How The Average Is Calculated</div>
+                    <p style="font-size:0.85rem; line-height:1.6;">
+                        Every star from every client review is added up and divided by the number of reviews:<br>
+                        <strong style="color:var(--primary);">(${reviews.map(r => r.rating || 0).join(' + ')})  ${reviews.length} reviews = ${total}  ${reviews.length} = ${avg.toFixed(2)} ?</strong>
+                    </p>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Rating Distribution</div>
+                    ${dist.map(d => `
+                        <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                            <span style="width:50px; font-size:0.8rem;">${d.star} ?</span>
+                            <div style="flex:1; background:#2a2a2a; border-radius:4px; height:14px; overflow:hidden;">
+                                <div style="width:${(d.count / reviews.length) * 100}%; background:#fbbf24; height:100%;"></div>
+                            </div>
+                            <span style="width:80px; font-size:0.8rem; color:var(--text-secondary);">${d.count} review${d.count === 1 ? '' : 's'}</span>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Per-Staff Ratings (what clients rated each staff member)</div>
+                    <table class="breakdown-table">
+                        <thead><tr><th>Staff</th><th>Reviews</th><th>All Ratings</th><th>Average</th></tr></thead>
+                        <tbody>${staffRows.map(g => `
+                            <tr>
+                                <td><strong>${esc(g.name)}</strong></td>
+                                <td>${g.count}</td>
+                                <td>${g.ratings.map(r => `${r}?`).join(', ')}</td>
+                                <td><strong style="color:var(--primary);">${g.avg.toFixed(2)} ?</strong> <span style="font-size:0.75rem; color:var(--text-secondary);">(${g.ratings.reduce((a, b) => a + b, 0)}  ${g.count})</span></td>
+                            </tr>
+                        `).join('')}</tbody>
+                    </table>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Every Client Review (the why behind the number)</div>
+                    ${reviews.slice().reverse().map(r => {
+                        const s = r.staffId ? staff.find(x => x.id === r.staffId) : null;
+                        const staffName = s ? s.name : (r.staffName || 'Unspecified');
+                        return `
+                        <div style="padding:10px 0; border-bottom:1px solid var(--border-color);">
+                            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+                                <span><strong>${esc(r.clientName || 'Client')}</strong> ? ${esc(staffName)}</span>
+                                <span>${starsHtml(r.rating || 0)} <span style="font-size:0.75rem; color:var(--text-secondary);">${Utils.formatDate(r.date)}</span></span>
+                            </div>
+                            ${r.comment ? `<div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">"${esc(r.comment)}"</div>` : ''}
+                        </div>`;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        // ===================== SCHEDULE PAGE =====================
+        function renderSchedulePage() {
+            const today = Utils.today();
+            const staff = DataManager.getStaff();
+            const dayStatuses = DataManager.getDayStatuses(today);
+            const todayDow = new Date().getDay();
+
+            // Auto-detect late: has a shift today that started >15 min ago and not clocked in,
+            // or clocked in more than 15 min after shift start
+            const nowMinutes = (() => { const d = new Date(); return d.getHours() * 60 + d.getMinutes(); })();
+            const toMin = (t) => { if (!t) return null; const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+            const todayShift = (staffId) => (DataManager.getShifts(staffId) || []).find(sh => Number(sh.dayOfWeek) === todayDow);
+            const lastClockInTime = (staffId) => {
+                const entries = (DataManager.data.timeClock || []).filter(t => t.staffId === staffId && t.date === today && t.type === 'in');
+                return entries.length ? entries[entries.length - 1].time : null;
+            };
+            const isAutoLate = (s) => {
+                const shift = todayShift(s.id);
+                if (!shift || !shift.start) return false;
+                const startMin = toMin(shift.start);
+                const inTime = lastClockInTime(s.id);
+                if (!inTime) return nowMinutes > startMin + 15;
+                return toMin(inTime) > startMin + 15;
+            };
+
+            const marked = (status) => staff.filter(s => ((dayStatuses[s.id] || {}).status) === status);
+            const lateStaff = staff.filter(s => ((dayStatuses[s.id] || {}).status) === 'late' || (!dayStatuses[s.id] && s.status === 'active' && isAutoLate(s)));
+            const noStatus = staff.filter(s => !dayStatuses[s.id]);
+            const clockedIn = noStatus.filter(s => s.isClockedIn);
+            const notIn = noStatus.filter(s => !s.isClockedIn && !isAutoLate(s));
+
+            document.getElementById('schedClockedIn').textContent = clockedIn.length;
+            document.getElementById('schedNotIn').textContent = notIn.length;
+            document.getElementById('schedLate').textContent = lateStaff.length;
+            document.getElementById('schedSick').textContent = marked('sick').length;
+            document.getElementById('schedVacation').textContent = marked('vacation').length;
+            document.getElementById('schedCalledOff').textContent = marked('called-off').length;
+
+            // Duty board
+            const board = document.getElementById('dutyBoard');
+            if (staff.length === 0) {
+                board.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:16px;">No staff yet  -  add staff from the Staff page</p>';
+            } else {
+                board.innerHTML = staff.map(s => {
+                    const ds = dayStatuses[s.id];
+                    const autoLate = !ds && isAutoLate(s);
+                    const shift = todayShift(s.id);
+                    const inTime = lastClockInTime(s.id);
+                    const stepOuts = (DataManager.getLeaveRequests ? DataManager.getLeaveRequests(s.id) : [])
+                        .filter(r => r.status === 'approved' && DataManager.isPartialLeave && DataManager.isPartialLeave(r) && r.startDate === today)
+                        .map(r => DataManager.formatLeaveTimeRange ? DataManager.formatLeaveTimeRange(r) : '')
+                        .filter(Boolean);
+                    return `
+                        <div class="duty-board-row">
+                            <span class="status-dot status-${s.isClockedIn ? 'online' : 'offline'}"></span>
+                            <div style="min-width:150px;">
+                                <strong>${esc(s.name)}</strong>
+                                <div style="font-size:0.7rem; color:var(--text-secondary);">${esc(typeof Utils !== 'undefined' && Utils.formatRoleLabel ? Utils.formatRoleLabel(s) : s.role)}${shift ? `  Shift ${Utils.formatTime(shift.start)}${Utils.formatTime(shift.end)}` : '  No shift today'}</div>
+                            </div>
+                            <div style="font-size:0.8rem; min-width:150px;">
+                                ${(typeof ApptStatus !== 'undefined' && ApptStatus.getStaffLiveStatus)
+                                    ? ApptStatus.staffLiveBadgeHtml(ApptStatus.getStaffLiveStatus(s, { appointments: DataManager.getAppointments(today) || [], date: today }))
+                                    : ''}
+                                ${s.isClockedIn ? `<span style="color:var(--success); margin-left:4px;">In at ${inTime ? Utils.formatTime(inTime) : '-'}</span>` : '<span style="color:var(--text-secondary); margin-left:4px;">Not clocked in</span>'}
+                                ${autoLate ? ' <span class="badge badge-warning">Auto-Late</span>' : ''}
+                                ${stepOuts.length ? `<div style="margin-top:4px; font-size:0.75rem; color:var(--primary);"><i class="fas fa-door-open"></i> Step-out ${stepOuts.join(' · ')}</div>` : ''}
+                            </div>
+                            <select class="form-select" style="width:auto; padding:4px 8px; font-size:0.8rem;" onchange="markDayStatus(${s.id}, this.value)">
+                                <option value="" ${!ds ? 'selected' : ''}>Normal / Clear</option>
+                                <option value="late" ${(ds && ds.status) === 'late' ? 'selected' : ''}>Late</option>
+                                <option value="sick" ${(ds && ds.status) === 'sick' ? 'selected' : ''}>Sick</option>
+                                <option value="vacation" ${(ds && ds.status) === 'vacation' ? 'selected' : ''}>Vacation</option>
+                                <option value="called-off" ${(ds && ds.status) === 'called-off' ? 'selected' : ''}>Called Off</option>
+                            </select>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Earnings table
+            const wkStart = weekStart(today);
+            const moStart = monthStart(today);
+            const yrStart = yearStart(today);
+            const sumRange = (staffId, start, end) => {
+                const appts = completedInRange(start, end).filter(a => a.staffId === staffId);
+                return { count: appts.length, gross: appts.reduce((s, a) => s + (a.price || 0), 0) };
+            };
+            document.getElementById('staffEarningsTable').innerHTML = staff.map(s => {
+                const d = sumRange(s.id, today, today);
+                const w = sumRange(s.id, wkStart, today);
+                const m = sumRange(s.id, moStart, today);
+                const y = sumRange(s.id, yrStart, today);
+                const avg = m.count > 0 ? m.gross / m.count : 0;
+                return `
+                    <tr>
+                        <td><strong>${esc(s.name)}</strong><br><span style="font-size:0.7rem; color:var(--text-secondary);">${(s.commission != null ? s.commission : 50)}% commission</span></td>
+                        <td>${Utils.formatCurrency(d.gross)}<br><span style="font-size:0.7rem; color:var(--text-secondary);">${d.count} appts</span></td>
+                        <td>${Utils.formatCurrency(w.gross)}<br><span style="font-size:0.7rem; color:var(--text-secondary);">${w.count} appts</span></td>
+                        <td>${Utils.formatCurrency(m.gross)}<br><span style="font-size:0.7rem; color:var(--text-secondary);">${m.count} appts</span></td>
+                        <td>${Utils.formatCurrency(y.gross)}<br><span style="font-size:0.7rem; color:var(--text-secondary);">${y.count} appts</span></td>
+                        <td>${m.count}</td>
+                        <td>${Utils.formatCurrency(avg)}</td>
+                    </tr>
+                `;
+            }).join('') || '<tr><td colspan="7" style="text-align:center; padding:16px; color:var(--text-secondary);">No staff yet</td></tr>';
+
+            renderShifts();
+        }
+
+        function markDayStatus(staffId, status) {
+            const user = Auth.getUser();
+            DataManager.setDayStatus(staffId, Utils.today(), status || null, '', user ? user.name : 'manager');
+            const s = DataManager.getStaff(staffId);
+            UI.toast(status ? `${(s && s.name) || 'Staff'} marked as ${status}` : `${(s && s.name) || 'Staff'} status cleared`, 'success');
+            renderSchedulePage();
+        }
+
+        // ----- Shifts -----
+        const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+        function renderShifts() {
+            const container = document.getElementById('staffSchedule');
+            const shifts = DataManager.getShifts();
+            const staff = DataManager.getStaff();
+
+            if (shifts.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:16px;">No shifts booked yet  -  click "Add Shift" to book staff</p>';
+                return;
+            }
+
+            const byDay = {};
+            shifts.forEach(sh => {
+                const d = Number(sh.dayOfWeek);
+                if (!byDay[d]) byDay[d] = [];
+                byDay[d].push(sh);
+            });
+
+            container.innerHTML = [1, 2, 3, 4, 5, 6, 0].map(d => {
+                const dayShifts = (byDay[d] || []).sort((a, b) => (a.start || '').localeCompare(b.start || ''));
+                if (dayShifts.length === 0) return '';
+                const isToday = d === new Date().getDay();
+                return `
+                    <div style="margin-bottom:12px;">
+                        <div style="font-weight:700; font-size:0.85rem; color:${isToday ? 'var(--primary)' : 'var(--text-secondary)'}; margin-bottom:6px;">
+                            ${DAY_NAMES[d]} ${isToday ? '(Today)' : ''}
+                        </div>
+                        ${dayShifts.map(sh => {
+                            const s = staff.find(x => x.id === sh.staffId);
+                            return `
+                                <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; background:var(--bg-secondary, #1a1a1a); border:1px solid var(--border-color); border-radius:8px; margin-bottom:6px;">
+                                    <span><strong>${s ? esc(s.name) : 'Unknown'}</strong>  ${Utils.formatTime(sh.start)} to ${Utils.formatTime(sh.end)}</span>
+                                    <button class="btn btn-sm btn-danger" onclick="removeShift(${sh.id})"><i class="fas fa-trash"></i></button>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openAddShiftModal() {
+            document.getElementById('shiftStaff').innerHTML = DataManager.getStaff()
+                .map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
+            showModal('addShiftModal');
+        }
+
+        function addNewShift() {
+            const staffId = parseInt(document.getElementById('shiftStaff').value);
+            if (!staffId) { UI.toast('Please add staff first', 'error'); return; }
+            DataManager.addShift({
+                staffId,
+                dayOfWeek: parseInt(document.getElementById('shiftDay').value),
+                start: document.getElementById('shiftStart').value,
+                end: document.getElementById('shiftEnd').value
+            });
+            hideModal('addShiftModal');
+            renderSchedulePage();
+            UI.toast('Shift added  -  synced to all pages', 'success');
+        }
+
+        function removeShift(id) {
+            if (confirm('Remove this shift?')) {
+                DataManager.deleteShift(id);
+                renderSchedulePage();
+                UI.toast('Shift removed', 'success');
+            }
+        }
+
+        // ===================== STAFF PAGE =====================
+        function renderStaffTable() {
+            const staff = DataManager.getStaff();
+            const tbody = document.getElementById('managerStaffTable');
+            const today = Utils.today();
+            const wkStart = weekStart(today);
+
+            if (staff.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--text-secondary);">No staff yet  -  click "Add Staff"</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = staff.map(s => {
+                const todayAppts = DataManager.getAppointments(today).filter(a => a.staffId === s.id);
+                const todayGross = todayAppts.filter(a => a.status === 'complete').reduce((sum, a) => sum + (a.price || 0), 0);
+                const weekGross = completedInRange(wkStart, today)
+                    .filter(a => a.staffId === s.id)
+                    .reduce((sum, a) => sum + (a.price || 0), 0);
+                return `
+                    <tr>
+                        <td><strong>${esc(s.name)}</strong></td>
+                        <td><span class="badge badge-${(s.role === 'manager' || (s.roles||[]).includes('manager')) ? 'warning' : (s.role === 'admin' || (s.roles||[]).includes('admin')) ? 'danger' : 'secondary'}">${esc(typeof Utils !== 'undefined' && Utils.formatRoleLabel ? Utils.formatRoleLabel(s) : s.role)}</span></td>
+                        <td>${(function(){
+                            if (typeof ApptStatus !== 'undefined' && ApptStatus.getStaffLiveStatus) {
+                                const live = ApptStatus.getStaffLiveStatus(s, {
+                                    appointments: DataManager.getAppointments(today) || [],
+                                    date: today
+                                });
+                                return ApptStatus.staffLiveBadgeHtml(live);
+                            }
+                            return '<span class="status-dot status-' + (s.isClockedIn ? 'online' : 'offline') + '"></span>' + (s.isClockedIn ? 'On Duty' : 'Off');
+                        })()}</td>
+                        <td>${todayAppts.length}</td>
+                        <td>${Utils.formatCurrency(todayGross)}</td>
+                        <td>${Utils.formatCurrency(weekGross)}</td>
+                        <td>${(s.commission != null ? s.commission : 50)}%</td>
+                        <td class="cell-actions">
+                            <button class="btn btn-sm btn-secondary" title="View schedule" onclick="viewStaffSchedule(${s.id})"><i class="fas fa-calendar"></i></button>
+                            <button class="btn btn-sm btn-secondary" title="Edit" onclick="editStaff(${s.id})"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" title="Delete" onclick="deleteStaff(${s.id})"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function openAddStaffModal() {
+            if (window.StaffQuickAdd && typeof StaffQuickAdd.openAdd === 'function') {
+                StaffQuickAdd.openAdd();
+                return;
+            }
+            document.getElementById('newStaffName').value = '';
+            document.getElementById('newStaffPin').value = '';
+            document.getElementById('newStaffPhone').value = '';
+            document.getElementById('newStaffEmail').value = '';
+            document.getElementById('newStaffCommission').value = '50';
+            if (typeof Utils !== 'undefined' && Utils.fillServiceCategoryCheckboxes) {
+                Utils.fillServiceCategoryCheckboxes('newStaffServiceCategories', []);
+            }
+            showModal('addStaffModal');
+        }
+
+        function addNewStaff() {
+            const name = document.getElementById('newStaffName').value.trim();
+            const pin = document.getElementById('newStaffPin').value.trim();
+            if (!name) { UI.toast('Please enter a name', 'error'); return; }
+            if (!/^\d{4}$/.test(pin)) { UI.toast('PIN must be exactly 4 digits', 'error'); return; }
+
+            const packedRoles = (typeof Utils !== 'undefined' && Utils.readRoleCheckboxes) ? Utils.readRoleCheckboxes('newStaffRoles') : { role: 'technician', roles: ['technician'] };
+            const serviceCategories = (typeof Utils !== 'undefined' && Utils.readServiceCategoryCheckboxes) ? Utils.readServiceCategoryCheckboxes('newStaffServiceCategories') : [];
+            DataManager.addStaff({
+                name,
+                role: packedRoles.role,
+                roles: packedRoles.roles,
+                pin,
+                phone: document.getElementById('newStaffPhone').value.trim(),
+                email: document.getElementById('newStaffEmail').value.trim(),
+                status: 'active',
+                commission: Math.max(0, Math.min(100, parseInt(document.getElementById('newStaffCommission').value) || 50)),
+                serviceCategories,
+                specialties: serviceCategories.length ? serviceCategories.slice() : ['All Services'],
+                avatar: Utils.getInitials(name),
+                color: Utils.randomColor()
+            });
+            hideModal('addStaffModal');
+            renderStaffTable();
+            renderSchedulePage();
+            try { if (typeof refreshSalonStaffUIs === 'function') refreshSalonStaffUIs({ action: 'add' }); } catch (e) {}
+            UI.toast(`${name} added — now synced on Admin, Scheduler, and Online Booking`, 'success');
+        }
+
+        // Managers may edit staff info, but changing a PIN always requires a valid
+        // manager/admin PIN, and ONLY admin can change a manager's PIN (enforced
+        // inside DataManager.changeStaffPin).
+        function editStaff(staffId) {
+            const staff = DataManager.getStaff().find(s => s.id === staffId);
+            if (!staff) return;
+
+            const newName = prompt('Edit staff name:', staff.name);
+            if (newName === null) return;
+
+            const newPhone = prompt('Edit phone number (full 10 digits):', staff.phone || '');
+            if (newPhone === null) return;
+
+            const newEmail = prompt('Edit email:', staff.email || '');
+            if (newEmail === null) return;
+
+            const newCommission = prompt('Edit commission % (0-100):', (staff.commission != null ? staff.commission : 50));
+            if (newCommission === null) return;
+
+            const updates = {
+                name: newName.trim() || staff.name,
+                phone: newPhone.trim(),
+                email: newEmail.trim(),
+                commission: Math.max(0, Math.min(100, parseInt(newCommission) || 0))
+            };
+
+            DataManager.updateStaff(staffId, updates);
+
+            const newPin = prompt('Change PIN? Enter a NEW 4-digit PIN, or leave blank to keep current:', '');
+            if (newPin !== null && newPin.trim()) {
+                const actingPin = prompt('Enter YOUR manager/admin PIN to authorize this PIN change:', '');
+                if (actingPin === null) { renderStaffTable(); return; }
+                const result = DataManager.changeStaffPin(staffId, newPin.trim(), actingPin.trim());
+                UI.toast(result.success ? (result.message + ' — old and new PIN backed up') : result.message, result.success ? 'success' : 'error');
+                if (!result.success) { renderStaffTable(); return; }
+            }
+
+            renderStaffTable();
+            renderSchedulePage();
+            UI.toast('Staff updated  -  synced to all pages', 'success');
+        }
+
+        function deleteStaff(staffId) {
+            if (window.StaffQuickAdd && typeof StaffQuickAdd.openDelete === 'function') {
+                StaffQuickAdd.openDelete(staffId);
+                return;
+            }
+            const staff = DataManager.getStaff().find(s => s.id === staffId);
+            if (!staff) return;
+
+            if (confirm(`Delete ${staff.name}?\n\nTheir full record AND appointment history will be permanently archived  -  nothing is ever lost.`)) {
+                DataManager.deleteStaff(staffId, 'manager');
+                renderStaffTable();
+                try { if (typeof refreshSalonStaffUIs === 'function') refreshSalonStaffUIs({ action: 'delete', staffId: staffId }); } catch (e) {}
+                UI.toast('Staff deleted — synced across Scheduler & Online Booking', 'success');
+                renderSchedulePage();
+                UI.toast('Staff member deleted  -  full record kept in archives, removed on all pages', 'success');
+            }
+        }
+
+        function viewStaffSchedule(staffId) {
+            showPage('schedule');
+        }
+
+        // ===================== CLIENTS PAGE =====================
+        function renderClients(search = '') {
+            if (search === '' && ((document.getElementById('clientSearch') || {}).value)) {
+                search = document.getElementById('clientSearch').value;
+            }
+            const clients = DataManager.getClients(search);
+            const tbody = document.getElementById('managerClientTable');
+
+            if (clients.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--text-secondary);">No clients found  -  clients added or imported on the Admin page appear here automatically</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = clients.map(c => `
+                <tr>
+                    <td><strong>${esc(c.firstName)} ${esc(c.lastName)}</strong></td>
+                    <td>${Utils.formatPhone(c.phone)}</td>
+                    <td>${Utils.formatDate(c.lastVisit)}</td>
+                    <td>${c.totalVisits || 0}</td>
+                    <td>${Utils.formatCurrency(c.totalAmount)}</td>
+                    <td style="color:var(--primary); font-weight:700;">${c.points || 0}</td>
+                    <td class="cell-actions">
+                        <button class="btn btn-sm btn-secondary" title="View" onclick="viewClient(${c.id})"><i class="fas fa-eye"></i></button>
+                        <button class="btn btn-sm btn-secondary" title="Edit" onclick="openEditClient(${c.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-danger" title="Delete" onclick="deleteClient(${c.id})"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function searchClients() {
+            renderClients(document.getElementById('clientSearch').value);
+        }
+
+        function addNewClient() {
+            const client = {
+                firstName: document.getElementById('clientFirstName').value.trim(),
+                lastName: document.getElementById('clientLastName').value.trim(),
+                phone: (typeof Utils !== 'undefined' && Utils.normalizePhone) ? (Utils.normalizePhone(document.getElementById('clientPhone').value.trim()) || document.getElementById('clientPhone').value.trim()) : document.getElementById('clientPhone').value.trim(),
+                email: document.getElementById('clientEmail').value.trim()
+            };
+
+            if (!client.firstName) {
+                UI.toast('First name is required', 'error');
+                return;
+            }
+
+            DataManager.addClient(client);
+            UI.toast('Client added  -  now visible on Admin, Scheduler, and Booking pages too', 'success');
+            hideModal('addClientModal');
+            renderClients();
+
+            document.getElementById('clientFirstName').value = '';
+            document.getElementById('clientLastName').value = '';
+            document.getElementById('clientPhone').value = '';
+            document.getElementById('clientEmail').value = '';
+        }
+
+        function viewClient(clientId) {
+            const c = DataManager.getClient(clientId);
+            if (!c) return;
+            const history = DataManager.data.appointments
+                .filter(a => a.clientId === clientId)
+                .sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time))
+                .slice(0, 15);
+
+            currentDetail = null;
+            document.getElementById('detailModalTitle').innerHTML = `<i class="fas fa-user"></i> ${esc(c.firstName)} ${esc(c.lastName)}`;
+            document.getElementById('detailModalBody').innerHTML = `
+                <div class="mini-stat-grid">
+                    <div class="mini-stat"><div class="ms-value">${c.totalVisits || 0}</div><div class="ms-label">Total Visits</div></div>
+                    <div class="mini-stat"><div class="ms-value">${Utils.formatCurrency(c.totalAmount || 0)}</div><div class="ms-label">Total Spent</div></div>
+                    <div class="mini-stat"><div class="ms-value">${c.points || 0}</div><div class="ms-label">Points</div></div>
+                    <div class="mini-stat"><div class="ms-value">${Utils.formatDate(c.lastVisit)}</div><div class="ms-label">Last Visit</div></div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-section-title">Contact</div>
+                    <p style="font-size:0.85rem;">${Utils.formatPhone(c.phone)} &nbsp;&nbsp; ${esc(c.email || '-')}</p>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-section-title">Visit History (latest ${history.length})</div>
+                    ${history.length === 0 ? '<p style="color:var(--text-secondary);">No appointments yet</p>' : `
+                    <table class="breakdown-table">
+                        <thead><tr><th>Date</th><th>Time</th><th>Services</th><th>Staff</th><th>Status</th><th>Total</th></tr></thead>
+                        <tbody>${history.map(a => `
+                            <tr>
+                                <td>${Utils.formatDate(a.date)}</td>
+                                <td>${Utils.formatTime(a.time)}</td>
+                                <td>${apptServices(a).map(s => esc(s.name)).join(' + ')}</td>
+                                <td>${esc(apptStaffName(a))}</td>
+                                <td>${typeof ApptStatus !== 'undefined' ? ApptStatus.badgeHtml(a.status) : ('<span class="badge">' + (a.status || '') + '</span>')}</td>
+                                <td>${Utils.formatCurrency(a.price || 0)}</td>
+                            </tr>
+                        `).join('')}</tbody>
+                    </table>`}
+                </div>
+            `;
+            showModal('detailModal');
+        }
+
+        function openEditClient(clientId) {
+            const c = DataManager.getClient(clientId);
+            if (!c) return;
+            document.getElementById('editClientId').value = clientId;
+            document.getElementById('editClientFirstName').value = c.firstName || '';
+            document.getElementById('editClientLastName').value = c.lastName || '';
+            document.getElementById('editClientPhone').value = c.phone || '';
+            document.getElementById('editClientEmail').value = c.email || '';
+            showModal('editClientModal');
+        }
+
+        function saveClientEdit() {
+            const id = parseInt(document.getElementById('editClientId').value);
+            const firstName = document.getElementById('editClientFirstName').value.trim();
+            const lastName = document.getElementById('editClientLastName').value.trim();
+            if (!firstName) { UI.toast('First name is required', 'error'); return; }
+            DataManager.updateClient(id, {
+                firstName: firstName,
+                lastName: lastName,
+                phone: document.getElementById('editClientPhone').value.trim(),
+                email: document.getElementById('editClientEmail').value.trim()
+            });
+            hideModal('editClientModal');
+            renderClients();
+            UI.toast('Client updated  -  synced to all pages', 'success');
+        }
+
+        function deleteClient(clientId) {
+            const c = DataManager.getClient(clientId);
+            if (!c) return;
+            if (confirm(`Delete ${c.firstName} ${c.lastName}?\n\nTheir full record will be permanently archived  -  nothing is ever lost.`)) {
+                DataManager.deleteClient(clientId, 'manager');
+                renderClients();
+                UI.toast('Client deleted  -  record archived, removed on all pages', 'success');
+            }
+        }
+
+        // ===================== REPORTS =====================
+        // One shared report builder for daily / weekly / monthly so every report
+        // has the same detailed breakdown and always matches the dashboard numbers.
+
+        function buildRangeReport(title, startDate, endDate) {
+            const appts = apptsInRange(startDate, endDate);
+            const bd = buildBreakdown(appts);
+
+            // Remember rows for CSV export
+            lastReportName = title.replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+            // One CSV row per staff share so the commission math is exact even
+            // when multiple techs split a single ticket
+            lastReportRows = [];
+            bd.completedAppts.forEach(a => {
+                apptStaffShares(a).forEach(sh => {
+                    const rate = rateForStaffId(sh.staffId, a);
+                    lastReportRows.push({
+                        date: a.date,
+                        time: a.time,
+                        client: apptClientName(a),
+                        type: isWalkinAppt(a) ? 'walk-in' : 'appointment',
+                        services: apptServices(a).map(s => `${s.name} ($${(s.price || 0).toFixed(2)})`).join(' + '),
+                        staff: sh.name,
+                        staff_share_before_commission: sh.amount.toFixed(2),
+                        appointment_gross: (a.price || 0).toFixed(2),
+                        commission_rate: rate + '%',
+                        staff_cut: (sh.amount * rate / 100).toFixed(2),
+                        salon_cut: (sh.amount * (1 - rate / 100)).toFixed(2),
+                        status: a.status
+                    });
+                });
+            });
+
+            return `
+                <div class="card" style="margin-top:4px;">
+                    <h3 style="color:var(--primary); margin-bottom:4px;">${title}</h3>
+                    <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:16px;">${Utils.formatDate(startDate)}  ${Utils.formatDate(endDate)}</p>
+
+                    <div class="mini-stat-grid">
+                        <div class="mini-stat"><div class="ms-value">${bd.total}</div><div class="ms-label">Total Appts</div></div>
+                        <div class="mini-stat"><div class="ms-value">${bd.completed}</div><div class="ms-label">Completed</div></div>
+                        <div class="mini-stat"><div class="ms-value">${bd.cancelled}</div><div class="ms-label">Cancelled</div></div>
+                        <div class="mini-stat"><div class="ms-value">${Utils.formatCurrency(bd.gross)}</div><div class="ms-label">Revenue (before comm.)</div></div>
+                        <div class="mini-stat"><div class="ms-value">${Utils.formatCurrency(bd.totalStaffCut)}</div><div class="ms-label">Staff Commission</div></div>
+                        <div class="mini-stat"><div class="ms-value">${Utils.formatCurrency(bd.totalSalonCut)}</div><div class="ms-label">Salon (after comm.)</div></div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-section-title">Walk-Ins vs Appointments</div>
+                        <table class="breakdown-table">
+                            <tbody>
+                                <tr><td>Appointments</td><td>${bd.bookedCount} total / ${bd.completedBookedCount} completed</td><td>${Utils.formatCurrency(bd.bookedRevenue)}</td></tr>
+                                <tr><td>Walk-Ins</td><td>${bd.walkinCount} total / ${bd.completedWalkinCount} completed</td><td>${Utils.formatCurrency(bd.walkinRevenue)}</td></tr>
+                            </tbody>
+                            <tfoot><tr><td>Total</td><td>${bd.total} / ${bd.completed} completed</td><td>${Utils.formatCurrency(bd.gross)}</td></tr></tfoot>
+                        </table>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-section-title">Service Breakdown (price of each service done)</div>
+                        ${bd.services.length === 0 ? '<p style="color:var(--text-secondary);">No completed services in this period</p>' : `
+                        <table class="breakdown-table">
+                            <thead><tr><th>Service</th><th>Times Done</th><th>Revenue</th></tr></thead>
+                            <tbody>${bd.services.map(s => `
+                                <tr><td>${esc(s.name)}</td><td>${s.count}</td><td>${Utils.formatCurrency(s.total)}</td></tr>
+                            `).join('')}</tbody>
+                            <tfoot><tr><td>Total</td><td>${bd.services.reduce((n, s) => n + s.count, 0)}</td><td>${Utils.formatCurrency(bd.gross)}</td></tr></tfoot>
+                        </table>`}
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-section-title">Staff Breakdown (before & after commission split)</div>
+                        ${bd.staffRows.length === 0 ? '<p style="color:var(--text-secondary);">No staff sales in this period</p>' : `
+                        <table class="breakdown-table">
+                            <thead><tr><th>Staff</th><th>Clients</th><th>Services</th><th>Gross (before)</th><th>Rate</th><th>Staff Made</th><th>Salon Made</th></tr></thead>
+                            <tbody>${bd.staffRows.map(s => `
+                                <tr>
+                                    <td><strong>${esc(s.name)}</strong></td>
+                                    <td>${s.clientCount}</td>
+                                    <td>${s.appts}</td>
+                                    <td>${Utils.formatCurrency(s.gross)}</td>
+                                    <td>${s.rate}%</td>
+                                    <td style="color:var(--success);">${Utils.formatCurrency(s.staffCut)}</td>
+                                    <td style="color:var(--primary);">${Utils.formatCurrency(s.salonCut)}</td>
+                                </tr>
+                            `).join('')}</tbody>
+                            <tfoot><tr><td>Total</td><td>${bd.staffRows.reduce((n, s) => n + s.clientCount, 0)}</td><td>${bd.staffRows.reduce((n, s) => n + s.appts, 0)}</td><td>${Utils.formatCurrency(bd.gross)}</td><td>-</td><td>${Utils.formatCurrency(bd.totalStaffCut)}</td><td>${Utils.formatCurrency(bd.totalSalonCut)}</td></tr></tfoot>
+                        </table>`}
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-section-title">Every Transaction (which staff did which client's service)</div>
+                        ${bd.completedAppts.length === 0 ? '<p style="color :var(--text-secondary);">No completed transactions in this period</p>' : `
+                        <table class="breakdown-table">
+                            <thead><tr><th>Date</th><th>Time</th><th>Client</th><th>Services (price each)</th><th>Staff</th><th>Gross</th><th>Staff Cut</th><th>Salon Cut</th></tr></thead>
+                            <tbody>${bd.completedAppts.map(a => transactionRowHtml(a, true)).join('')}</tbody>
+                        </table>`}
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateDailyReport() {
+            const today = Utils.today();
+            document.getElementById('reportContent').innerHTML =
+                buildRangeReport(`Daily Report  ${Utils.formatDate(today)}`, today, today);
+            UI.toast('Daily report generated', 'success');
+        }
+
+        function generateWeeklyReport() {
+            const today = Utils.today();
+            document.getElementById('reportContent').innerHTML =
+                buildRangeReport(`Weekly Report  -  Week of ${Utils.formatDate(weekStart(today))}`, weekStart(today), today);
+            UI.toast('Weekly report generated', 'success');
+        }
+
+        function generateMonthlyReport() {
+            const today = Utils.today();
+            document.getElementById('reportContent').innerHTML =
+                buildRangeReport(`Monthly Report  ${today.slice(0, 7)}`, monthStart(today), today);
+            UI.toast('Monthly report generated', 'success');
+        }
+
+        function exportReport() {
+            if (lastReportRows.length === 0) {
+                UI.toast('Generate a daily, weekly, or monthly report first', 'error');
+                return;
+            }
+            Utils.exportCSV(lastReportRows, `${lastReportName}-${Utils.today()}.csv`);
+            UI.toast('Report exported to CSV', 'success');
+        }
+
+        // ===================== INVENTORY =====================
+        function renderInventory() {
+            const search = (((document.getElementById('inventorySearch') || {}).value) || '').toLowerCase().trim();
+            let items = DataManager.getInventory();
+            if (search) {
+                items = items.filter(i =>
+                    (i.name || '').toLowerCase().includes(search) ||
+                    (i.brand || '').toLowerCase().includes(search) ||
+                    (i.color || '').toLowerCase().includes(search) ||
+                    (i.polishNumber || '').toLowerCase().includes(search)
+                );
+            }
+            const tbody = document.getElementById('inventoryTable');
+
+            if (items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:20px; color:var(--text-secondary);">No items found  -  use "Quick Add Polish" or "Add Item"</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = items.map(item => {
+                const isLow = item.quantity <= item.minLevel;
+                const isOut = item.quantity <= 0;
+                return `
+                    <tr>
+                        <td><strong>${esc(item.name)}</strong></td>
+                        <td>${esc(item.brand || '-')}</td>
+                        <td>${esc(item.color || '-')}</td>
+                        <td>${esc(item.polishNumber || '-')}</td>
+                        <td>${esc(item.category)}</td>
+                        <td style="color:${isOut ? 'var(--danger)' : isLow ? 'var(--warning, #fbbf24)' : 'var(--success)'}; font-weight:700;">
+                            <button class="btn btn-sm btn-secondary" style="padding:2px 6px;" onclick="adjustInventory(${item.id}, -1)">-</button>
+                            ${item.quantity}
+                            <button class="btn btn-sm btn-secondary" style="padding:2px 6px;" onclick="adjustInventory(${item.id}, 1)">+</button>
+                        </td>
+                        <td>${item.minLevel}</td>
+                        <td>${Utils.formatCurrency(item.price)}</td>
+                        <td><span class="badge badge-${isOut ? 'danger' : isLow ? 'warning' : 'success'}">${isOut ? 'OUT' : isLow ? 'Low Stock' : 'OK'}</span></td>
+                        <td class="cell-actions">
+                            <button class="btn btn-sm btn-secondary" onclick="openEditInventory(${item.id})"><i class="fas fa-edit"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function adjustInventory(id, delta) {
+            const item = DataManager.data.inventory.find(i => i.id === id);
+            if (!item) return;
+            const newQty = Math.max(0, (item.quantity || 0) + delta);
+            DataManager.updateInventory(id, { quantity: newQty });
+            renderInventory();
+        }
+
+        function openAddPolishModal() {
+            document.getElementById('polishBrand').value = '';
+            document.getElementById('polishColor').value = '';
+            document.getElementById('polishNumber').value = '';
+            document.getElementById('polishQuantity').value = '1';
+            showModal('addPolishModal');
+        }
+
+        function addPolishItem() {
+            const brand = document.getElementById('polishBrand').value.trim();
+            const color = document.getElementById('polishColor').value.trim();
+            const number = document.getElementById('polishNumber').value.trim();
+
+            if (!brand || !color || !number) {
+                UI.toast('Brand, color name, and polish number are all required', 'error');
+                return;
+            }
+
+            // If the exact same bottle already exists, just restock it  -  fast
+            const existing = DataManager.data.inventory.find(i =>
+                (i.brand || '').toLowerCase() === brand.toLowerCase() &&
+                (i.color || '').toLowerCase() === color.toLowerCase() &&
+                (i.polishNumber || '').toLowerCase() === number.toLowerCase()
+            );
+            const qty = parseInt(document.getElementById('polishQuantity').value) || 0;
+
+            if (existing) {
+                DataManager.updateInventory(existing.id, { quantity: (existing.quantity || 0) + qty });
+                UI.toast(`Restocked ${brand} ${color} #${number}  now ${existing.quantity + qty} in stock`, 'success');
+            } else {
+                const newId = Math.max(0, ...DataManager.data.inventory.map(i => i.id)) + 1;
+                DataManager.data.inventory.push({
+                    id: newId,
+                    name: `${brand} - ${color}`,
+                    brand, color,
+                    polishNumber: number,
+                    category: 'Polish',
+                    quantity: qty,
+                    minLevel: parseInt(document.getElementById('polishMinLevel').value) || 1,
+                    price: parseFloat(document.getElementById('polishPrice').value) || 0
+                });
+                DataManager.saveData();
+                UI.toast(`${brand} ${color} #${number} added to inventory  -  synced to all pages`, 'success');
+            }
+
+            hideModal('addPolishModal');
+            renderInventory();
+        }
+
+        function addInventoryItem() {
+            const item = {
+                name: document.getElementById('invName').value.trim(),
+                category: document.getElementById('invCategory').value,
+                brand: document.getElementById('invBrand').value.trim(),
+                color: document.getElementById('invColor').value.trim(),
+                polishNumber: document.getElementById('invPolishNumber').value.trim(),
+                quantity: parseInt(document.getElementById('invQuantity').value) || 0,
+                minLevel: parseInt(document.getElementById('invMinLevel').value) || 0,
+                price: parseFloat(document.getElementById('invPrice').value) || 0
+            };
+
+            if (!item.name) {
+                UI.toast('Please enter item name', 'error');
+                return;
+            }
+
+            const newId = Math.max(0, ...DataManager.data.inventory.map(i => i.id)) + 1;
+            DataManager.data.inventory.push({ id: newId, ...item });
+            DataManager.saveData();
+
+            UI.toast('Item added to inventory  -  synced to all pages', 'success');
+            hideModal('addInventoryModal');
+            renderInventory();
+
+            document.getElementById('invName').value = '';
+            document.getElementById('invBrand').value = '';
+            document.getElementById('invColor').value = '';
+            document.getElementById('invPolishNumber').value = '';
+            document.getElementById('invQuantity').value = '10';
+            document.getElementById('invPrice').value = '0';
+        }
+
+        function openEditInventory(itemId) {
+            const item = DataManager.data.inventory.find(i => i.id === itemId);
+            if (!item) return;
+            document.getElementById('editInvId').value = itemId;
+            document.getElementById('editInvName').value = item.name || '';
+            document.getElementById('editInvBrand').value = item.brand || '';
+            document.getElementById('editInvColor').value = item.color || '';
+            document.getElementById('editInvPolishNumber').value = item.polishNumber || '';
+            document.getElementById('editInvQuantity').value = item.quantity || 0;
+            document.getElementById('editInvMinLevel').value = item.minLevel || 0;
+            document.getElementById('editInvPrice').value = item.price || 0;
+            showModal('editInventoryModal');
+        }
+
+        function saveInventoryEdit() {
+            const id = parseInt(document.getElementById('editInvId').value);
+            DataManager.updateInventory(id, {
+                name: document.getElementById('editInvName').value.trim(),
+                brand: document.getElementById('editInvBrand').value.trim(),
+                color: document.getElementById('editInvColor').value.trim(),
+                polishNumber: document.getElementById('editInvPolishNumber').value.trim(),
+                quantity: parseInt(document.getElementById('editInvQuantity').value) || 0,
+                minLevel: parseInt(document.getElementById('editInvMinLevel').value) || 0,
+                price: parseFloat(document.getElementById('editInvPrice').value) || 0
+            });
+            hideModal('editInventoryModal');
+            renderInventory();
+            UI.toast('Inventory item updated  -  synced to all pages', 'success');
+        }
+
+        function deleteInventoryItem() {
+            const id = parseInt(document.getElementById('editInvId').value);
+            const item = DataManager.data.inventory.find(i => i.id === id);
+            if (!item) return;
+            if (confirm(`Delete "${item.name}" from inventory?`)) {
+                DataManager.data.inventory = DataManager.data.inventory.filter(i => i.id !== id);
+                DataManager.saveData();
+                hideModal('editInventoryModal');
+                renderInventory();
+                UI.toast('Item removed from inventory', 'success');
+            }
+        }
+
+        // ===================== MANAGER NOTIFICATIONS =====================
+        // Managers get instant alerts when clients book or cancel appointments
+        function renderManagerNotifications() {
+            const bell = document.getElementById('notifBell');
+            const badge = document.getElementById('notifBadge');
+            const list = document.getElementById('notifList');
+            if (!bell) return;
+
+            if (!Auth.isLoggedIn()) {
+                bell.style.display = 'none';
+                return;
+            }
+            bell.style.display = 'inline-flex';
+
+            const notifs = DataManager.getNotificationsFor('managers');
+            const unread = notifs.filter(n => !n.read).length;
+            badge.style.display = unread > 0 ? 'block' : 'none';
+            badge.textContent = unread;
+
+            if (notifs.length === 0) {
+                list.innerHTML = '<p style="padding:20px; text-align:center; color:var(--text-secondary); font-size:0.85rem;">No notifications yet  -  new bookings and cancellations appear here instantly.</p>';
+                return;
+            }
+
+            list.innerHTML = notifs.slice(0, 30).map(n => `
+                <div style="padding:10px 14px; border-bottom:1px solid var(--border-color); font-size:0.85rem; ${n.read ? 'opacity:0.55;' : 'background:rgba(251,191,36,0.06);'}">
+                    <div>${n.message}</div>
+                    <div style="color:var(--text-muted); font-size:0.7rem; margin-top:4px;">${new Date(n.timestamp).toLocaleString()}</div>
+                </div>
+            `).join('');
+        }
+
+        function toggleManagerNotifications() {
+            const panel = document.getElementById('notifPanel');
+            if (panel.style.display === 'none') {
+                renderManagerNotifications();
+                panel.style.display = 'block';
+                // Mark as read once opened, then clear the badge
+                DataManager.markNotificationsRead('managers');
+                setTimeout(renderManagerNotifications, 300);
+            } else {
+                panel.style.display = 'none';
+            }
+        }
+
+        // ===================== CLOSEOUT =====================
+        function initCloseoutPage() {
+            const dateInput = document.getElementById('closeoutDateInput');
+            if (!dateInput.value) dateInput.value = Utils.today();
+            const user = Auth.getUser();
+            if (user && !document.getElementById('closeoutBy').value) {
+                document.getElementById('closeoutBy').value = user.name || 'Manager';
+            }
+            previewCloseout();
+            renderManagerCloseouts();
+        }
+
+        function previewCloseout() {
+            const date = document.getElementById('closeoutDateInput').value || Utils.today();
+            const appts = DataManager.getAppointments(date);
+            const completed = appts.filter(a => a.status === 'complete');
+            const cancelled = appts.filter(a => a.status === 'cancelled');
+            const revenue = completed.reduce((sum, a) => sum + (a.price || 0), 0);
+
+            document.getElementById('coTotalAppts').textContent = appts.length;
+            document.getElementById('coCompleted').textContent = completed.length;
+            document.getElementById('coCancelled').textContent = cancelled.length;
+            document.getElementById('coRevenuePreview').textContent = Utils.formatCurrency(revenue);
+            updateCloseoutTotal();
+        }
+
+        function updateCloseoutTotal() {
+            const cash = parseFloat(document.getElementById('coCash').value) || 0;
+            const card = parseFloat(document.getElementById('coCard').value) || 0;
+            const declared = cash + card;
+            document.getElementById('coGrandTotal').value = Utils.formatCurrency(declared);
+
+            // Live mismatch warning: register (cash + card) vs expected revenue
+            const date = document.getElementById('closeoutDateInput').value || Utils.today();
+            const expected = DataManager.getAppointments(date)
+                .filter(a => a.status === 'complete')
+                .reduce((sum, a) => sum + (a.price || 0), 0);
+            const variance = Math.round((declared - expected) * 100) / 100;
+            const warn = document.getElementById('coMismatchWarning');
+            if (warn && Math.abs(variance) > 0.01) {
+                warn.style.display = 'block';
+                const direction = variance > 0 ? 'over' : 'short';
+                document.getElementById('coMismatchDetail').textContent =
+                    `Expected ${Utils.formatCurrency(expected)} from completed services, but the register declares ${Utils.formatCurrency(declared)}  ${Utils.formatCurrency(Math.abs(variance))} ${direction}.`;
+            } else if (warn) {
+                warn.style.display = 'none';
+            }
+        }
+
+        function submitCloseout() {
+            const date = document.getElementById('closeoutDateInput').value || Utils.today();
+            const closedBy = document.getElementById('closeoutBy').value.trim() || 'Manager';
+            const cash = parseFloat(document.getElementById('coCash').value) || 0;
+            const card = parseFloat(document.getElementById('coCard').value) || 0;
+            const notes = document.getElementById('coNotes').value.trim();
+            const pin = document.getElementById('coPin').value.trim();
+
+            // A valid manager or admin PIN is always required
+            if (!Auth.verifyPin(pin, 'manager')) {
+                UI.toast('A valid manager or admin PIN is required to submit a closeout', 'error');
+                return;
+            }
+
+            const appts = DataManager.getAppointments(date);
+            const completed = appts.filter(a => a.status === 'complete');
+            const expected = completed.reduce((sum, a) => sum + (a.price || 0), 0);
+            const declared = cash + card;
+            const variance = Math.round((declared - expected) * 100) / 100;
+            const mismatched = Math.abs(variance) > 0.01;
+            const isAdminPin = pin === DataManager.settings.adminPin;
+
+            // HARD GATE: a mismatched register can only be closed with the ADMIN PIN
+            if (mismatched && !isAdminPin) {
+                updateCloseoutTotal(); // make sure the red warning is visible
+                UI.toast(`Closeout blocked  -  register is ${Utils.formatCurrency(Math.abs(variance))} ${variance > 0 ? 'over' : 'short'}. Fix the numbers or use the Admin PIN to override.`, 'error');
+                return;
+            }
+
+            if (mismatched && isAdminPin) {
+                const direction = variance > 0 ? 'over' : 'short';
+                if (!confirm(`ADMIN OVERRIDE\n\nExpected: ${Utils.formatCurrency(expected)}\nDeclared: ${Utils.formatCurrency(declared)}\nVariance: ${Utils.formatCurrency(Math.abs(variance))} ${direction}\n\nForce this closeout through with the admin override?`)) {
+                    return;
+                }
+                DataManager.logAudit('closeout_override', `Closeout for ${date} forced through by ADMIN override (${closedBy}). Expected $${expected.toFixed(2)}, declared $${declared.toFixed(2)}, variance $${variance.toFixed(2)}.`);
+            }
+
+            const existing = DataManager.data.closeouts.find(c => c.date === date);
+            if (existing && !confirm(`A closeout for ${Utils.formatDate(date)} already exists. Submit an additional record?`)) {
+                return;
+            }
+
+            DataManager.addCloseout({
+                date: date,
+                closedBy: closedBy,
+                totalAppointments: appts.length,
+                completed: completed.length,
+                cancelled: appts.filter(a => a.status === 'cancelled').length,
+                cashTotal: cash,
+                cardTotal: card,
+                totalRevenue: declared,
+                expectedRevenue: expected,
+                variance: variance,
+                override: mismatched,
+                // Snapshot the per-staff breakdown so the
+                // Admin closeout viewer shows identical numbers forever
+                staffBreakdown: DataManager.getStaffBreakdownForDate(date),
+                notes: notes
+            });
+
+            document.getElementById('coPin').value = '';
+            document.getElementById('coNotes').value = '';
+            document.getElementById('coCash').value = '0';
+            document.getElementById('coCard').value = '0';
+            updateCloseoutTotal();
+            renderManagerCloseouts();
+            UI.toast(mismatched
+                ? 'Closeout submitted with ADMIN OVERRIDE  -  variance recorded on the Admin page'
+                : 'Closeout submitted  -  it is now on record on the Admin page',
+                mismatched ? 'warning' : 'success');
+        }
+
+        function renderManagerCloseouts() {
+            const tbody = document.getElementById('managerCloseoutTable');
+            if (!tbody) return;
+            const records = DataManager.getCloseouts();
+
+            if (records.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--text-secondary);">No closeouts submitted yet</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = records.map(r => `
+                <tr>
+                    <td><strong>${Utils.formatDate(r.date)}</strong></td>
+                    <td>${esc(r.closedBy || '-')}</td>
+                    <td style="text-align:center;">${(r.completed != null ? r.completed : 0)}</td>
+                    <td>${Utils.formatCurrency(r.cashTotal || 0)}</td>
+                    <td>${Utils.formatCurrency(r.cardTotal || 0)}</td>
+                    <td style="color:var(--primary); font-weight:700;">${Utils.formatCurrency(r.totalRevenue || 0)}${r.override ? ` <span class="badge badge-danger" title="Admin override  -  variance ${Utils.formatCurrency(r.variance || 0)}">!</span>` : ''}</td>
+                </tr>
+            `).join('');
+        }
+
+        // ===================== DEMO DAY (same engine as the Admin page) =====================
+        function loadDemoDayManager() {
+            const result = DataManager.loadDemoDay();
+            refreshAllViews();
+            UI.toast(`Demo day loaded: ${result.appointments} appointments, ${result.reviews} reviews, ${result.clockIns} clock-ins  -  click the dashboard cards to explore`, 'success');
+        }
+
+        function clearDemoData() {
+            if (!confirm('Remove all demo data?\n\nOnly demo-tagged records are wiped  -  real staff, clients, and appointments are never touched.')) return;
+            const removed = DataManager.removeDemoData();
+            refreshAllViews();
+            UI.toast(removed > 0 ? `Demo data removed (${removed} records)  real data untouched` : 'No demo data found', removed > 0 ? 'success' : 'info');
+        }
+
+        // ===================== LOGIN =====================
+        function doLogin() {
+            const pin = document.getElementById('pinInput').value;
+            const result = Auth.login(pin);
+
+            if (result.success && (result.role === 'manager' || result.role === 'admin')) {
+                document.getElementById('loginError').style.display = 'none';
+                document.getElementById('pinInput').value = '';
+                hideModal('loginModal');
+
+                document.getElementById('currentUserName').textContent = result.name;
+                document.getElementById('currentUserName').style.color = 'var(--primary)';
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'inline-flex';
+
+                UI.toast(`Welcome, ${result.name}!`, 'success');
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+                document.getElementById('pinInput').value = '';
+            }
+        }
+
+        function logout() {
+            Auth.logout();
+            document.getElementById('currentUserName').textContent = 'Not logged in';
+            document.getElementById('currentUserName').style.color = 'var(--text-secondary)';
+            document.getElementById('loginBtn').style.display = 'inline-flex';
+            document.getElementById('logoutBtn').style.display = 'none';
+            UI.toast('Logged out', 'info');
+        }
+
+        function showModal(id) { UI.showModal(id); }
+        function hideModal(id) {
+            if (id === 'detailModal') currentDetail = null;
+            UI.hideModal(id);
+        }
+
+        var __pinInput = document.getElementById('pinInput'); if (__pinInput) __pinInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') doLogin();
+        });
+    </script>
+    <script src="../shared/salon-staff-ai.js?v=20260731apptFixes6"></script>
+    <script src="../shared/unb-ai-assist.js?v=20260807unbAiEmoji"></script>
+    <script src="../shared/staff-ai-widget.js?v=20260807unbAiEmoji"></script>
+</body>
+</html>

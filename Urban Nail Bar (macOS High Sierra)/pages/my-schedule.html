@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="shared/legacy-compat.js?v=20260805sierra3"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Schedule — Moved To Staff</title>
+<meta http-equiv="refresh" content="0;url=staff.html#myschedule">
+<script>
+/* My Schedule now lives inside Staff Members (Staff Dashboard). */
+(function () {
+    try {
+        location.replace('staff.html#myschedule');
+    } catch (e) {
+        location.href = 'staff.html#myschedule';
+    }
+})();
+</script>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:#0a0a0a; color:#e5e7eb; display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; padding:20px; text-align:center; text-transform:uppercase; }
+a { color:#fbbf24; font-weight:700; }
+</style>
+</head>
+<body>
+<p>My Schedule moved into <a href="staff.html#myschedule">Staff Members</a>. Redirecting…</p>
+</body>
+</html>

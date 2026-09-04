@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Recover Appointments · Urban Nail Bar</title>
+<style>
+  body { font-family: Segoe UI, sans-serif; background:#0a0a0a; color:#eee; margin:0; padding:24px; }
+  h1 { color:#ffe566; margin:0 0 8px; }
+  .sub { color:#9ca3af; margin-bottom:20px; }
+  .card { background:#111; border:1px solid #333; border-radius:10px; padding:16px; margin-bottom:14px; }
+  .ok { color:#22c55e; } .warn { color:#fbbf24; } .bad { color:#f87171; }
+  button { background:#ffe566; color:#000; border:0; font-weight:800; padding:10px 14px; border-radius:8px; cursor:pointer; margin:4px 6px 4px 0; }
+  button.secondary { background:#222; color:#ffe566; border:1px solid #ffe566; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { border-bottom:1px solid #222; padding:8px; text-align:left; }
+  code { color:#93c5fd; }
+  pre { background:#000; border:1px solid #333; padding:10px; overflow:auto; max-height:220px; font-size:12px; }
+</style>
+</head>
+<body>
+  <h1>Recover Appointments</h1>
+  <p class="sub">Open this page in the <b>same Chrome window</b> you use for the scheduler (<code>http://localhost:3001</code>). It reads your browser backups and can restore them.</p>
+
+  <div class="card" id="statusCard">Scanning…</div>
+
+  <div class="card">
+    <h3>Actions</h3>
+    <button onclick="exportLive()">Download live data JSON</button>
+    <button onclick="pushDiskBackup()">Force disk backup now</button>
+    <button class="secondary" onclick="restoreRichestLocal()">Restore richest local backup</button>
+    <button class="secondary" onclick="mergeArchive()">Merge archive → active appointments</button>
+    <button class="secondary" onclick="location.href='/pages/scheduler.html'">Open Scheduler</button>
+  </div>
+
+  <div class="card">
+    <h3>Local backups (browser)</h3>
+    <div id="localBackups">—</div>
+  </div>
+
+  <div class="card">
+    <h3>Disk backups (server)</h3>
+    <div id="diskBackups">—</div>
+  </div>
+
+  <div class="card">
+    <h3>Appointments by date (live)</h3>
+    <pre id="byDate">—</pre>
+  </div>
+
+<script>
+const KEY = 'aiSalonPro_v3_data';
+const BAK = 'aiSalonPro_v3_backups';
+
+function loadLive() {
+  try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { return null; }
+}
+function loadBackups() {
+  try { return JSON.parse(localStorage.getItem(BAK) || '[]'); } catch (e) { return []; }
+}
+function byDate(appts) {
+  const m = {};
+  (appts || []).forEach(a => { if (!a || !a.date) return; m[a.date] = (m[a.date] || 0) + 1; });
+  return m;
+}
+function saveLive(data) {
+  data.lastUpdated = new Date().toISOString();
+  localStorage.setItem(KEY, JSON.stringify(data));
+}
+
+function refresh() {
+  const data = loadLive();
+  const backups = loadBackups();
+  const appts = (data && data.appointments) || [];
+  const arch = (data && data.appointmentArchive) || [];
+  const dates = byDate(appts);
+  document.getElementById('statusCard').innerHTML =
+    '<div><b>Live appointments:</b> <span class="' + (appts.length ? 'ok' : 'bad') + '">' + appts.length + '</span></div>' +
+    '<div><b>Archive:</b> ' + arch.length + '</div>' +
+    '<div><b>lastUpdated:</b> ' + ((data && data.lastUpdated) || '—') + '</div>' +
+    '<div><b>Local backup snapshots:</b> ' + backups.length + '</div>';
+  document.getElementById('byDate').textContent = JSON.stringify(dates, null, 2);
+
+  const rows = backups.slice().reverse().map(b => {
+    const count = ((b.data && b.data.appointments) || []).length;
+    const d = byDate((b.data && b.data.appointments) || []);
+    return '<tr><td>' + (b.label || '') + '</td><td>' + (b.createdAt || '') + '</td><td>' + count + '</td><td><code>' + JSON.stringify(d) + '</code></td>' +
+      '<td><button onclick="restoreBackup(' + b.id + ')">Restore</button></td></tr>';
+  }).join('');
+  document.getElementById('localBackups').innerHTML = rows
+    ? ('<table><tr><th>Label</th><th>Created</th><th>Appts</th><th>Dates</th><th></th></tr>' + rows + '</table>')
+    : '<span class="warn">No local backups found in this browser origin.</span>';
+
+  fetch('/api/salon-backups').then(r => r.json()).then(j => {
+    const list = (j.backups || []);
+    document.getElementById('diskBackups').innerHTML = list.length
+      ? ('<table><tr><th>File</th><th>Appts</th><th>Modified</th></tr>' + list.map(b =>
+          '<tr><td><code>' + b.file + '</code></td><td>' + (b.appointmentCount != null ? b.appointmentCount : '?') +
+          '</td><td>' + new Date(b.mtime).toLocaleString() + '</td></tr>').join('') + '</table>')
+      : '<span class="warn">No disk backups yet.</span>';
+  }).catch(() => {
+    document.getElementById('diskBackups').innerHTML = '<span class="bad">Server backup API not reachable. Is localhost:3001 running?</span>';
+  });
+}
+
+function exportLive() {
+  const data = loadLive();
+  const blob = new Blob([JSON.stringify({ data, exportedAt: new Date().toISOString() }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'salon-live-export-' + Date.now() + '.json';
+  a.click();
+}
+
+function pushDiskBackup() {
+  const data = loadLive();
+  fetch('/api/salon-backup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ label: 'manual-recover-page', data, settings: null, appointmentCount: ((data && data.appointments) || []).length })
+  }).then(r => r.json()).then(j => { alert('Disk backup saved: ' + (j.file || 'ok') + ' (' + j.appointmentCount + ' appts)'); refresh(); })
+   .catch(e => alert('Backup failed: ' + e));
+}
+
+function restoreBackup(id) {
+  const backups = loadBackups();
+  const snap = backups.find(b => String(b.id) === String(id));
+  if (!snap || !snap.data) return alert('Backup not found');
+  if (!confirm('Restore this backup into live data? Current live data will be snapshotted first.')) return;
+  const live = loadLive() || { appointments: [] };
+  const bak = loadBackups();
+  bak.push({ id: Date.now(), label: 'before-restore-ui', createdAt: new Date().toISOString(), data: live });
+  while (bak.length > 15) bak.shift();
+  localStorage.setItem(BAK, JSON.stringify(bak));
+  saveLive(snap.data);
+  // also push to server
+  fetch('/api/salon-data', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ data: snap.data, settings: snap.settings || null, savedAt: Date.now() })
+  }).catch(() => {});
+  alert('Restored. Open Scheduler and hard-refresh (Ctrl+F5).');
+  refresh();
+}
+
+function restoreRichestLocal() {
+  const backups = loadBackups();
+  let best = null;
+  backups.forEach(b => {
+    const n = ((b.data && b.data.appointments) || []).length;
+    if (!best || n > best.n) best = { n, b };
+  });
+  const liveN = ((loadLive() || {}).appointments || []).length;
+  if (!best) return alert('No local backups');
+  if (best.n <= liveN) return alert('Live data already has as many or more appointments (' + liveN + '). Richest backup has ' + best.n + '.');
+  restoreBackup(best.b.id);
+}
+
+function mergeArchive() {
+  const data = loadLive();
+  if (!data) return alert('No live data');
+  const ids = new Set((data.appointments || []).map(a => String(a.id)));
+  let n = 0;
+  (data.appointmentArchive || []).forEach(a => {
+    if (a && a.id != null && !ids.has(String(a.id))) {
+      data.appointments.push(a);
+      ids.add(String(a.id));
+      n++;
+    }
+  });
+  saveLive(data);
+  fetch('/api/salon-data', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ data, settings: null, savedAt: Date.now() })
+  }).catch(() => {});
+  alert('Merged ' + n + ' archived appointments back to active.');
+  refresh();
+}
+
+refresh();
+</script>
+</body>
+</html>

@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Salon Pro — Urban Nail Bar</title>
+    <link rel="stylesheet" href="shared/styles.css?v=20260815brand3">
+    <link rel="stylesheet" href="shared/vendor/fontawesome/css/all.min.css">
+    <style>
+        :root {
+            --home-bg: #0b0b0b;
+            --home-panel: #141414;
+            --home-line: #2a2a2a;
+            --home-gold: #ffe566;
+            --home-gold-deep: #c9a227;
+            --home-muted: #9ca3af;
+            --home-text: #f3f4f6;
+        }
+        * { box-sizing: border-box; }
+        html, body {
+            margin: 0;
+            min-height: 100%;
+            height: auto;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background: var(--home-bg);
+            color: var(--home-text);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -5%, rgba(255, 229, 102, 0.16), transparent 58%),
+                radial-gradient(ellipse 55% 40% at 85% 90%, rgba(201, 162, 39, 0.1), transparent 50%),
+                #0b0b0b;
+            text-transform: uppercase;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                url('assets/images/ai-salon-pro-logo.png') center 42% / min(58vw, 520px) no-repeat;
+            opacity: 0.09;
+            filter: saturate(1.15) brightness(1.05);
+        }
+        .home-shell {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1180px;
+            min-height: 100vh;
+            margin: 0 auto;
+            padding: 14px 18px 10px;
+            display: flex;
+            flex-direction: column;
+            overflow: visible;
+        }
+        .home-shell > * + * { margin-top: 10px; }
+        input[type="password"], input[type="email"], input[type="tel"], input[type="number"], .no-caps {
+            text-transform: none;
+        }
+
+        .home-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-shrink: 0;
+            padding: 16px 18px;
+            background: linear-gradient(135deg, rgba(255,229,102,0.14) 0%, rgba(20,20,20,0.92) 40%, #121212 100%);
+            border: 1px solid rgba(255, 229, 102, 0.45);
+            border-radius: 16px;
+            box-shadow:
+                0 0 0 1px rgba(255, 229, 102, 0.1),
+                0 12px 32px rgba(0, 0, 0, 0.35),
+                0 0 40px rgba(255, 229, 102, 0.08);
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+        }
+        .brand > * + * { margin-left: 14px; }
+        .brand-mark {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background:
+                linear-gradient(145deg, rgba(255,229,102,0.25), rgba(0,0,0,0.55)),
+                #111;
+            border: 2px solid #ffe566;
+            color: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            overflow: hidden;
+            box-shadow: 0 0 18px rgba(255, 229, 102, 0.35), inset 0 1px 0 rgba(255,255,255,0.25);
+            padding: 0;
+        }
+        .brand-mark img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .brand-copy { min-width: 0; }
+        .brand .system-title {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            line-height: 1.3;
+            color: #ffe566 !important;
+            -webkit-text-fill-color: #ffe566 !important;
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            filter: none;
+            text-shadow:
+                0 0 12px rgba(255, 229, 102, 0.55),
+                0 1px 2px rgba(0, 0, 0, 0.9);
+        }
+        .brand h1 {
+            margin: 6px 0 0;
+            font-size: 1.45rem;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.05;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
+        }
+        .brand p.tagline {
+            margin: 7px 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            line-height: 1.25;
+            color: #ffffff;
+            text-transform: none;
+            white-space: normal;
+            overflow: visible;
+            max-width: none;
+        }
+        .brand p.tagline .brand-ai-line {
+            color: #ffe566;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .brand p.tagline .brand-powered-line {
+            color: #ffffff;
+            font-weight: 600;
+            text-transform: none;
+        }
+        .brand p.tagline strong,
+        .brand p.tagline strong.brand-metallic,
+        .brand p.tagline strong.brand-gold {
+            font-weight: 900;
+            background: none;
+            -webkit-background-clip: border-box;
+            background-clip: border-box;
+            color: #ffe566;
+            -webkit-text-fill-color: #ffe566;
+            filter: none;
+            text-shadow: 0 0 8px rgba(255, 229, 102, 0.4), 0 1px 2px rgba(0, 0, 0, 0.85);
+        }
+        .home-actions { display: flex; flex-shrink: 0; align-items: center; }
+        .home-actions > * + * { margin-left: 8px; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            border: 1px solid transparent;
+            white-space: nowrap;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .btn i {
+            color: #ffe566 !important;
+            -webkit-text-fill-color: #ffe566 !important;
+        }
+        .btn > * + * { margin-left: 6px; }
+        .btn-primary {
+            background: linear-gradient(135deg, #ffe566 0%, #c9a227 55%, #8a6914 100%);
+            color: #111 !important;
+            border-color: #ffe566;
+            box-shadow: 0 4px 16px rgba(255, 229, 102, 0.35);
+        }
+        .btn-primary i {
+            color: #111 !important;
+            -webkit-text-fill-color: #111 !important;
+        }
+        .btn-ghost {
+            background: rgba(255, 229, 102, 0.1);
+            color: #ffe566 !important;
+            border-color: rgba(255, 229, 102, 0.55);
+        }
+        .btn-ghost:hover,
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 229, 102, 0.4);
+        }
+        .btn:hover { transform: translateY(-1px); }
+
+        .home-main {
+            flex: 1 1 auto;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            overflow: visible;
+        }
+        .home-main > * + * { margin-top: 12px; }
+
+        .section {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            flex: 1 1 auto;
+        }
+        .section > * + * { margin-top: 8px; }
+        .section-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .section-head h2 {
+            margin: 0;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--home-muted);
+        }
+        .section-head span { font-size: 0.75rem; color: #6b7280; }
+
+        .portal-grid {
+            display: grid;
+            grid-gap: 12px;
+            gap: 12px;
+            min-height: 0;
+            flex: 1 1 auto;
+        }
+        .portal-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .portal-grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+        .portal-card {
+            background: var(--home-panel);
+            border: 1px solid var(--home-line);
+            border-radius: 14px;
+            padding: 16px 18px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            min-height: 108px;
+            justify-content: center;
+            transition: border-color 0.15s ease, background 0.15s ease;
+        }
+        .portal-card > * + * { margin-top: 8px; }
+        .portal-card:hover {
+            border-color: rgba(255,229,102,0.55);
+            background: #181818;
+        }
+        .portal-card .row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .portal-card .row > * + * { margin-left: 10px; }
+        .portal-card .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255,229,102,0.12);
+            border: 1px solid rgba(255,229,102,0.35);
+            color: #ffe566;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .portal-card .icon i {
+            color: #ffe566 !important;
+            -webkit-text-fill-color: #ffe566 !important;
+        }
+        .portal-card .badge {
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            padding: 4px 9px;
+            border-radius: 999px;
+            background: rgba(255,229,102,0.12);
+            color: #ffe566;
+            border: 1px solid rgba(255,229,102,0.3);
+            white-space: nowrap;
+        }
+        .portal-card .badge.lock {
+            background: rgba(220,38,38,0.1);
+            color: #fca5a5;
+            border-color: rgba(220,38,38,0.3);
+        }
+        .portal-card h3 {
+            margin: 0;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.2;
+        }
+        .portal-card p {
+            margin: 0;
+            font-size: 0.8rem;
+            line-height: 1.35;
+            color: var(--home-muted);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .section.staff-desk .portal-card {
+            min-height: 100px;
+        }
+
+        .phone-setup {
+            flex-shrink: 0;
+            display: grid;
+            grid-template-columns: 1fr minmax(280px, auto);
+            grid-gap: 48px;
+            gap: 48px;
+            align-items: center;
+            background: var(--home-panel);
+            border: 1px solid var(--home-line);
+            border-radius: 14px;
+            padding: 20px 24px;
+            min-height: 180px;
+        }
+        .phone-setup h3 {
+            margin: 0 0 10px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--home-gold);
+        }
+        .phone-setup h3 i {
+            color: #ffe566 !important;
+        }
+        .phone-setup .ps-steps {
+            margin: 0 0 10px;
+            font-size: 0.82rem;
+            line-height: 1.55;
+            color: var(--home-muted);
+        }
+        .phone-setup .ps-steps b { color: #e5e7eb; }
+        .phone-setup code {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-size: 0.78rem;
+        }
+        .ps-url {
+            font-size: 0.78rem;
+            font-weight: 700;
+            line-height: 1.55;
+            word-break: break-all;
+            max-height: none;
+            overflow: visible;
+        }
+        .ps-url a { color: var(--home-gold); text-decoration: none; }
+        .ps-url .warn { color: #f87171; }
+        .ps-url .lbl {
+            color: #6b7280;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .ps-qrs {
+            display: flex;
+            padding: 8px 12px 8px 32px;
+            margin-left: 8px;
+            border-left: 1px solid var(--home-line);
+            justify-content: flex-end;
+        }
+        .ps-qrs > * + * { margin-left: 48px; }
+        .ps-qrbox {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--home-muted);
+            text-align: center;
+            min-width: 148px;
+            padding: 14px 14px 12px;
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 14px;
+        }
+        .ps-qrbox > * + * { margin-top: 10px; }
+        .ps-qr {
+            background: #fff;
+            padding: 12px;
+            border-radius: 14px;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 0.7rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            border: 4px solid #fff;
+            outline: 1px solid #e5e7eb;
+        }
+        .ps-qr img, .ps-qr canvas { display: block; max-width: 100%; height: auto; }
+
+        .home-footer {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            font-size: 0.68rem;
+            color: #6b7280;
+            overflow: hidden;
+        }
+        .home-footer > * + * { margin-left: 10px; }
+        .home-footer span.status { color: #86efac; font-weight: 700; }
+        .home-footer #sessionInfo {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .home-footer #sessionInfo a { color: #f87171; text-decoration: none; font-weight: 700; }
+
+        @media (max-width: 1100px) {
+            .portal-grid.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .phone-setup { grid-template-columns: 1fr; grid-gap: 18px; }
+            .ps-qrs {
+                justify-content: center;
+                border-left: none;
+                padding: 14px 0 0;
+                margin-left: 0;
+                border-top: 1px solid var(--home-line);
+            }
+            .ps-qrs > * + * { margin-left: 36px; }
+        }
+        @media (max-width: 900px) {
+            html, body { overflow: auto; }
+            .home-shell {
+                height: auto;
+                min-height: 100vh;
+                overflow: visible;
+                padding: 12px 14px 10px;
+                max-width: 100%;
+            }
+            .brand p { white-space: normal; max-width: none; }
+            .home-actions { flex-wrap: wrap; }
+            .home-actions > * { margin: 4px 8px 0 0; }
+            .home-actions > * + * { margin-left: 0; }
+        }
+        @media (max-width: 560px) {
+            .portal-grid.two, .portal-grid.four { grid-template-columns: 1fr; }
+            .home-top { flex-direction: column; align-items: flex-start; }
+            .home-top > * + * { margin-top: 10px; }
+            .btn { width: 100%; justify-content: center; }
+            .home-actions { width: 100%; }
+            .home-actions > * { width: 100%; margin: 4px 0 0; }
+            .ps-qrs { flex-wrap: wrap; justify-content: center; }
+            .ps-qrs > * + * { margin-left: 16px; margin-top: 12px; }
+            .ps-qr { width: 120px; height: 120px; }
+            .home-footer { white-space: normal; }
+            .brand .system-title { font-size: 0.62rem; letter-spacing: 0.1em; }
+            .brand h1 { font-size: 1.35rem; }
+            .brand p.tagline { white-space: normal; max-width: none; }
+            .brand-mark { width: 50px; height: 50px; font-size: 1.1rem; }
+        }
+        /* Short laptop screens at 100% zoom */
+        @media (max-height: 780px) {
+            .home-shell { padding: 10px 14px 8px; }
+            .home-shell > * + * { margin-top: 8px; }
+            .home-main > * + * { margin-top: 9px; }
+            .portal-grid { grid-gap: 9px; }
+            .portal-card {
+                padding: 12px 14px;
+                min-height: 88px;
+                border-radius: 12px;
+            }
+            .portal-card .icon { width: 34px; height: 34px; font-size: 0.9rem; }
+            .portal-card h3 { font-size: 0.95rem; }
+            .portal-card p { font-size: 0.74rem; -webkit-line-clamp: 1; }
+            .section.staff-desk .portal-card { min-height: 82px; }
+            .phone-setup { padding: 14px 16px; min-height: 148px; grid-gap: 32px; }
+            .ps-qr { width: 116px; height: 116px; padding: 10px; }
+            .ps-qrs > * + * { margin-left: 32px; }
+            .ps-qrbox { min-width: 124px; padding: 10px; }
+        }
+        @media (max-width: 560px) and (max-height: 700px) {
+            .portal-card { min-height: 76px; padding: 10px 12px; }
+            .portal-card p { display: none; }
+            .phone-setup { min-height: 0; padding: 12px; }
+        }
+    </style>
+</head>
+<body class="page-directory">
+    <div class="home-shell">
+        <header class="home-top">
+            <div class="brand">
+                <div class="brand-mark" aria-hidden="true"><img src="assets/images/ai-salon-pro-logo.png" alt="AI Salon Pro" onerror="this.style.display='none';this.parentNode.textContent='AI';"></div>
+                <div class="brand-copy">
+                    <p class="system-title brand-metallic" id="homeSystemTitle">AI Salon Pro · Salon &amp; Spa AI Software</p>
+                    <h1 id="homeSalonName">Urban Nail Bar</h1>
+                    <p class="tagline no-caps" id="homeTagline">
+                        <span class="brand-ai-line">AI INTEGRATION</span>
+                        <span class="brand-powered-line">Powered By <strong class="brand-gold">AI Salon Pro</strong></span>
+                    </p>
+                </div>
+            </div>
+            <div class="home-actions">
+                <a class="btn btn-primary" href="http://localhost:3002/"><i class="fas fa-calendar-check"></i> Book Appointment</a>
+                <a class="btn btn-ghost" href="pages/website.html"><i class="fas fa-globe"></i> Website</a>
+                <a class="btn btn-ghost" href="pages/guide.html"><i class="fas fa-book-open"></i> How To Use</a>
+            </div>
+        </header>
+
+        <div class="home-main">
+            <section class="section">
+                <div class="section-head">
+                    <h2 id="homeClientsLabel">For Clients</h2>
+                    <span>Public</span>
+                </div>
+                <div class="portal-grid two">
+                    <a href="pages/website.html" class="portal-card">
+                        <div class="row">
+                            <div class="icon"><i class="fas fa-globe"></i></div>
+                            <span class="badge">Public</span>
+                        </div>
+                        <h3>Website</h3>
+                        <p>Services, team, contact, and AI guest assistant.</p>
+                    </a>
+                    <a href="http://localhost:3002/" class="portal-card">
+                        <div class="row">
+                            <div class="icon"><i class="fas fa-calendar-check"></i></div>
+                            <span class="badge">Public</span>
+                        </div>
+                        <h3>Book Online</h3>
+                        <p>Sign in with phone, then pick a service — syncs live.</p>
+                    </a>
+                </div>
+            </section>
+
+            <section class="section staff-desk">
+                <div class="section-head">
+                    <h2 id="homeStaffLabel">Staff &amp; Alert</h2>
+                    <span>PIN required</span>
+                </div>
+                <div class="portal-grid four" id="staffPortalGrid">
+                    <a href="pages/scheduler.html" class="portal-card" id="homeCardScheduler" data-home-card="scheduler">
+                        <div class="row">
+                            <div class="icon"><i class="fas fa-calendar-alt"></i></div>
+                            <span class="badge lock"><i class="fas fa-lock"></i> Manager</span>
+                        </div>
+                        <h3>Scheduler</h3>
+                        <p>Day board &amp; checkout</p>
+                    </a>
+                    <a href="pages/staff.html#myschedule" class="portal-card" id="homeCardMySchedule" data-home-card="myschedule" style="display:none;">
+                        <div class="row">
+                            <div class="icon"><i class="fas fa-calendar"></i></div>
+                            <span class="badge lock"><i class="fas fa-lock"></i> Staff</span>
+                        </div>
+                        <h3>My Schedule</h3>
+                        <p>Your appointments only</p>
+                    </a>
+                    <a href="pages/staff.html" class="portal-card" id="homeCardStaff" data-home-card="staff">
+                        <div class="row">
+                            <div class="icon"><i class="fas fa-users"></i></div>
+                            <span class="badge lock"><i class="fas fa-lock"></i> Staff</span>
+                        </div>
+                        <h3>Staff Members</h3>
+                        <p>Schedule &amp; pay</p>
+                    </a>
+                    <a href="pages/sms-blast.html" class="portal-card" id="homeCardSms" data-home-card="alert">
+                        <div class="row">
+                            <div class="icon"><i class="fas fa-comment-sms"></i></div>
+                            <span class="badge lock"><i class="fas fa-lock"></i> Alert</span>
+                        </div>
+                        <h3>SMS Blast</h3>
+                        <p>Text booking link</p>
+                    </a>
+                    <a href="pages/reminders.html" class="portal-card" id="homeCardReminders" data-home-card="alert">
+                        <div class="row">
+                            <div class="icon"><i class="fas fa-bell"></i></div>
+                            <span class="badge lock"><i class="fas fa-lock"></i> Alert</span>
+                        </div>
+                        <h3>Reminders</h3>
+                        <p>One-tap texts</p>
+                    </a>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-head">
+                    <h2>Management</h2>
+                    <span>Manager &amp; Admin</span>
+                </div>
+                <div class="portal-grid two">
+                    <a href="pages/manager.html" class="portal-card">
+                        <div class="row">
+                            <div class="icon"><i class="fas fa-user-tie"></i></div>
+                            <span class="badge lock"><i class="fas fa-lock"></i> Manager</span>
+                        </div>
+                        <h3>Manager</h3>
+                        <p>Operations, reports, inventory, approvals.</p>
+                    </a>
+                    <a href="pages/admin.html" class="portal-card">
+                        <div class="row">
+                            <div class="icon"><i class="fas fa-shield-alt"></i></div>
+                            <span class="badge lock"><i class="fas fa-lock"></i> Admin</span>
+                        </div>
+                        <h3>Admin</h3>
+                        <p>Staff, security, payroll, and backups.</p>
+                    </a>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-head">
+                    <h2>Help</h2>
+                    <span>Start &amp; use</span>
+                </div>
+                <div class="portal-grid two">
+                    <a href="pages/guide.html" class="portal-card">
+                        <div class="row">
+                            <div class="icon"><i class="fas fa-book-open"></i></div>
+                            <span class="badge">Guide</span>
+                        </div>
+                        <h3>How To Start &amp; Use</h3>
+                        <p>Open the salon, daily desk flow, booking, sync, and fixes for this computer.</p>
+                    </a>
+                    <a href="AI-SALON-PRO-GUIDE.html" class="portal-card">
+                        <div class="row">
+                            <div class="icon"><i class="fas fa-file-alt"></i></div>
+                            <span class="badge">File</span>
+                        </div>
+                        <h3>Guide Shortcut</h3>
+                        <p>Same guide via the folder shortcut file (opens the in-app page).</p>
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <div class="phone-setup" id="phoneSetup">
+            <div>
+                <h3><i class="fas fa-mobile-alt"></i> Phone Setup</h3>
+                <div class="ps-steps">
+                    Keep the salon server running (START-SALON) · Staff scan Staff Members · Clients scan Book Now
+                </div>
+                <div class="ps-url" id="psUrl"><i class="fas fa-spinner fa-spin"></i> Finding your phone links…</div>
+            </div>
+            <div class="ps-qrs">
+                <div class="ps-qrbox">
+                    <div class="ps-qr" id="psQrStaff">QR</div>
+                    <span><i class="fas fa-lock"></i> Staff</span>
+                </div>
+                <div class="ps-qrbox">
+                    <div class="ps-qr" id="psQrBook">QR</div>
+                    <span><i class="fas fa-calendar-check"></i> Book</span>
+                </div>
+            </div>
+        </div>
+
+        <footer class="home-footer">
+            <div>
+                <i class="fas fa-circle" style="color:#22c55e;font-size:0.5rem;"></i>
+                Status: <span class="status">Live Sync</span> · AI Salon Pro · Urban Nail Bar · v3.0
+            </div>
+            <div id="sessionInfo"></div>
+        </footer>
+    </div>
+
+    <script src="shared/legacy-compat.js?v=20260801sierra1"></script>
+    <script src="shared/data-manager.js?v=20260815menu3"></script>
+<script src="shared/live-sync.js?v=20260815perf1"></script>
+    <script src="shared/utils.js?v=20260815menu3"></script>
+    <script src="shared/auth.js?v=20260801sierra1"></script>
+    <script src="shared/site-content.js?v=20260815menu3"></script>
+    <script src="shared/vendor/qrcode/qrcode.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof DataManager !== 'undefined') DataManager.init();
+            applyHomeBranding();
+            renderSessionInfo();
+            applyHomeRoleCards();
+            initPhoneSetup();
+            window.addEventListener('storage', function (e) {
+                if (e.key === (window.SALON_SESSION_KEY || 'aiSalonPro_v3_session')) {
+                    renderSessionInfo();
+                    applyHomeRoleCards();
+                }
+                if (e.key === 'unb_site_content_v2_sync') applyHomeBranding();
+            });
+            if (window.SiteContent && SiteContent.addListener) {
+                SiteContent.addListener(function () { applyHomeBranding(); });
+            }
+        });
+
+        function applyHomeBranding() {
+            var c = (window.SiteContent && SiteContent.get && SiteContent.get()) || {};
+            var settings = (window.DataManager && DataManager.settings) || {};
+            var salon = settings.salonName || c.salonName || 'Urban Nail Bar';
+            var systemEl = document.getElementById('homeSystemTitle');
+            var salonEl = document.getElementById('homeSalonName');
+            var clientsEl = document.getElementById('homeClientsLabel');
+            var staffEl = document.getElementById('homeStaffLabel');
+            if (systemEl) systemEl.textContent = 'AI Salon Pro · Salon & Spa AI Software';
+            if (salonEl) salonEl.textContent = salon;
+            var leadEl = document.getElementById('homeTaglineLead');
+            if (leadEl) leadEl.textContent = '';
+            if (clientsEl) clientsEl.textContent = c.homeClientsLabel || 'For Clients';
+            if (staffEl) staffEl.textContent = c.homeStaffLabel || 'Staff & Alert';
+            document.title = salon + ' — AI Salon Pro';
+        }
+
+        function renderSessionInfo() {
+            var el = document.getElementById('sessionInfo');
+            if (!el || typeof SalonAuth === 'undefined') return;
+            var user = SalonAuth.current();
+            if (user) {
+                el.innerHTML = 'Staff: <strong style="color:#e5e7eb;">' + user.name + '</strong> (' + user.role + ')'
+                    + ' · <a href="#" onclick="SalonAuth.logout(); renderSessionInfo(); applyHomeRoleCards(); return false;">Log out</a>';
+            } else {
+                el.innerHTML = 'Staff locked · PIN required';
+            }
+        }
+
+        /**
+         * Role-aware home tiles:
+         * - Manager / Admin / Receptionist → full Scheduler + Alert tools
+         * - Technician-only → My Schedule (not multi-staff Scheduler); Alert tiles stay
+         *   visible but still PIN-gated on those pages
+         * - Logged out → show Scheduler (desk unlock) + Staff Members; hide My Schedule duplicate
+         */
+        function applyHomeRoleCards() {
+            var sched = document.getElementById('homeCardScheduler');
+            var mine = document.getElementById('homeCardMySchedule');
+            var staff = document.getElementById('homeCardStaff');
+            if (!sched || !mine) return;
+
+            var techOnly = typeof SalonAuth !== 'undefined' && SalonAuth.isTechnicianOnly && SalonAuth.isTechnicianOnly();
+            var canSched = typeof SalonAuth !== 'undefined' && SalonAuth.canAccessScheduler && SalonAuth.canAccessScheduler();
+
+            if (techOnly) {
+                sched.style.display = 'none';
+                mine.style.display = '';
+                if (staff) staff.style.display = 'none'; // My Schedule is their calendar entry
+            } else if (canSched) {
+                sched.style.display = '';
+                mine.style.display = 'none';
+                if (staff) staff.style.display = '';
+            } else {
+                // Not logged in: show Scheduler (manager/admin/reception unlock) + Staff portal
+                sched.style.display = '';
+                mine.style.display = 'none';
+                if (staff) staff.style.display = '';
+            }
+        }
+
+        function initPhoneSetup() {
+            var urlEl = document.getElementById('psUrl');
+            var qrStaff = document.getElementById('psQrStaff');
+            var qrBook = document.getElementById('psQrBook');
+            var qrSize = window.matchMedia('(max-height: 780px)').matches — 100 : 116;
+            fetch('http://localhost:3001/api/lan-info', { cache: 'no-store' })
+                .then(function (res) {
+                    if (!res.ok) throw new Error('server unreachable');
+                    return res.json();
+                })
+                .then(function (info) {
+                    var ip = (info.ips && info.ips[0]) || null;
+                    if (!ip) throw new Error('no LAN address');
+                    var staffBase = 'http://' + ip + ':' + info.port;
+                    var bookBase = 'http://' + ip + ':' + (info.publicPort || 3002);
+                    var urlStaff = staffBase + '/pages/staff.html#myschedule';
+                    var urlBook = bookBase + '/';
+                    urlEl.innerHTML = '<span class="lbl">Staff</span> <a href="' + urlStaff + '" target="_blank" rel="noopener">' + urlStaff + '</a><br>'
+                        + '<span class="lbl">Clients</span> <a href="' + urlBook + '" target="_blank" rel="noopener">' + urlBook + '</a>';
+                    if (typeof QRCode !== 'undefined') {
+                        qrStaff.innerHTML = '';
+                        new QRCode(qrStaff, { text: urlStaff, width: qrSize, height: qrSize, colorDark: '#000000', colorLight: '#ffffff' });
+                        qrBook.innerHTML = '';
+                        new QRCode(qrBook, { text: urlBook, width: qrSize, height: qrSize, colorDark: '#000000', colorLight: '#ffffff' });
+                    } else {
+                        qrStaff.textContent = 'Link';
+                        qrBook.textContent = 'Link';
+                    }
+                })
+                .catch(function () {
+                    urlEl.innerHTML = '<span class="warn"><i class="fas fa-exclamation-triangle"></i> Start the salon (START-SALON) and reload.</span>';
+                    qrStaff.textContent = 'Off';
+                    qrBook.textContent = 'Off';
+                });
+        }
+    </script>
+</body>
+</html>

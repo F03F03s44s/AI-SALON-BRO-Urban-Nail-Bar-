@@ -1,0 +1,33 @@
+# Secrets & runtime
+server/.env
+server/dnsexit.env
+server/caddy.exe
+server/caddy
+server/cloudflared.exe
+server/cloudflared
+server/config.yml
+server/.auth-secret
+assets/*API*
+assets/*api*
+assets/*key*
+assets/*KEY*
+server/server.log
+server/node_modules/
+node_modules/
+
+# Live data (sync via server, not git)
+server/data-store.json
+server/data-store.json.bak
+server/snapshot-*.json
+
+# Backups & temp scripts
+*backup*
+*.bak
+fix_*.py
+check_js.py
+find_all.py
+insert_pills.py
+
+# OS
+.DS_Store
+Thumbs.db

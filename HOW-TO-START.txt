@@ -9,7 +9,7 @@ Windows 11:
 macOS High Sierra / Big Sur:
   Double-click START-SALON.command  (in this root folder)
   OR open the matching package and double-click its START-SALON.command:
-    Urban Nail Bar (macOS High Sierra)
+    Urban Nail Bar (macOS High Sierra)   ← primary (edit here)
     Urban Nail Bar (macOS Big Sur)
 
 If macOS blocks: right-click → Open → Open
@@ -19,9 +19,12 @@ WHAT ONE-CLICK DOES
 -------------------
 1) Backup shared data → _shared-salon-data/backups/
 2) Sync appointments + clients to ALL 3 OS packages
-3) Mirror pages/UI/server code (newest file wins) so calendars match
+3) Mirror UI FROM High Sierra → Big Sur + Windows 11
 4) Start the salon server (ports 3001 + 3002)
 5) Open the staff home page
+
+Windows 11 is sync-only (do not edit that folder).
+Edit the salon on macOS High Sierra; Big Sur + Windows stay matched.
 
 Keep the Salon Server window open while you work.
 

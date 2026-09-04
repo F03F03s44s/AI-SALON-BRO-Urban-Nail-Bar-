@@ -1,0 +1,15 @@
+{
+  "name": "AI Salon Pro",
+  "install": "cd \"Urban Nail Bar (macOS High Sierra)/server\" && npm install --omit=dev --omit=optional --no-fund --no-audit",
+  "terminals": [
+    {
+      "name": "Salon server",
+      "command": "export SALON_PRO_ROOT=\"$(pwd)\" && export SALON_DATA_FILE=\"$SALON_PRO_ROOT/_shared-salon-data/data-store.json\" && cd \"Urban Nail Bar (macOS High Sierra)/server\" && node salon-server.js",
+      "description": "Keeps the staff app on port 3001 and public booking on port 3002. Leave this running so Cursor can forward the ports."
+    }
+  ],
+  "ports": [
+    { "name": "Staff / Scheduler", "port": 3001 },
+    { "name": "Online Booking", "port": 3002 }
+  ]
+}

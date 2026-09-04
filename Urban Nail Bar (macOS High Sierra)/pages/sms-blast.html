@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Blast — Urban Nail Bar</title>
+    <link rel="stylesheet" href="../shared/styles.css?v=20260815brand3">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>document.documentElement.classList.add('salon-auth-locked');</script>
+    <style>html.salon-auth-locked body{visibility:hidden!important;}</style>
+    <style>
+        .sms-wrap { max-width: 980px; margin: 0 auto; padding: 16px 14px 80px; }
+        .sms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        @media (max-width: 860px) { .sms-grid { grid-template-columns: 1fr; } }
+        .sms-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 16px; }
+        .sms-card h2 { color: var(--primary); font-size: 0.95rem; margin-bottom: 10px; }
+        .sms-toolbar { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+        .sms-toolbar .btn-sm { font-size: 0.72rem; }
+        .client-list { max-height: 420px; overflow-y: auto; }
+        .client-row { display: flex; align-items: center; gap: 10px; padding: 8px 6px; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; }
+        .client-row:last-child { border-bottom: none; }
+        .client-row .nm { flex: 1; color: var(--text-primary); font-weight: 600; }
+        .client-row .ph { color: var(--text-muted); font-size: 0.75rem; }
+        .client-row.sent { opacity: 0.45; }
+        .client-row.sent .nm::after { content: ' ✓ sent'; color: #22c55e; font-size: 0.7rem; }
+        .blast-list { max-height: 420px; overflow-y: auto; }
+        .blast-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border-color); }
+        .blast-row:last-child { border-bottom: none; }
+        .blast-row .who { flex: 1; min-width: 0; }
+        .blast-row .who .nm { color: var(--text-primary); font-weight: 700; font-size: 0.85rem; }
+        .blast-row .who .ph { color: var(--text-muted); font-size: 0.72rem; }
+        .send-btn { background: linear-gradient(135deg,#fbbf24,#f59e0b); color: #000; border: none; border-radius: 8px; padding: 8px 14px; font-weight: 800; font-size: 0.75rem; cursor: pointer; text-decoration: none; white-space: nowrap; }
+        .copy-btn { background: var(--bg-input); color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 10px; font-size: 0.72rem; cursor: pointer; }
+        .copy-btn:hover { color: var(--primary); border-color: var(--primary); }
+        .hint { color: var(--text-muted); font-size: 0.72rem; line-height: 1.5; margin-top: 10px; }
+        .count-pill { background: rgba(251,191,36,0.12); color: var(--primary); border-radius: 20px; padding: 2px 10px; font-size: 0.72rem; font-weight: 800; }
+    </style>
+</head>
+<body>
+    <div class="sms-wrap">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+            <div>
+                <h1 style="color:var(--text-primary); font-size:1.3rem; margin:0;"><i class="fas fa-comment-sms" style="color:var(--primary);"></i> SMS Blast</h1>
+                <div style="color:var(--text-secondary); font-size:0.78rem;">Text your clients the online booking link — one tap per person.</div>
+            </div>
+            <a href="../index.html" class="btn btn-secondary btn-sm" data-app-nav="home" title="App directory"><i class="fas fa-th-large"></i> DIRECTORY</a>
+        </div>
+
+        <div class="sms-card" style="margin-bottom:16px;">
+            <h2><i class="fas fa-pen"></i> Message</h2>
+            <div class="form-group">
+                <label class="form-label">Booking link</label>
+                <input type="text" class="form-input" id="smsLink" placeholder="https://your-booking-link…">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Text message <span id="smsLen" style="color:var(--text-muted); font-weight:400;"></span></label>
+                <textarea class="form-textarea" id="smsBody" rows="4">Hi! Great news from Urban Nail Bar 💅 You can now book your appointments online — takes under a minute: {link} Save it to your home screen for next time! See you soon ✨</textarea>
+            </div>
+            <div class="hint"><i class="fas fa-info-circle"></i> <b>{link}</b> is replaced with the booking link above. Tapping <b>Send</b> opens your phone's Messages app with the text pre-filled — you just hit send. On iPhone and Android.</div>
+        </div>
+
+        <div class="sms-grid">
+            <div class="sms-card">
+                <h2><i class="fas fa-users"></i> 1 · Pick clients <span class="count-pill" id="selCount">0</span></h2>
+                <div class="sms-toolbar">
+                    <input type="text" class="form-input" id="clientSearch" placeholder="Search name or phone…" style="flex:1;" oninput="renderClients()">
+                    <button class="btn btn-secondary btn-sm" onclick="selectAll(true)">All</button>
+                    <button class="btn btn-secondary btn-sm" onclick="selectAll(false)">None</button>
+                </div>
+                <div class="client-list" id="clientList"></div>
+                <div class="form-group" style="margin-top:10px;">
+                    <label class="form-label">Extra numbers (one per line, e.g. 480-555-1234)</label>
+                    <textarea class="form-textarea" id="extraNumbers" rows="2" placeholder=""></textarea>
+                </div>
+                <button class="btn btn-primary" style="width:100%;" onclick="buildBlast()"><i class="fas fa-arrow-right"></i> Build send list</button>
+            </div>
+
+            <div class="sms-card">
+                <h2><i class="fas fa-paper-plane"></i> 2 · Send <span class="count-pill" id="blastCount">0</span></h2>
+                <div class="sms-toolbar">
+                    <button class="btn btn-secondary btn-sm" onclick="copyMessage()"><i class="fas fa-copy"></i> Copy message</button>
+                    <button class="btn btn-secondary btn-sm" onclick="copyAllLinks()"><i class="fas fa-link"></i> Copy all numbers</button>
+                </div>
+                <div class="blast-list" id="blastList"><div class="hint">Build your send list on the left — your personalized send buttons appear here.</div></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../shared/data-manager.js?v=20260815menu3"></script>
+<script src="../shared/live-sync.js?v=20260815perf1"></script>
+    <script src="../shared/utils.js?v=20260815menu3"></script>
+    <script src="../shared/auth.js?v=20260731rbac"></script>
+    <script>
+    // Staff-only: front desk, manager, or admin (client phone numbers are private).
+    SalonAuth.guardPage(['admin', 'manager', 'receptionist'], { pageName: 'SMS Blast', onUnlock: initSms });
+
+    let smsClients = [];
+    const sentMark = new Set(JSON.parse(localStorage.getItem('smsBlastSent') || '[]'));
+
+    async function initSms() {
+        // Clients from the shared dataset
+        smsClients = (DataManager.getClients() || [])
+            .filter(c => c.phone)
+            .map(c => ({ id: c.id, name: ((c.firstName || '') + ' ' + (c.lastName || '')).trim() || 'Client', phone: c.phone }))
+            .sort((a, b) => a.name.localeCompare(b.name));
+        renderClients();
+
+        // Booking link: permanent link file first, then LAN info, else blank
+        try {
+            const t = await (await fetch('/print/public-url.txt', { cache: 'no-store' })).text();
+            if (t && t.trim().startsWith('http')) document.getElementById('smsLink').value = t.trim();
+        } catch (e) {}
+        if (!document.getElementById('smsLink').value) {
+            try {
+                const info = await (await fetch('/api/lan-info', { cache: 'no-store' })).json();
+                if (info.ips && info.ips[0]) document.getElementById('smsLink').value = 'http://' + info.ips[0] + ':' + (info.publicPort || 3002) + '/';
+            } catch (e) {}
+        }
+        document.getElementById('smsBody').addEventListener('input', updateLen);
+        updateLen();
+    }
+
+    function updateLen() {
+        const n = document.getElementById('smsBody').value.length;
+        document.getElementById('smsLen').textContent = ' · ' + n + ' chars';
+    }
+
+    function renderClients() {
+        const q = (document.getElementById('clientSearch').value || '').toLowerCase();
+        const list = smsClients.filter(c => !q || c.name.toLowerCase().includes(q) || c.phone.includes(q));
+        document.getElementById('clientList').innerHTML = list.length ? list.map(c => `
+            <label class="client-row ${sentMark.has(c.phone) ? 'sent' : ''}">
+                <input type="checkbox" class="sms-check" data-phone="${c.phone}" data-name="${c.name.replace(/"/g, '&quot;')}" onchange="updateSelCount()">
+                <span class="nm">${c.name}</span>
+                <span class="ph">${Utils.formatPhone(c.phone)}</span>
+            </label>
+        `).join('') : '<div class="hint">No clients with phone numbers yet.</div>';
+        updateSelCount();
+    }
+
+    function selectAll(on) {
+        document.querySelectorAll('.sms-check').forEach(cb => cb.checked = on);
+        updateSelCount();
+    }
+
+    function updateSelCount() {
+        document.getElementById('selCount').textContent = document.querySelectorAll('.sms-check:checked').length;
+    }
+
+    function currentMessage() {
+        const link = document.getElementById('smsLink').value.trim() || '(add your booking link above)';
+        return document.getElementById('smsBody').value.split('{link}').join(link);
+    }
+
+    function buildBlast() {
+        const targets = new Map();
+        document.querySelectorAll('.sms-check:checked').forEach(cb => {
+            if (!sentMark.has(cb.dataset.phone)) targets.set(cb.dataset.phone, cb.dataset.name);
+        });
+        (document.getElementById('extraNumbers').value || '').split('\n')
+            .map(s => s.trim()).filter(Boolean)
+            .forEach(ph => { if (!sentMark.has(ph)) targets.set(ph, targets.get(ph) || 'there'); });
+
+        document.getElementById('blastCount').textContent = targets.size;
+        const msg = currentMessage();
+        const list = document.getElementById('blastList');
+        if (!targets.size) {
+            list.innerHTML = '<div class="hint">Nothing to send — pick clients or add numbers (already-sent numbers are skipped).</div>';
+            return;
+        }
+        list.innerHTML = [...targets.entries()].map(([phone, name]) => `
+            <div class="blast-row">
+                <div class="who"><div class="nm">${name}</div><div class="ph">${Utils.formatPhone(phone)}</div></div>
+                <button class="copy-btn" onclick="copyText('${phone}', this)" title="Copy number"><i class="fas fa-copy"></i></button>
+                <a class="send-btn" href="sms:${phone.replace(/[^\d+]/g, '')}?body=${encodeURIComponent('Hi ' + name.split(' ')[0] + '! ' + msg)}" onclick="markSent('${phone}', this)"><i class="fas fa-paper-plane"></i> Send</a>
+            </div>
+        `).join('');
+        UI.toast(targets.size + ' send buttons ready — tap Send on each (opens Messages)', 'success');
+    }
+
+    function markSent(phone, el) {
+        sentMark.add(phone);
+        localStorage.setItem('smsBlastSent', JSON.stringify([...sentMark]));
+        el.style.opacity = '0.4';
+        el.textContent = '✓ opened';
+    }
+
+    function copyText(text, btn) {
+        navigator.clipboard.writeText(text).then(() => {
+            const old = btn.innerHTML; btn.innerHTML = '✓';
+            setTimeout(() => btn.innerHTML = old, 900);
+        });
+    }
+
+    function copyMessage() {
+        navigator.clipboard.writeText(currentMessage()).then(() => UI.toast('Message copied', 'success'));
+    }
+
+    function copyAllLinks() {
+        const nums = [...document.querySelectorAll('.blast-row .ph')].map(e => e.textContent).join('\n');
+        if (!nums) { UI.toast('Build the send list first', 'error'); return; }
+        navigator.clipboard.writeText(nums).then(() => UI.toast('Numbers copied', 'success'));
+    }
+
+    function resetSentMarks() {
+        sentMark.clear();
+        localStorage.removeItem('smsBlastSent');
+        renderClients();
+        UI.toast('Sent marks cleared', 'info');
+    }
+    </script>
+</body>
+</html>

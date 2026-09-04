@@ -1,0 +1,31 @@
+# Secrets & runtime
+**/.env
+**/dnsexit.env
+**/caddy.exe
+**/caddy
+**/cloudflared.exe
+**/cloudflared
+**/config.yml
+**/.auth-secret
+**/server.log
+**/salon-server.log
+**/salon-server.pid
+**/node_modules/
+
+# Live client data (never commit)
+_shared-salon-data/data-store.json
+_shared-salon-data/data-store.json.bak
+_shared-salon-data/backups/
+**/server/data-store.json
+**/server/data-store.json.bak
+**/snapshot-*.json
+
+# OS package mirrors (High Sierra is the source of truth)
+Urban Nail Bar (Windows 11)/
+Urban Nail Bar (macOS Big Sur)/
+Urban Nail Bar (macOS Sierra)/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.bak

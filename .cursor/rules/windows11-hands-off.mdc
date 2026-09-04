@@ -1,0 +1,13 @@
+---
+description: Windows 11 package is done — sync-only; work on macOS High Sierra
+alwaysApply: true
+---
+
+# Windows 11 hands-off
+
+- Do not edit, create, or delete files inside `Urban Nail Bar (Windows 11)/`.
+- Windows 11 must only stay synced from macOS High Sierra.
+- Active development package: `Urban Nail Bar (macOS High Sierra)`.
+- UI/code mirror: High Sierra → Big Sur + Windows 11 (never Windows → Mac).
+- Shared data hub may still sync appointments/clients to all three.
+- If Windows needs a change: edit High Sierra, then run `_sync/MIRROR-ALL-THREE.js`.

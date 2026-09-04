@@ -1,0 +1,2440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Nail Bar - Official Website</title>
+    <link rel="stylesheet" href="../shared/styles.css?v=20260815brand3">
+    <link rel="stylesheet" href="../shared/vendor/fontawesome/css/all.min.css">
+    <style>
+
+        .discount-ads {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            padding: 20px 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .discount-ad {
+            background: linear-gradient(135deg, rgba(251,191,36,0.14), rgba(251,191,36,0.05));
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 14px 12px;
+            text-align: center;
+            box-shadow: 0 0 14px rgba(251,191,36,0.18), inset 0 0 18px rgba(251,191,36,0.05);
+        }
+        .discount-ad .t { font-weight: 900; color: #ffffff !important; font-size: 0.95rem; margin-bottom: 4px; }
+        .discount-ad .d { font-size: 0.75rem; color: var(--primary) !important; font-weight: 700; }
+        .discount-ads-title {
+            text-align: center; padding: 16px 16px 0; font-weight: 900; font-size: 1.1rem;
+            color: var(--primary); letter-spacing: 1px;
+        }
+        .website-promo {
+            max-width: 720px;
+            margin: 28px auto 8px;
+            padding: 14px 20px;
+            background: linear-gradient(135deg, rgba(251,191,36,0.16), rgba(251,191,36,0.06));
+            border: none;
+            border-radius: 14px;
+            text-align: center;
+            font-weight: 800;
+            color: #ffffff !important;
+            font-size: 1.05rem;
+            box-shadow: 0 0 16px rgba(251,191,36,0.2), inset 0 0 20px rgba(251,191,36,0.06);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.85);
+            box-sizing: border-box;
+            text-shadow: none;
+        }
+        .website-promo .promo-emoji {
+            color: var(--primary) !important;
+            text-shadow: 0 0 18px rgba(251,191,36,0.45);
+        }
+        @media (max-width: 600px) {
+            .website-promo { margin: 20px 16px 8px; font-size: 0.95rem; padding: 12px 14px; }
+        }
+        /* Bold everything */
+        body, body * { font-weight: 700 !important; }
+        i.fa, i.fas, i.far, i.fab, .fa, .fas, .far, .fab { font-weight: 900 !important; }
+        a, a:hover, a:focus, a:active, a:visited {
+            text-decoration: none !important;
+        }
+        /* Readable text above gold highlights — high contrast, never blended */
+        .content-area,
+        .content-area p,
+        .content-area li,
+        .content-area span,
+        .content-area label,
+        .section-subtitle,
+        .about-body,
+        .about-story,
+        .gallery-welcome,
+        .gallery-subnote,
+        .services-intro,
+        .menu-row .m-price,
+        .menu-row .m-desc,
+        .testimonial-card .quote,
+        .testimonial-card .meta,
+        .staff-card-website h3,
+        .staff-card-website .role,
+        .staff-card-website .specialties,
+        .staff-card-website .staff-schedule,
+        .contact-cards p,
+        .contact-hours-row,
+        .contact-hours-row .day,
+        .contact-hours-row .time,
+        .policy-item summary,
+        .footer-links a,
+        .hero-jingle,
+        .website-promo,
+        .gallery-family,
+        .discount-ad .t,
+        .rating-pill {
+            color: #ffffff !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 1px rgba(0, 0, 0, 0.75);
+        }
+        .about-lead,
+        .section-title,
+        .gallery-subhead,
+        .discount-ads-title,
+        .discount-ad .d,
+        .menu-col-labels,
+        .menu-col-labels span,
+        .policy-item summary,
+        .policy-item summary .policy-title,
+        .policy-item p,
+        .testimonial-card .stars,
+        .testimonial-card .meta strong,
+        .contact-info-panel h3,
+        .contact-hours-panel h3,
+        .contact-cards h4,
+        .contact-book-cta h3,
+        .footer-copy,
+        .hero-content h1,
+        .website-promo .promo-emoji,
+        .services-categories,
+        .staff-card-website .staff-initials,
+        .staff-card-website .staff-photo span {
+            color: #fde68a !important;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 2px rgba(0, 0, 0, 0.85);
+            text-decoration: none !important;
+        }
+        .why-list li {
+            color: #ffffff !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+        }
+        /* Soften remaining gold fills so text stays brighter than highlights */
+        .gallery-item {
+            box-shadow: 0 0 10px rgba(251,191,36,0.2);
+        }
+        /* Website specific styles */
+        .website-hero {
+            background:
+                linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.78) 100%),
+                url('../assets/images/nail-hero-image.png') center/cover no-repeat,
+                linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a1a0a 100%);
+            min-height: 78vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 48px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .website-hero::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: radial-gradient(ellipse 70% 50% at 50% 20%, rgba(251, 191, 36, 0.12), transparent 60%);
+            pointer-events: none;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .hero-logo {
+            width: 160px;
+            height: 160px;
+            max-width: 160px;
+            object-fit: contain;
+            object-position: center;
+            margin: 0 auto 22px;
+            display: block;
+            padding: 6px;
+            background: #000;
+            border-radius: 18px;
+            border: 3px solid #fbbf24;
+            box-sizing: border-box;
+            filter: none;
+            box-shadow:
+                0 0 0 4px rgba(251, 191, 36, 0.28),
+                0 12px 40px rgba(0, 0, 0, 0.55);
+        }
+        .section-brand-logo {
+            width: 88px;
+            height: 88px;
+            max-width: 88px;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            margin: 0 auto 14px;
+            padding: 4px;
+            background: #000;
+            border-radius: 12px;
+            border: 2px solid #fbbf24;
+            box-sizing: border-box;
+            filter: none;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+        }
+        .hero-jingle {
+            color: #ffffff !important;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.02em;
+            margin: 0 auto 18px;
+            max-width: 640px;
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, rgba(251,191,36,0.55), rgba(251,191,36,0.28));
+            box-shadow: 0 0 36px rgba(251,191,36,0.55), inset 0 0 48px rgba(251,191,36,0.22);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.85);
+            box-sizing: border-box;
+        }
+        
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-shadow: 0 0 40px rgba(251, 191, 36, 0.3);
+        }
+        
+        .hero-content p {
+            font-size: 1.3rem;
+            color: #ffffff;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .hero-btn {
+            padding: 16px 32px;
+            border-radius: var(--radius-lg);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid var(--primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+            color: #ffffff;
+            text-decoration: none;
+        }
+        .hero-btn i {
+            color: var(--primary) !important;
+        }
+        
+        .hero-btn:hover,
+        .hero-btn-primary:hover,
+        .hero-btn-secondary:hover {
+            background: rgba(251, 191, 36, 0.4);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.55), 0 6px 20px rgba(251, 191, 36, 0.25);
+            text-decoration: none;
+            border-color: var(--primary);
+        }
+        .hero-btn:hover i,
+        .hero-btn-primary:hover i,
+        .hero-btn-secondary:hover i {
+            color: var(--primary) !important;
+        }
+        
+        .hero-btn-primary,
+        .hero-btn-secondary {
+            background: transparent;
+            color: #ffffff;
+            border: 2px solid var(--primary);
+        }
+
+        /* Header / services Book Now — gold outline, white label, gold calendar */
+        .user-menu .btn-primary,
+        #services .btn-primary {
+            background: transparent !important;
+            color: #ffffff !important;
+            border: 2px solid var(--primary) !important;
+            box-shadow: none;
+            text-decoration: none !important;
+        }
+        .user-menu .btn-primary i,
+        #services .btn-primary i {
+            color: var(--primary) !important;
+        }
+        .user-menu .btn-primary:hover,
+        #services .btn-primary:hover {
+            background: rgba(251, 191, 36, 0.4) !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.55), 0 6px 20px rgba(251, 191, 36, 0.25) !important;
+            transform: translateY(-1px);
+            text-decoration: none !important;
+            border-color: var(--primary) !important;
+        }
+        .user-menu .btn-primary:hover i,
+        #services .btn-primary:hover i {
+            color: var(--primary) !important;
+        }
+
+        /* CTA Book now — yellow border, white label, gold calendar */
+        .contact-book-cta .btn-primary {
+            background: transparent !important;
+            color: #ffffff !important;
+            border: 2px solid var(--primary) !important;
+            box-shadow: none !important;
+            text-decoration: none !important;
+        }
+        .contact-book-cta .btn-primary i {
+            color: var(--primary) !important;
+        }
+        .contact-book-cta .btn-primary #contactCtaBtnLabel {
+            background: transparent !important;
+            color: inherit !important;
+            border: none !important;
+            box-shadow: none !important;
+            text-decoration: none !important;
+        }
+        .contact-book-cta .btn-primary:hover {
+            background: rgba(251, 191, 36, 0.4) !important;
+            color: #ffffff !important;
+            border: 2px solid var(--primary) !important;
+            box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.55), 0 6px 20px rgba(251, 191, 36, 0.25) !important;
+            transform: translateY(-1px);
+            text-decoration: none !important;
+        }
+        .contact-book-cta .btn-primary:hover i {
+            color: var(--primary) !important;
+        }
+        .contact-book-cta .btn-primary:hover #contactCtaBtnLabel {
+            color: inherit !important;
+            border: none !important;
+            text-decoration: none !important;
+        }
+        
+        .section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: #ffffff;
+            font-size: 1.1rem;
+            margin-bottom: 60px;
+        }
+        
+        .services-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 760px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 8px;
+            box-sizing: border-box;
+        }
+        .services-book-wrap {
+            display: flex;
+            justify-content: center;
+            margin-top: 12px;
+        }
+        .services-book-wrap .btn-primary {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 10px !important;
+            background: linear-gradient(135deg, #ffe566, #f5c518) !important;
+            color: #111111 !important;
+            border: 2px solid #c9a227 !important;
+            font-weight: 900 !important;
+            text-shadow: none !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+        }
+        .services-book-wrap .btn-primary i,
+        .services-book-wrap .btn-primary .fa-calendar-check,
+        .services-book-wrap .btn-primary .fa-calendar-alt {
+            color: #111111 !important;
+            -webkit-text-fill-color: #111111 !important;
+            font-size: 1.05em !important;
+            filter: none !important;
+            opacity: 1 !important;
+        }
+        .menu-dropdown {
+            background: linear-gradient(180deg, rgba(255,229,102,0.08), rgba(255,255,255,0.02));
+            border: 1px solid rgba(255, 229, 102, 0.45);
+            border-radius: 12px;
+            overflow: hidden;
+            text-align: left;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+        }
+        /* Service | Duration | Price — aligned columns */
+        .menu-col-labels,
+        .menu-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 80px 88px;
+            column-gap: 10px;
+            padding: 9px 16px;
+            align-items: center;
+            min-height: 42px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .menu-col-labels {
+            padding-top: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+        }
+        .menu-col-labels,
+        .menu-col-labels span {
+            color: var(--primary) !important;
+        }
+        .menu-col-labels .c-dur,
+        .menu-row .m-dur { text-align: center; }
+        .menu-col-labels .c-price,
+        .menu-row .m-price { text-align: right; }
+        .menu-row { border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .menu-row:hover .m-name,
+        .menu-row:hover .m-dur,
+        .menu-row:hover .m-price,
+        .menu-row:hover .svc-popular {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+        }
+        .menu-row:last-child { border-bottom: none; }
+        .menu-row .m-info { min-width: 0; }
+        .s-name .svc-popular,
+        .m-name .svc-popular,
+        .svc-popular {
+            color: #ffe566 !important;
+            -webkit-text-fill-color: #ffe566 !important;
+        }
+        .s-name .svc-pipe,
+        .m-name .svc-pipe,
+        .menu-row .svc-pipe,
+        .svc-pipe {
+            color: #ffe566 !important;
+            -webkit-text-fill-color: #ffe566 !important;
+            font-weight: 900;
+        }
+        .menu-row .m-name {
+            font-weight: 700;
+            font-size: 0.84rem;
+            color: #ffffff !important;
+            line-height: 1.3;
+            overflow-wrap: break-word;
+            word-break: normal;
+        }
+        .menu-row .m-desc {
+            color: rgba(255,255,255,0.75);
+            font-size: 0.68rem;
+            margin-top: 2px;
+            line-height: 1.3;
+        }
+        .menu-row .m-dur {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            justify-self: center;
+            color: #f5f5f5 !important;
+            font-size: 0.64rem;
+            font-weight: 700;
+            white-space: nowrap;
+            padding: 3px 8px;
+            border: 1px solid rgba(255, 229, 102, 0.65);
+            border-radius: 999px;
+            line-height: 1.2;
+            box-sizing: border-box;
+            min-width: 58px;
+        }
+        .menu-row .m-price {
+            color: #ffe566 !important;
+            font-weight: 800;
+            font-size: 0.86rem;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+            justify-self: end;
+            text-align: right;
+        }
+        .menu-addons-label {
+            padding: 6px 16px 2px;
+            font-size: 0.65rem; font-weight: 800; letter-spacing: 0.6px;
+            text-transform: uppercase; color: #ffffff; text-align: center;
+        }
+        .sch-qb-family-label,
+        .qb-family-label,
+        .menu-family-label {
+            padding: 10px 16px 4px;
+            font-size: 0.68rem;
+            font-weight: 900;
+            letter-spacing: 0.55px;
+            text-transform: uppercase;
+            color: #ffe566;
+            border-top: 1px solid rgba(255, 229, 102, 0.2);
+            margin-top: 4px;
+            background: linear-gradient(90deg, rgba(255, 229, 102, 0.1), transparent 70%);
+        }
+        .sch-qb-family-label:first-child,
+        .qb-family-label:first-child,
+        .menu-family-label:first-child {
+            border-top: none;
+            margin-top: 0;
+            background: none;
+        }
+        .menu-addons-toggle {
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            width: 100%; padding: 7px 12px; min-height: 36px;
+            border: none; border-top: 1px solid rgba(255,255,255,0.05);
+            background: transparent; color: #ffffff;
+            font: inherit; font-size: 0.72rem; font-weight: 700; cursor: pointer;
+        }
+        .menu-addons-toggle:hover { color: #ffffff; }
+        .menu-addons-toggle i { font-size: 0.65rem; color: var(--primary) !important; }
+        .menu-row.addon .m-name { font-weight: 600; font-size: 0.85rem; color: #ffffff !important; }
+        .menu-dropdown-toggle {
+            width: 100%;
+            padding: 10px 16px;
+            background: linear-gradient(90deg, rgba(251,191,36,0.12), transparent);
+            border: none;
+            border-bottom: 1px solid transparent;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            color: inherit;
+            font: inherit;
+            text-align: left;
+        }
+        .menu-dropdown.open .menu-dropdown-toggle { border-bottom-color: var(--border-color); }
+        .menu-dropdown-toggle h3 {
+            margin: 0;
+            color: #ffffff;
+            font-size: 1.05rem;
+            font-weight: 800;
+        }
+        .menu-dropdown-toggle .count {
+            color: #ffffff;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+        .menu-dropdown-toggle .chevron {
+            width: 28px; height: 28px; border-radius: 50%;
+            border: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary); font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+        .menu-dropdown-toggle .chevron i {
+            color: var(--primary) !important;
+        }
+        .menu-dropdown.open .menu-dropdown-toggle .chevron {
+            transform: rotate(180deg);
+            background: rgba(251,191,36,0.15);
+        }
+        .menu-dropdown-panel { display: none; }
+        .menu-dropdown.open .menu-dropdown-panel { display: block; }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+        .gallery-subhead {
+            text-align: center;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 36px 0 6px;
+            letter-spacing: 0.3px;
+        }
+        .gallery-subhead:first-of-type { margin-top: 0; }
+        #services .gallery-grid { margin-bottom: 40px; }
+        .gallery-subnote {
+            text-align: center;
+            color: #ffffff;
+            font-size: 0.88rem;
+            margin: 0 0 18px;
+        }
+        .gallery-welcome {
+            text-align: center;
+            color: #ffffff;
+            font-size: 1rem;
+            line-height: 1.65;
+            max-width: 760px;
+            margin: 0 auto 22px;
+            text-transform: none;
+        }
+        .gallery-family {
+            text-align: center;
+            color: #ffffff !important;
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            margin: -6px auto 14px;
+            text-transform: uppercase;
+            max-width: 640px;
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, rgba(251,191,36,0.55), rgba(251,191,36,0.28));
+            box-shadow: 0 0 36px rgba(251,191,36,0.55), inset 0 0 48px rgba(251,191,36,0.22);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+            box-sizing: border-box;
+        }
+        /* Square tiles without aspect-ratio (Safari < 15 / Big Sur & Sierra) */
+        .gallery-item {
+            position: relative;
+            display: block;
+            width: 100%;
+            height: 0;
+            padding: 0 0 100%;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 2px solid var(--primary);
+            background: #111;
+            cursor: pointer;
+            margin: 0;
+            box-shadow: 0 0 18px rgba(251,191,36,0.28);
+        }
+        .gallery-item img {
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.35s ease;
+        }
+        .gallery-item:hover img { transform: scale(1.06); }
+        @media (max-width: 900px) {
+            .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 520px) {
+            .gallery-grid { grid-template-columns: 1fr; }
+            .website-hero { min-height: 56vh; padding: 36px 16px; }
+            .hero-logo { width: 120px; height: 120px; max-width: 120px; padding: 5px; }
+            .hero-content h1 { font-size: 2rem; }
+            .hero-buttons { display: flex; flex-direction: column; align-items: stretch; }
+            .hero-btn { width: 100%; justify-content: center; }
+            .menu-col-labels,
+            .menu-row {
+                grid-template-columns: minmax(0, 1fr) 64px 70px;
+                column-gap: 6px;
+                padding: 8px 10px;
+            }
+            .menu-row .m-name { font-size: 0.78rem; }
+            .menu-row .m-price { font-size: 0.78rem; }
+            .services-grid { padding: 0 4px; }
+        }
+        
+        .service-card-website {
+            background: linear-gradient(135deg, rgba(251,191,36,0.14), rgba(251,191,36,0.05));
+            border: 2px solid var(--primary);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 0 14px rgba(251,191,36,0.18), inset 0 0 18px rgba(251,191,36,0.05);
+        }
+        
+        .service-card-website:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-glow);
+        }
+        
+        .service-card-website .icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+        
+        .service-card-website h3 {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .service-card-website p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+        
+        .service-card-website .price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        
+        .staff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+        
+        .staff-card-website {
+            background: linear-gradient(135deg, rgba(251,191,36,0.14), rgba(251,191,36,0.05));
+            border: 2px solid var(--primary);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 0 14px rgba(251,191,36,0.18), inset 0 0 18px rgba(251,191,36,0.05);
+        }
+        
+        .staff-card-website:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .staff-card-website .staff-photo {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+        .staff-card-website .staff-photo span,
+        .staff-card-website .staff-initials {
+            color: var(--primary) !important;
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            text-decoration: none !important;
+        }
+        
+        .staff-card-website .staff-info {
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .staff-card-website h3 {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .staff-card-website .role {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        
+        .staff-card-website .specialties {
+            color: #ffffff;
+            font-size: 0.8rem;
+            line-height: 1.35;
+            min-height: 2.2em;
+        }
+        .staff-card-website .staff-schedule {
+            margin-top: 14px;
+            text-align: left;
+            font-size: 0.78rem;
+            line-height: 1.45;
+            color: #ffffff;
+            border-top: 1px solid var(--border-color);
+            padding-top: 12px;
+        }
+        .staff-card-website .staff-schedule .sched-label {
+            color: var(--primary);
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 4px;
+        }
+        .staff-card-website .staff-schedule .sched-off {
+            margin-top: 8px;
+            color: rgba(255,255,255,0.85);
+        }
+        .staff-card-website .btn-secondary {
+            background: transparent !important;
+            color: #ffffff !important;
+            border: 2px solid var(--primary) !important;
+            text-decoration: none !important;
+        }
+        .staff-card-website .btn-secondary:hover {
+            background: rgba(251, 191, 36, 0.4) !important;
+            color: #ffffff !important;
+            text-decoration: none !important;
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.55), 0 6px 20px rgba(251, 191, 36, 0.25) !important;
+        }
+        
+        /* AI Voice Assistant Widget */
+        .ai-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+        
+        .ai-widget-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #000;
+            border: 2px solid #fbbf24;
+            color: #fbbf24;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 12px rgba(251, 191, 36, 0.25);
+            transition: all 0.3s;
+            animation: aiPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes aiPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 12px rgba(251, 191, 36, 0.25); }
+            50% { transform: scale(1.05); box-shadow: 0 6px 28px rgba(0, 0, 0, 0.55), 0 0 18px rgba(251, 191, 36, 0.45); }
+        }
+        
+        .ai-widget-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .ai-widget-btn.listening {
+            animation: aiListen 1s ease-in-out infinite;
+            background: #000;
+            border-color: #fbbf24;
+            color: #fbbf24;
+        }
+        
+        @keyframes aiListen {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+        
+        .ai-chat-panel {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 380px;
+            max-height: 500px;
+            background: var(--bg-card);
+            border: 2px solid var(--primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1001;
+        }
+        
+        .ai-chat-panel.active {
+            display: flex;
+        }
+        
+        .ai-chat-header {
+            background: var(--gradient-primary);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .ai-chat-header h3 {
+            color: #000;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ai-chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 300px;
+            max-height: 400px;
+        }
+        
+        .ai-message {
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            max-width: 85%;
+            word-wrap: break-word;
+        }
+        
+        .ai-message.user {
+            background: var(--gradient-primary);
+            color: #000;
+            align-self: flex-end;
+            font-weight: 600;
+        }
+        
+        .ai-message.bot {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            align-self: flex-start;
+            border: 1px solid var(--border-color);
+        }
+        
+        .ai-message.loading {
+            background: var(--bg-hover);
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        .ai-chat-input-area {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 8px;
+            background: var(--bg-hover);
+        }
+        
+        .ai-chat-input {
+            flex: 1;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+        }
+        
+        .ai-chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .ai-chat-send {
+            background: var(--gradient-primary);
+            border: none;
+            color: #000;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        
+        .ai-voice-btn {
+            background: var(--bg-hover);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        
+        .ai-voice-btn:hover {
+            background: var(--primary);
+            color: #000;
+        }
+        
+        .ai-voice-btn.listening {
+            background: var(--danger);
+            border-color: var(--danger);
+            color: #fff;
+            animation: aiPulse 1s infinite;
+        }
+        
+        .contact-form {
+            max-width: 600px;
+            margin: 40px auto 0;
+            padding: 24px 22px;
+            border: 2px solid var(--primary);
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, rgba(251,191,36,0.14), rgba(251,191,36,0.05));
+            box-shadow: 0 0 14px rgba(251,191,36,0.18), inset 0 0 18px rgba(251,191,36,0.05);
+            box-sizing: border-box;
+        }
+        .contact-info-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 28px;
+            max-width: 920px;
+            margin: 0 auto 8px;
+        }
+        @media (max-width: 720px) {
+            .contact-info-grid { grid-template-columns: 1fr; }
+        }
+        .contact-info-panel, .contact-hours-panel {
+            background: linear-gradient(135deg, rgba(251,191,36,0.14), rgba(251,191,36,0.05));
+            border: 2px solid var(--primary);
+            border-radius: var(--radius-lg);
+            padding: 24px 22px;
+            box-shadow: 0 0 14px rgba(251,191,36,0.18), inset 0 0 18px rgba(251,191,36,0.05);
+        }
+        .contact-info-panel h3, .contact-hours-panel h3 {
+            color: var(--primary);
+            font-size: 1.15rem;
+            margin: 0 0 16px;
+            letter-spacing: 0.02em;
+        }
+        .contact-info-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .contact-info-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffffff !important;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none !important;
+            border: 1px solid var(--primary);
+            border-radius: 20px;
+            padding: 7px 14px;
+            transition: all 0.2s;
+            background: transparent;
+        }
+        .contact-info-links a i {
+            color: var(--primary) !important;
+        }
+        .contact-info-links a:hover {
+            background: rgba(251, 191, 36, 0.4);
+            color: #ffffff !important;
+            border-color: var(--primary);
+            box-shadow: 0 0 12px rgba(251, 191, 36, 0.35);
+        }
+        .contact-info-links a:hover i {
+            color: var(--primary) !important;
+        }
+        .contact-hours-list {
+            display: grid;
+            gap: 12px;
+        }
+        .contact-hours-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            border-bottom: 0;
+            padding-bottom: 0;
+            flex-wrap: wrap;
+        }
+        .contact-hours-row .day,
+        .contact-hours-row .time {
+            color: #ffffff;
+            font-weight: 700;
+            border: 1px solid var(--primary);
+            border-radius: 20px;
+            padding: 7px 14px;
+            background: transparent;
+            display: inline-block;
+        }
+        .contact-book-cta {
+            max-width: 920px;
+            margin: 36px auto 0;
+            text-align: center;
+            padding: 28px 24px;
+            border: 2px solid var(--primary);
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, rgba(251,191,36,0.14), rgba(251,191,36,0.05));
+            box-shadow: 0 0 14px rgba(251,191,36,0.18), inset 0 0 18px rgba(251,191,36,0.05);
+        }
+        .contact-book-cta h3 {
+            color: var(--primary);
+            font-size: 1.35rem;
+            margin: 0 0 10px;
+        }
+        .contact-book-cta p {
+            color: #ffffff;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0 auto 18px;
+            max-width: 640px;
+        }
+        
+        .footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: #ffffff !important;
+            text-decoration: none !important;
+            transition: color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 36px;
+            padding: 4px 8px;
+        }
+        
+        .footer-links a:visited,
+        .footer-links a:focus,
+        .footer-links a:active {
+            color: #ffffff !important;
+            text-decoration: none !important;
+        }
+        .footer-links a:hover {
+            color: var(--primary) !important;
+            text-decoration: none !important;
+        }
+        .footer-copy {
+            color: var(--primary);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        .footer-edit {
+            margin-top: 18px;
+        }
+        .footer-edit .btn,
+        .footer-edit #editWebsiteBtn {
+            font-size: 0.78rem;
+            background: transparent !important;
+            color: #ffffff !important;
+            border: 2px solid var(--primary) !important;
+            text-decoration: none !important;
+        }
+        .footer-edit .btn i,
+        .footer-edit #editWebsiteBtn i {
+            color: var(--primary) !important;
+        }
+        .footer-edit .btn:hover,
+        .footer-edit #editWebsiteBtn:hover {
+            background: rgba(251, 191, 36, 0.4) !important;
+            color: #ffffff !important;
+            text-decoration: none !important;
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.55), 0 6px 20px rgba(251, 191, 36, 0.25) !important;
+        }
+        .footer-edit .btn:hover i,
+        .footer-edit #editWebsiteBtn:hover i {
+            color: var(--primary) !important;
+        }
+
+        .about-block {
+            max-width: 820px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .about-lead {
+            color: var(--primary);
+            font-size: 1.15rem;
+            letter-spacing: 0.04em;
+            margin-bottom: 12px;
+        }
+        .about-body, .about-story {
+            color: #ffffff;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 18px;
+        }
+        .about-story {
+            margin-top: 22px;
+        }
+        .about-story .about-address-metallic,
+        .content-area .about-story .about-address-metallic,
+        .content-area span.about-address-metallic {
+            font-weight: 900 !important;
+            background: linear-gradient(
+                115deg,
+                #7a5a10 0%,
+                #c9a227 18%,
+                #ffe566 38%,
+                #fbbf24 52%,
+                #fff3a0 62%,
+                #d4a017 78%,
+                #8a6914 100%
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent !important;
+            -webkit-text-fill-color: transparent !important;
+            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 8px rgba(251, 191, 36, 0.45));
+            text-shadow: none !important;
+        }
+        .why-list {
+            list-style: none;
+            padding: 0;
+            margin: 28px auto 0;
+            max-width: 720px;
+            text-align: left;
+            display: grid;
+            gap: 12px;
+        }
+        .why-list li {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            color: #ffffff;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            padding: 12px 14px;
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(251,191,36,0.14), rgba(251,191,36,0.05));
+            box-shadow: 0 0 14px rgba(251,191,36,0.18), inset 0 0 18px rgba(251,191,36,0.05);
+        }
+        .why-list li i { color: var(--primary); margin-top: 3px; flex-shrink: 0; }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .testimonial-card {
+            background: linear-gradient(135deg, rgba(251,191,36,0.14), rgba(251,191,36,0.05));
+            border: 2px solid var(--primary);
+            border-radius: 14px;
+            padding: 20px 18px;
+            text-align: left;
+            box-shadow: 0 0 14px rgba(251,191,36,0.18), inset 0 0 18px rgba(251,191,36,0.05);
+        }
+        .testimonial-card .stars { color: var(--primary); letter-spacing: 2px; font-size: 0.85rem; margin-bottom: 8px; }
+        .testimonial-card .quote { color: var(--text-primary); font-size: 0.95rem; line-height: 1.55; margin-bottom: 14px; }
+        .testimonial-card .meta { color: var(--text-secondary); font-size: 0.78rem; }
+        .testimonial-card .meta strong { color: var(--primary); }
+        .rating-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 auto 28px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: 2px solid var(--primary);
+            color: #ffffff !important;
+            font-size: 0.9rem;
+            background: linear-gradient(135deg, rgba(251,191,36,0.14), rgba(251,191,36,0.05));
+            box-shadow: 0 0 14px rgba(251,191,36,0.18), inset 0 0 18px rgba(251,191,36,0.05);
+        }
+        .rating-pill i {
+            color: var(--primary) !important;
+        }
+        .review-platform-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: -12px auto 28px;
+            max-width: 720px;
+        }
+        .review-platform-links .contact-action-btn {
+            color: #ffffff !important;
+            border-color: var(--primary);
+        }
+        .review-platform-links .contact-action-btn i {
+            color: var(--primary) !important;
+        }
+        .review-platform-links .contact-action-btn:hover {
+            background: rgba(251, 191, 36, 0.4);
+            color: #ffffff !important;
+            box-shadow: 0 0 12px rgba(251, 191, 36, 0.35);
+        }
+        .review-platform-links .contact-action-btn:hover i {
+            color: var(--primary) !important;
+        }
+        .contact-action-btn {
+            display: inline-block;
+            margin-top: 10px;
+            color: #ffffff !important;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none !important;
+            border: 1px solid var(--primary);
+            border-radius: 20px;
+            padding: 6px 16px;
+            transition: all 0.2s;
+            background: transparent;
+            cursor: pointer;
+        }
+        .contact-action-btn i {
+            color: var(--primary) !important;
+        }
+        .contact-action-btn:hover {
+            background: rgba(251, 191, 36, 0.4);
+            color: #ffffff !important;
+            box-shadow: 0 0 12px rgba(251, 191, 36, 0.35);
+        }
+        .contact-action-btn:hover i {
+            color: var(--primary) !important;
+        }
+        .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        .contact-cards > div {
+            background: linear-gradient(135deg, rgba(251,191,36,0.14), rgba(251,191,36,0.05));
+            border: 2px solid var(--primary);
+            border-radius: var(--radius-lg);
+            padding: 22px 18px;
+            box-shadow: 0 0 14px rgba(251,191,36,0.18), inset 0 0 18px rgba(251,191,36,0.05);
+        }
+        .contact-cards h4 {
+            color: var(--primary) !important;
+        }
+        .contact-cards > div > div[style*="font-size:2rem"] i,
+        .contact-cards .fa, .contact-cards .fas {
+            color: var(--primary) !important;
+        }
+        .contact-cards p {
+            color: #ffffff !important;
+        }
+        #contactForm .form-label {
+            color: #ffffff;
+        }
+        #contactForm .form-input,
+        #contactForm .form-textarea {
+            color: #ffffff;
+        }
+        #contactForm .form-input::placeholder,
+        #contactForm .form-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.75);
+        }
+        #contactForm .btn-primary {
+            color: #ffffff !important;
+            background: transparent !important;
+            border: 2px solid var(--primary) !important;
+            text-decoration: none !important;
+        }
+        #contactForm .btn-primary i {
+            color: var(--primary) !important;
+        }
+        #contactForm .btn-primary:hover {
+            color: #ffffff !important;
+            background: rgba(251, 191, 36, 0.4) !important;
+            text-decoration: none !important;
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.55), 0 6px 20px rgba(251, 191, 36, 0.25) !important;
+        }
+        #contactForm .btn-primary:hover i {
+            color: var(--primary) !important;
+        }
+        .footer-links a[href="booking.html"] {
+            color: #ffffff !important;
+            text-decoration: none !important;
+        }
+        .footer-links a[href="booking.html"]:visited,
+        .footer-links a[href="booking.html"]:focus,
+        .footer-links a[href="booking.html"]:active {
+            color: #ffffff !important;
+            text-decoration: none !important;
+        }
+        .footer-links a[href="booking.html"]:hover {
+            color: var(--primary) !important;
+            text-decoration: none !important;
+        }
+        @media (max-width: 900px) {
+            .contact-cards { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+        }
+        @media (max-width: 520px) {
+            .contact-cards { grid-template-columns: 1fr; gap: 28px; }
+        }
+        .ai-widget-btn {
+            width: 56px !important;
+            min-width: 56px;
+            height: 56px !important;
+            min-height: 56px;
+            border-radius: 999px !important;
+            padding: 0;
+            font-size: 1.45rem !important;
+            font-weight: 700;
+            letter-spacing: 0;
+            line-height: 1;
+            text-align: center;
+            background: #000 !important;
+            border: 2px solid #fbbf24 !important;
+            color: #fbbf24 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ai-chat-header h3 { font-size: 0.85rem; letter-spacing: 0.02em; }
+        .ai-chat-input-area .unb-ai-voice-btn {
+            background: #000;
+            color: #fbbf24;
+            border-color: #fbbf24;
+        }
+
+        .policy-list { max-width: 820px; margin: 0 auto; display: grid; gap: 10px; }
+        .policy-item {
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(251,191,36,0.14), rgba(251,191,36,0.05));
+            overflow: hidden;
+            box-shadow: 0 0 14px rgba(251,191,36,0.18), inset 0 0 18px rgba(251,191,36,0.05);
+        }
+        .policy-item summary {
+            cursor: pointer;
+            list-style: none;
+            padding: 14px 18px;
+            color: #fde68a !important;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            text-decoration: none !important;
+        }
+        .policy-item summary .policy-title {
+            color: #fde68a !important;
+            text-decoration: none !important;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 2px rgba(0, 0, 0, 0.85);
+        }
+        .policy-item summary::-webkit-details-marker { display: none; }
+        .policy-item summary::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            transition: transform 0.2s;
+        }
+        .policy-item[open] summary::after { transform: rotate(180deg); }
+        .policy-item p {
+            margin: 0;
+            padding: 0 18px 16px;
+            color: #fde68a !important;
+            font-size: 0.92rem;
+            line-height: 1.65;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 2px rgba(0, 0, 0, 0.85);
+        }
+        .services-intro {
+            max-width: 760px;
+            margin: 0 auto 18px;
+            text-align: center;
+            color: #ffffff;
+            font-size: 1rem;
+            line-height: 1.65;
+        }
+        .services-categories {
+            max-width: 760px;
+            margin: 0 auto 36px;
+            text-align: center;
+            color: var(--primary);
+            font-size: 1.05rem;
+            font-weight: 800;
+            line-height: 1.55;
+            letter-spacing: 0.02em;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 2.5rem; }
+            .hero-content p { font-size: 1rem; }
+            .section { padding: 40px 20px; }
+            .section-title { font-size: 1.8rem; }
+            .ai-chat-panel { width: calc(100% - 40px); right: 20px; left: 20px; }
+            .hero-logo { width: 100px; height: 100px; max-width: 100px; padding: 4px; }
+            .app-header .salon-logo { width: 72px; height: 72px; max-width: 72px; padding: 2px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+                <div class="logo">
+            <img class="salon-logo" src="../assets/images/logo.png" alt="Urban Nail Bar"
+                 onerror="this.onerror=null;this.src='../assets/brand/logo.png'">
+            <div class="logo-text">
+                <h1 class="brand-salon-name">Urban Nail Bar</h1>
+                <span class="brand-tagline"><span class="brand-ai-line">AI INTEGRATION</span><span class="brand-powered-line">Powered By <strong class="brand-gold">AI Salon Pro</strong></span></span>
+            </div>
+        </div>
+        <nav class="nav-tabs"></nav>
+        <div class="user-menu">
+            <a href="booking.html" class="btn btn-primary">
+                <i class="fas fa-calendar-check"></i> Book Now
+            </a>
+        </div>
+    </header>
+
+    <div class="app-body" style="overflow-y:auto;">
+        <main class="content-area" style="overflow-y:auto; padding:0;">
+            <!-- Hero Section -->
+            <section class="website-hero" id="websiteHero">
+                <div class="hero-content">
+                    <p class="hero-jingle" id="heroJingle">Buff it, dip it, make it glow — mani, pedi, steal the show!</p>
+                    <img class="hero-logo" id="heroLogo" src="../assets/images/logo.png" alt="Urban Nail Bar" onerror="this.onerror=null;this.src='../assets/brand/logo.png'">
+                    <h1 id="heroSalonName">Urban Nail Bar</h1>
+                    <p id="heroSubtitle">Enjoy manicures, pedicures, nail enhancements, and custom designs in a clean, polished salon environment.</p>
+                    <div class="hero-buttons">
+                        <a href="booking.html" class="hero-btn hero-btn-primary">
+                            <i class="fas fa-calendar-check"></i> Book Appointment
+                        </a>
+                        <a href="#services" class="hero-btn hero-btn-secondary" onclick="goSiteSection(event, 'services')">
+                            <i class="fas fa-spa"></i> Our Services
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <div class="website-promo" id="sitePromoBanner"><span class="promo-emoji">✨</span> $5 OFF any Mani + Pedi Combo — Book Today! <span class="promo-emoji">✨</span></div>
+            <div class="discount-ads-title"><i class="fas fa-tags"></i> SPECIAL DISCOUNTS</div>
+            <div class="discount-ads" id="discountAdsStrip">
+                <div class="discount-ad"><div class="t">New Client</div><div class="d">10% OFF your first visit</div></div>
+                <div class="discount-ad"><div class="t">First Timer</div><div class="d">Welcome deal — 10% OFF</div></div>
+                <div class="discount-ad"><div class="t">Birthday</div><div class="d">Celebrate with 20% OFF</div></div>
+                <div class="discount-ad"><div class="t">Senior</div><div class="d">15% OFF for seniors</div></div>
+                <div class="discount-ad"><div class="t">Military</div><div class="d">25% OFF with ID</div></div>
+                <div class="discount-ad"><div class="t">Ask Us</div><div class="d">Custom discounts available</div></div>
+            </div>
+
+            <!-- About -->
+            <section class="section" id="about">
+                <h2 class="section-title">About Us</h2>
+                <p class="section-subtitle" id="aboutSubtitle">💛 What Makes Us Different 💛</p>
+                <div class="about-block">
+                    <div class="about-lead" id="aboutLead">Our Luxurious Phenomenal Treatments &amp; Premium Spectacular Offerings</div>
+                    <p class="about-body" id="aboutBody"></p>
+                    <ul class="why-list" id="whyChooseUs"></ul>
+                    <p class="about-story" id="aboutStory"></p>
+                </div>
+            </section>
+
+            <!-- Gallery / Our Salon (interior photos only) -->
+            <section class="section" id="gallery" style="background:var(--bg-hover);">
+                <h2 class="section-title" id="salonGalleryTitle">Urban Nail Bar</h2>
+                <p class="gallery-family" id="salonGalleryFamily">👨‍👩‍👧‍👦 The Urban Nail Bar Family 👨‍👩‍👧‍👦</p>
+                <p class="gallery-welcome no-caps" id="salonGalleryWelcome">Would Like To Welcome You To Our Wonderful Family Friendly Environment Salon &amp; Spa Located in Scottsdale, Arizona.</p>
+                <h3 class="gallery-subhead" id="salonGallerySubhead">Our Salon</h3>
+                <p class="gallery-subnote" id="salonGallerySubnote">A Quick Look At Our Scottsdale Salon Space!</p>
+                <div class="gallery-grid" id="salonGalleryContainer"></div>
+            </section>
+
+            <!-- Services Section — work gallery sits above the service menu -->
+            <section class="section" id="services">
+                <h3 class="gallery-subhead" id="workGalleryTitle">Our Craft &amp; Services</h3>
+                <p class="gallery-subnote" id="workGallerySubnote">Premium nail art &amp; signature finished looks by our talented team.</p>
+                <div class="gallery-grid" id="workGalleryContainer"></div>
+                <h2 class="section-title">Our Services</h2>
+                <p class="services-intro" id="servicesIntro"></p>
+                <p class="services-categories" id="servicesCategories">💅 Manicure · 🦶 Pedicure · ✨ Enhancements · 💎 Dip · 🕯️ Waxing · 👁️ Lashes &amp; more</p>
+                <div class="services-grid" id="servicesContainer"></div>
+            </section>
+
+            <!-- Testimonials -->
+            <section class="section" id="testimonials" style="background:var(--bg-hover);">
+                <h2 class="section-title">What Our Clients Say</h2>
+                <p class="section-subtitle">Real reviews from Urban Nail Bar guests</p>
+                <div style="text-align:center;">
+                    <div class="rating-pill" id="ratingPill"><i class="fas fa-star"></i> 4.8 / 5 · 1,150 reviews</div>
+                </div>
+                <div class="review-platform-links" id="reviewPlatformLinks"></div>
+                <div class="testimonials-grid" id="testimonialsContainer"></div>
+            </section>
+
+            <!-- Staff Section -->
+            <section class="section" id="staff">
+                <img class="section-brand-logo" src="../assets/images/logo.png" alt="Urban Nail Bar"
+                     onerror="this.onerror=null;this.src='../assets/brand/logo.png'">
+                <h2 class="section-title">Meet Our Team</h2>
+                <p class="section-subtitle">Expert nail techs dedicated to making you look your best</p>
+                <div class="staff-grid" id="staffContainer"></div>
+            </section>
+
+            <!-- Policy -->
+            <section class="section" id="policy" style="background:var(--bg-hover);">
+                <img class="section-brand-logo" src="../assets/images/logo.png" alt="Urban Nail Bar"
+                     onerror="this.onerror=null;this.src='../assets/brand/logo.png'">
+                <h2 class="section-title">Salon Policies</h2>
+                <p class="section-subtitle">Please read before your visit</p>
+                <div class="policy-list" id="policyContainer"></div>
+            </section>
+
+            <!-- Contact Section -->
+            <section class="section" id="contact">
+                <h2 class="section-title">Contact Us</h2>
+                <p class="section-subtitle" id="contactSubtitle">Start your journey now</p>
+
+                <div class="contact-info-grid">
+                    <div class="contact-info-panel">
+                        <h3 id="contactInfoLabel">Information</h3>
+                        <div class="contact-info-links" id="contactInfoLinks"></div>
+                    </div>
+                    <div class="contact-hours-panel">
+                        <h3 id="contactHoursLabel">Hours</h3>
+                        <div class="contact-hours-list" id="contactHoursList"></div>
+                    </div>
+                </div>
+
+                <div class="contact-cards">
+                    <div>
+                        <div style="font-size:2rem; color:var(--primary); margin-bottom:8px;"><i class="fas fa-map-marker-alt"></i></div>
+                        <h4 style="color:var(--primary); margin-bottom:4px;">Visit Us</h4>
+                        <p style="color:#ffffff; font-size:0.9rem;" id="contactAddress">9290 East Vía de Ventura Suite #103<br>Scottsdale, AZ 85258</p>
+                        <a id="contactDirections" class="contact-action-btn" href="https://www.google.com/maps/dir/?api=1&destination=Urban+Nail+Bar+LLC%2C+9290+East+Via+de+Ventura+Suite+103%2C+Scottsdale%2C+AZ+85258" target="_blank" rel="noopener">
+                            <i class="fas fa-directions"></i> Get Directions
+                        </a>
+                    </div>
+                    <div>
+                        <div style="font-size:2rem; color:var(--primary); margin-bottom:8px;"><i class="fas fa-phone"></i></div>
+                        <h4 style="color:var(--primary); margin-bottom:4px;">Call Us</h4>
+                        <p style="color:#ffffff; font-size:0.9rem;" id="contactPhone">(480) 291-5440<br>Mon - Sat 9:30AM - 6:30PM<br>Sun 11:00AM - 5:00PM</p>
+                        <a id="contactCallBtn" class="contact-action-btn" href="tel:+14802915440">
+                            <i class="fas fa-phone"></i> Call Us
+                        </a>
+                    </div>
+                    <div>
+                        <div style="font-size:2rem; color:var(--primary); margin-bottom:8px;"><i class="fas fa-envelope"></i></div>
+                        <h4 style="color:var(--primary); margin-bottom:4px;">Email Us</h4>
+                        <p style="color:#ffffff; font-size:0.9rem;" id="contactEmail2">Send us a message below<br>We reply within 24 hours</p>
+                        <a id="contactEmailBtn" class="contact-action-btn" href="#contactForm">
+                            <i class="fas fa-envelope"></i> Email Us
+                        </a>
+                    </div>
+                </div>
+
+                <div class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label class="form-label">Your Name</label>
+                        <input type="text" class="form-input" id="contactName" placeholder="Enter your name" autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone</label>
+                        <input type="tel" class="form-input" id="contactPhoneInput" placeholder="(480) 000-0000" autocomplete="tel">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" id="contactEmail" placeholder="your@email.com" autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Message</label>
+                        <textarea class="form-textarea" id="contactMessage" rows="4" placeholder="How can we help you?"></textarea>
+                    </div>
+                    <button class="btn btn-primary btn-lg" onclick="sendContact()" style="width:100%;">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </div>
+
+                <!-- Embedded Map (same embed as live contact page) -->
+                <div id="contactMapWrap" style="margin-top:40px; border-radius:var(--radius-lg); overflow:hidden; border:2px solid var(--border-color); box-shadow:var(--shadow-glow); background:#111;">
+                    <iframe id="contactMap"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3944.075791248265!2d-111.8805589!3d33.554083399999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x872b0b875ed02aad%3A0x27b5654f8161c515!2sUrban%20Nail%20Bar%20LLC!5e1!3m2!1sen!2s!4v1773384287072!5m2!1sen!2s"
+                        width="100%" height="360" style="border:0; display:block; min-height:280px; background:#1a1a1a;" allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="Salon location map"></iframe>
+                    <div id="contactMapFallback" style="display:none;padding:28px 20px;text-align:center;color:var(--text-secondary);">
+                        <p style="margin:0 0 12px;"><i class="fas fa-map-marker-alt" style="color:var(--primary);"></i> Map preview unavailable in this browser.</p>
+                        <a id="contactMapOpenLink" class="btn btn-primary" href="https://www.google.com/maps/search/?api=1&query=Urban+Nail+Bar+LLC+9290+East+Via+de+Ventura+Suite+103+Scottsdale+AZ+85258" target="_blank" rel="noopener">Open in Google Maps</a>
+                    </div>
+                </div>
+
+                <div class="contact-book-cta" id="contactBookCta">
+                    <h3 id="contactCtaTitle">Book your next nail appointment</h3>
+                    <p id="contactCtaBody">Visit Urban Nail Bar LLC in Scottsdale for elevated nail care in a polished, welcoming space. We are here to help you relax, refresh, and leave feeling confident.</p>
+                    <a id="contactCtaBtn" href="booking.html" class="btn btn-primary btn-lg">
+                        <i class="fas fa-calendar-check"></i> <span id="contactCtaBtnLabel">Book now</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer-links">
+                    <a href="#about" onclick="goSiteSection(event, 'about')">About</a>
+                    <a href="#gallery" onclick="goSiteSection(event, 'gallery')">Our Salon</a>
+                    <a href="#services" onclick="goSiteSection(event, 'services')">Services</a>
+                    <a href="#testimonials" onclick="goSiteSection(event, 'testimonials')">Reviews</a>
+                    <a href="#policy" onclick="goSiteSection(event, 'policy')">Policy</a>
+                    <a href="booking.html">Book Now</a>
+                    <a href="#contact" onclick="goSiteSection(event, 'contact')">Contact</a>
+                </div>
+                <p class="footer-copy" id="footerCopyright">Copyright ©2026 Urban Nail Bar. Created, managed &amp; run by Urban Nail Bar.</p>
+                <div class="footer-edit">
+                    <a href="admin.html#website" id="editWebsiteBtn" class="btn btn-secondary" title="Admin PIN required — opens Website &amp; Home editor" style="display:none;">
+                        <i class="fas fa-pen"></i> Edit Website
+                    </a>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- UNB AI ASSISTANT Widget -->
+    <div class="ai-widget">
+        <div class="ai-chat-panel" id="aiChatPanel">
+            <div class="ai-chat-header">
+                <h3 class="unb-ai-badge">✨ UNB AI ASSISTANT</h3>
+                <button onclick="toggleAIChat()" style="background:none; border:none; color:#000; cursor:pointer; font-size:1.2rem;" aria-label="Close UNB AI ASSISTANT">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="ai-chat-messages" id="aiChatMessages">
+                <div class="ai-message bot" id="aiWelcomeMsg">
+                    <strong style="color:var(--primary);">UNB AI ASSISTANT</strong><br>
+                    Hello! Ask about our salon, hours, services, policies, or booking. Tap <strong>Voice</strong> or type.
+                </div>
+            </div>
+            <div class="ai-chat-input-area">
+                <button type="button" class="unb-ai-voice-btn" id="voiceBtn" title="Voice" aria-label="Voice">
+                    <i class="fas fa-microphone"></i> <span class="unb-ai-btn-label">Voice</span>
+                </button>
+                <input type="text" class="ai-chat-input" id="aiInput" placeholder="Ask me anything..." 
+                       onkeypress="if(event.key==='Enter') sendAIMessage()" aria-label="Message UNB AI ASSISTANT">
+                <button class="ai-chat-send" onclick="sendAIMessage()" aria-label="Send">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        <button class="ai-widget-btn" id="aiWidgetBtn" onclick="toggleAIChat()" title="UNB AI ASSISTANT" aria-label="Open UNB AI ASSISTANT">
+            <span class="unb-ai-fab-emoji" aria-hidden="true">✨</span>
+        </button>
+    </div>
+
+    <script src="../shared/legacy-compat.js?v=20260805launch1"></script>
+    <script src="../shared/utils.js?v=20260815menu3"></script>
+    <script src="../shared/data-manager.js?v=20260815menu3"></script>
+<script src="../shared/live-sync.js?v=20260815perf1"></script>
+    <script src="../shared/auth.js?v=20260805launch1"></script>
+    <script src="../shared/site-content.js?v=20260815menu3"></script>
+    <script src="../shared/unb-ai-assist.js?v=20260807unbAiEmoji"></script>
+    <script src="../shared/app-nav.js?v=20260810navhover"></script>
+    <script>
+        let unbAiVoice = null;
+        let openMenuCat = null;
+        let openMenuAddons = {};
+
+        function menuSections() {
+            if (typeof DataManager !== 'undefined' && DataManager.getServiceCategories) {
+                return DataManager.getServiceCategories();
+            }
+            if (typeof Utils !== 'undefined' && Utils.serviceCategories && typeof DataManager !== 'undefined') {
+                return Utils.serviceCategories(DataManager.getServices() || []);
+            }
+            return ['General', 'Manicure', 'Pedicure', 'Nail Enhancements', 'Dip Powder', 'Waxing', 'Lashes', 'Fix & Removal', 'Kid Menu'];
+        }
+
+            window.addEventListener('storage', function (e) {
+                if (e.key === (window.SALON_SESSION_KEY || 'aiSalonPro_v3_session')) {
+                    refreshEditWebsiteBtn();
+                }
+            });
+            document.addEventListener('DOMContentLoaded', () => {
+            initWebsite();
+            initUnbAiVoice();
+            scrollToHashTarget();
+            
+            // Listen for data changes
+            DataManager.addListener((type, data) => {
+                if (type === 'data' || type === 'settings') {
+                    renderServices();
+                    renderStaff();
+                    renderContact();
+                    applyBranding();
+                }
+            });
+            if (window.SiteContent && SiteContent.addListener) {
+                SiteContent.addListener(() => initWebsite());
+            }
+        });
+
+        function goSiteSection(e, id) {
+            if (e) e.preventDefault();
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                try { history.replaceState(null, '', '#' + id); } catch (err) {}
+            }
+        }
+        function scrollToHashTarget() {
+            const id = (location.hash || '').replace(/^#/, '');
+            if (!id) return;
+            const el = document.getElementById(id);
+            if (!el) return;
+            setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+        }
+        window.addEventListener('hashchange', scrollToHashTarget);
+
+        function initWebsite() {
+            applyBranding();
+            renderAbout();
+            renderGallery();
+            renderServices();
+            renderTestimonials();
+            renderPolicies();
+            renderStaff();
+            renderContact();
+            refreshEditWebsiteBtn();
+        }
+
+        function refreshEditWebsiteBtn() {
+            var btn = document.getElementById('editWebsiteBtn');
+            if (!btn) return;
+            var show = false;
+            try {
+                if (window.SalonAuth && SalonAuth.hasAccess) {
+                    show = !!SalonAuth.hasAccess(['admin']);
+                }
+            } catch (e) { show = false; }
+            btn.style.display = show ? '' : 'none';
+        }
+
+        // Salon name + hero imagery from SiteContent / settings
+        function applyBranding() {
+            const c = (window.SiteContent && SiteContent.get()) || {};
+            const name = (DataManager.settings && DataManager.settings.salonName) || c.salonName || 'Urban Nail Bar';
+            document.title = `${name} - Official Website`;
+            const logoSalon = document.querySelector('.logo-text .brand-salon-name') || document.querySelector('.logo-text h1');
+            if (logoSalon) logoSalon.textContent = name;
+            const heroH1 = document.getElementById('heroSalonName');
+            if (heroH1) heroH1.textContent = name;
+            const jingle = document.getElementById('heroJingle');
+            if (jingle && c.siteJingle) jingle.textContent = c.siteJingle;
+            const sub = document.getElementById('heroSubtitle');
+            if (sub && (c.siteHeroSubtitle || c.siteTagline)) {
+                sub.textContent = c.siteHeroSubtitle || c.siteTagline;
+            }
+            const hero = document.getElementById('websiteHero');
+            if (hero && c.siteHeroImage) {
+                hero.style.backgroundImage =
+                    "linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.78) 100%), url('" + c.siteHeroImage + "')";
+                hero.style.backgroundSize = 'cover';
+                hero.style.backgroundPosition = 'center';
+            }
+            const logo = document.getElementById('heroLogo');
+            if (logo && c.siteLogo) logo.src = c.siteLogo;
+            const foot = document.getElementById('footerCopyright');
+            if (foot) foot.textContent = c.siteFooterCopyright || 'Copyright ©2026 Urban Nail Bar. Created, managed & run by Urban Nail Bar.';
+            const promo = document.getElementById('sitePromoBanner');
+            if (promo) {
+                const promoText = c.siteAnnouncement
+                    || '✨ $5 OFF any Mani + Pedi Combo — Book Today! ✨';
+                promo.innerHTML = String(promoText)
+                    .replace(/</g, '&lt;')
+                    .replace(/✨/g, '<span class="promo-emoji">✨</span>');
+            }
+            const intro = document.getElementById('servicesIntro');
+            if (intro) intro.textContent = c.siteServicesIntro || '';
+            const gTitle = document.getElementById('salonGalleryTitle');
+            if (gTitle) gTitle.textContent = c.siteSalonSectionTitle || 'Urban Nail Bar';
+            const gFamily = document.getElementById('salonGalleryFamily');
+            if (gFamily) gFamily.textContent = c.siteSalonFamily || '👨‍👩‍👧‍👦 The Urban Nail Bar Family 👨‍👩‍👧‍👦';
+            const gWelcome = document.getElementById('salonGalleryWelcome');
+            if (gWelcome) {
+                gWelcome.textContent = c.siteSalonWelcome
+                    || 'Would Like To Welcome You To Our Wonderful Family Friendly Environment Salon & Spa Located in Scottsdale, Arizona.';
+            }
+            const gSub = document.getElementById('salonGallerySubhead');
+            if (gSub) gSub.textContent = c.siteSalonSubhead || 'Our Salon';
+            const gNote = document.getElementById('salonGallerySubnote');
+            if (gNote) gNote.textContent = c.siteSalonSubnote || 'A Quick Look At Our Scottsdale Salon Space!';
+            const workTitle = document.getElementById('workGalleryTitle');
+            if (workTitle) workTitle.textContent = c.siteWorkSectionTitle || 'Our Craft & Services';
+            const workNote = document.getElementById('workGallerySubnote');
+            if (workNote) workNote.textContent = c.siteWorkSubnote || 'Premium nail art & signature finished looks by our talented team.';
+            const svcCats = document.getElementById('servicesCategories');
+            if (svcCats) svcCats.textContent = c.siteServicesCategories || svcCats.textContent;
+            renderDiscountAds();
+        }
+
+        function renderDiscountAds() {
+            const strip = document.getElementById('discountAdsStrip');
+            if (!strip) return;
+            const c = (window.SiteContent && SiteContent.get()) || {};
+            const ads = Array.isArray(c.discountAds) && c.discountAds.length
+                ? c.discountAds
+                : [
+                    { title: 'New Client', text: '10% OFF your first visit' },
+                    { title: 'First Timer', text: 'Welcome deal — 10% OFF' },
+                    { title: 'Birthday', text: 'Celebrate with 20% OFF' },
+                    { title: 'Senior', text: '15% OFF for seniors' },
+                    { title: 'Military', text: '25% OFF with ID' },
+                    { title: 'Ask Us', text: 'Custom discounts available' }
+                ];
+            strip.innerHTML = ads.map((ad) => `
+                <div class="discount-ad">
+                    <div class="t">${String(ad.title || '').replace(/</g, '&lt;')}</div>
+                    <div class="d">${String(ad.text || '').replace(/</g, '&lt;')}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderAbout() {
+            const c = (window.SiteContent && SiteContent.get()) || {};
+            const sub = document.getElementById('aboutSubtitle');
+            const lead = document.getElementById('aboutLead');
+            const body = document.getElementById('aboutBody');
+            const story = document.getElementById('aboutStory');
+            const why = document.getElementById('whyChooseUs');
+            if (sub && c.siteAboutTitle) sub.textContent = c.siteAboutTitle;
+            if (lead && c.siteAboutLead) lead.textContent = c.siteAboutLead;
+            if (body) body.textContent = c.siteAboutBody || '';
+            if (story) {
+                const raw = String(c.siteAboutStory || '');
+                const escaped = raw.replace(/</g, '&lt;');
+                const highlighted = escaped.replace(
+                    /9290 East V[ií]a de Ventura Suite #103 in Scottsdale/gi,
+                    '<span class="about-address-metallic">$&</span>'
+                );
+                story.innerHTML = highlighted;
+            }
+            if (why) {
+                const items = Array.isArray(c.siteWhyChooseUs) ? c.siteWhyChooseUs : [];
+                why.innerHTML = items.map(t =>
+                    `<li><i class="fas fa-check-circle"></i><span>${String(t).replace(/</g, '&lt;')}</span></li>`
+                ).join('');
+            }
+        }
+
+        function renderTestimonials() {
+            const box = document.getElementById('testimonialsContainer');
+            if (!box) return;
+            const c = (window.SiteContent && SiteContent.get()) || {};
+            const list = Array.isArray(c.siteTestimonials) ? c.siteTestimonials : [];
+            const pill = document.getElementById('ratingPill');
+            if (pill) {
+                const rating = c.siteRating || 4.8;
+                const count = c.siteReviewCount || 1150;
+                pill.innerHTML = `<i class="fas fa-star"></i> ${rating} / 5 · ${Number(count).toLocaleString()} reviews`;
+            }
+            const linksBox = document.getElementById('reviewPlatformLinks');
+            if (linksBox) {
+                const links = Array.isArray(c.siteReviewLinks) ? c.siteReviewLinks : [];
+                linksBox.innerHTML = links.map(l => `
+                    <a class="contact-action-btn" style="margin-top:0;" href="${String(l.url || '').replace(/"/g, '')}" target="_blank" rel="noopener noreferrer">
+                        <i class="fab ${String(l.icon || 'fa-star').replace(/"/g, '')}"></i> ${String(l.label || l.shortLabel || 'Reviews').replace(/</g, '&lt;')}
+                    </a>
+                `).join('');
+            }
+            box.innerHTML = list.map(t => `
+                <article class="testimonial-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="quote">${String(t.text || '').replace(/</g, '&lt;')}</p>
+                    <div class="meta"><strong>${String(t.name || '').replace(/</g, '&lt;')}</strong>${t.date ? ' · ' + t.date : ''}</div>
+                </article>
+            `).join('');
+        }
+
+        function renderPolicies() {
+            const box = document.getElementById('policyContainer');
+            if (!box) return;
+            const c = (window.SiteContent && SiteContent.get()) || {};
+            const list = Array.isArray(c.sitePolicies) ? c.sitePolicies : [];
+            box.innerHTML = list.map((p, i) => `
+                <details class="policy-item">
+                    <summary><span class="policy-title">${String(p.title || '').replace(/</g, '&lt;')}</span></summary>
+                    <p>${String(p.body || '').replace(/</g, '&lt;')}</p>
+                </details>
+            `).join('');
+        }
+
+        function renderGallery() {
+            const c = (window.SiteContent && SiteContent.get()) || {};
+            const salonFallback = [
+                '../assets/images/salon-1.jpg',
+                '../assets/images/salon-2.jpg',
+                '../assets/images/salon-3.jpg',
+                '../assets/images/salon-4.jpg',
+                '../assets/images/salon-5.jpg'
+            ];
+            const workFallback = [
+                '../assets/images/gallery-1.jpg',
+                '../assets/images/gallery-2.jpg',
+                '../assets/images/gallery-3.jpg',
+                '../assets/images/gallery-4.jpg',
+                '../assets/images/gallery-5.jpg',
+                '../assets/images/gallery-6.jpg'
+            ];
+            const salon = (c.siteSalonGallery && c.siteSalonGallery.length) ? c.siteSalonGallery : salonFallback.map((url) => ({ url, caption: 'Inside the salon' }));
+            const work = (c.siteWorkGallery && c.siteWorkGallery.length) ? c.siteWorkGallery : workFallback.map((url) => ({ url, caption: 'Nail art' }));
+            const all = salon.concat(work);
+            window._galleryPhotos = all;
+
+            const fill = (id, photos, offset, fallbacks) => {
+                const box = document.getElementById(id);
+                if (!box) return;
+                box.innerHTML = photos.map((p, i) => `
+                    <button type="button" class="gallery-item" onclick="openGalleryPhoto(${offset + i})" aria-label="${(p.caption || 'Salon photo').replace(/"/g, '')}">
+                        <img src="${p.url}?v=20260805macfix" alt="${(p.caption || 'Salon photo').replace(/"/g, '')}"
+                             onerror="this.onerror=null; this.src='${fallbacks[i % fallbacks.length]}'">
+                    </button>
+                `).join('');
+            };
+            fill('salonGalleryContainer', salon, 0, salonFallback);
+            fill('workGalleryContainer', work, salon.length, workFallback);
+        }
+
+        function openGalleryPhoto(i) {
+            const photos = window._galleryPhotos || [];
+            const p = photos[i];
+            if (!p) return;
+            let lb = document.getElementById('galleryLightbox');
+            if (!lb) {
+                lb = document.createElement('div');
+                lb.id = 'galleryLightbox';
+                lb.style.cssText = 'position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,0.9);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;cursor:pointer;';
+                lb.onclick = () => { lb.style.display = 'none'; };
+                document.body.appendChild(lb);
+            }
+            lb.innerHTML = '<img src="' + p.url + '" alt="" style="max-width:96%;max-height:92%;border-radius:12px;object-fit:contain;">';
+            lb.style.display = 'flex';
+        }
+
+        // Contact section — SiteContent
+        function renderContact() {
+            const c = (window.SiteContent && SiteContent.get()) || {};
+            const st = DataManager.settings || {};
+            const phone = c.sitePhone || c.salonPhone || st.salonPhone || '(480) 291-5440';
+            const email = c.siteEmail || c.salonEmail || st.salonEmail || '';
+            const address = c.salonAddress || st.salonAddress || '';
+            const directionsUrl = c.siteDirectionsUrl || c.siteMapUrl ||
+                ('https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(`${st.salonName || 'Urban Nail Bar'} ${address}`.trim()));
+
+            const subEl = document.getElementById('contactSubtitle');
+            if (subEl) subEl.textContent = c.siteContactTitle || 'Start your journey now';
+            const infoLabel = document.getElementById('contactInfoLabel');
+            if (infoLabel) infoLabel.textContent = c.siteContactInfoLabel || 'Information';
+            const hoursLabel = document.getElementById('contactHoursLabel');
+            if (hoursLabel) hoursLabel.textContent = c.siteHoursLabel || 'Hours';
+
+            const weekdayLabel = c.siteHoursWeekdayLabel || 'Mon - Sat';
+            const weekdayHours = c.siteHoursWeekday || '9:30AM - 6:30PM';
+            const sundayLabel = c.siteHoursSundayLabel || 'Sun';
+            const sundayHours = c.siteHoursSunday || '11:00AM - 5:00PM';
+            const hoursList = document.getElementById('contactHoursList');
+            if (hoursList) {
+                hoursList.innerHTML = `
+                    <div class="contact-hours-row"><span class="day">${weekdayLabel}</span><span class="time">${weekdayHours}</span></div>
+                    <div class="contact-hours-row"><span class="day">${sundayLabel}</span><span class="time">${sundayHours}</span></div>`;
+            }
+
+            const tel = String(phone).replace(/[^0-9+]/g, '');
+            const infoLinks = document.getElementById('contactInfoLinks');
+            if (infoLinks) {
+                const social = [
+                    ...(Array.isArray(c.siteReviewLinks) ? c.siteReviewLinks : []),
+                    ...(Array.isArray(c.siteSocialLinks) ? c.siteSocialLinks : [])
+                ];
+                // Live order: Phone, Facebook, Instagram, Google, Yelp, TikTok
+                const order = ['facebook', 'instagram', 'google', 'yelp', 'tiktok'];
+                const byId = {};
+                social.forEach(l => { if (l && l.id) byId[l.id] = l; });
+                const parts = [];
+                if (phone) {
+                    parts.push(`<a href="tel:${tel}"><i class="fas fa-phone"></i> ${(typeof Utils !== 'undefined' && Utils.formatPhone) ? Utils.formatPhone(phone).replace(/</g, '&lt;') : String(phone).replace(/</g, '&lt;')}</a>`);
+                }
+                order.forEach(id => {
+                    const l = byId[id];
+                    if (!l || !l.url) return;
+                    const label = String(l.shortLabel || l.label || id).replace(/</g, '&lt;');
+                    const icon = String(l.icon || 'fa-link').replace(/"/g, '');
+                    parts.push(`<a href="${String(l.url).replace(/"/g, '')}" target="_blank" rel="noopener noreferrer"><i class="fab ${icon}"></i> ${label}</a>`);
+                });
+                infoLinks.innerHTML = parts.join('');
+            }
+
+            const addrEl = document.getElementById('contactAddress');
+            const phoneEl = document.getElementById('contactPhone');
+            const emailEl = document.getElementById('contactEmail2');
+            const dirEl = document.getElementById('contactDirections');
+            const callBtn = document.getElementById('contactCallBtn');
+            const emailBtn = document.getElementById('contactEmailBtn');
+
+            if (addrEl && address) {
+                addrEl.innerHTML = String(address).split(',').map(p => p.trim()).filter(Boolean).join('<br>');
+            }
+            if (dirEl) dirEl.href = directionsUrl;
+            const mapEl = document.getElementById('contactMap');
+            const mapFallback = document.getElementById('contactMapFallback');
+            const mapOpen = document.getElementById('contactMapOpenLink');
+            const embedUrl = c.siteMapEmbedUrl ||
+                ('https://maps.google.com/maps?q=' + encodeURIComponent((st.salonName || 'Urban Nail Bar') + ' ' + address).trim() + '&output=embed');
+            if (mapOpen) mapOpen.href = directionsUrl || c.siteMapUrl || mapOpen.href;
+            if (mapEl) {
+                mapEl.src = embedUrl;
+                // If the iframe stays blank (blocked embed / offline), show Open in Maps
+                var mapShown = false;
+                var revealFallback = function () {
+                    if (mapShown) return;
+                    if (mapEl) mapEl.style.display = 'none';
+                    if (mapFallback) mapFallback.style.display = 'block';
+                };
+                mapEl.onload = function () { mapShown = true; };
+                setTimeout(function () {
+                    try {
+                        // Cross-origin iframe: we can't read content; if height collapsed, fall back
+                        if (!mapEl.offsetHeight || mapEl.offsetHeight < 40) revealFallback();
+                    } catch (e) { revealFallback(); }
+                }, 4000);
+            }
+            if (phoneEl) {
+                const phoneHtml = phone ? `<a href="tel:${tel}" style="color:inherit; text-decoration:none;">${(typeof Utils !== 'undefined' && Utils.formatPhone) ? Utils.formatPhone(phone) : phone}</a>` : '';
+                // Call Us card: plain day labels (no emojis)
+                phoneEl.innerHTML = [phoneHtml, `Mon - Sat ${weekdayHours}`, `Sun ${sundayHours}`].filter(Boolean).join('<br>');
+            }
+            if (callBtn && tel) callBtn.href = `tel:${tel}`;
+            if (emailEl) {
+                if (email) {
+                    emailEl.innerHTML = `<a href="mailto:${email}" style="color:inherit; text-decoration:none;">${email}</a><br>We reply within 24 hours`;
+                } else {
+                    emailEl.innerHTML = 'Send us a message below<br>We reply within 24 hours';
+                }
+            }
+            if (emailBtn) {
+                if (email) {
+                    emailBtn.href = `mailto:${email}`;
+                    emailBtn.removeAttribute('onclick');
+                } else {
+                    emailBtn.href = '#contactForm';
+                    emailBtn.onclick = (e) => {
+                        e.preventDefault();
+                        const form = document.getElementById('contactForm') || document.getElementById('contactName');
+                        if (form) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        const name = document.getElementById('contactName');
+                        if (name) setTimeout(() => name.focus(), 350);
+                    };
+                }
+            }
+
+            const ctaTitle = document.getElementById('contactCtaTitle');
+            const ctaBody = document.getElementById('contactCtaBody');
+            const ctaBtnLabel = document.getElementById('contactCtaBtnLabel');
+            if (ctaTitle) ctaTitle.textContent = c.siteContactCtaTitle || 'Book your next nail appointment';
+            if (ctaBody) ctaBody.textContent = c.siteContactCtaBody || '';
+            if (ctaBtnLabel) ctaBtnLabel.textContent = c.siteContactCtaBtn || 'Book now';
+        }
+
+        function toggleMenuCat(cat) {
+            openMenuCat = (openMenuCat === cat) ? null : cat;
+            renderServices();
+        }
+
+        function toggleMenuAddons(cat) {
+            openMenuAddons[cat] = !openMenuAddons[cat];
+            renderServices();
+        }
+
+        function renderServices() {
+            const sections = menuSections();
+            const all = DataManager.getServices() || [];
+            const services = all.filter(s => {
+                const cat = Utils.displayCategory(s);
+                return sections.includes(cat) || !sections.length;
+            });
+            const container = document.getElementById('servicesContainer');
+            if (!container) return;
+
+            const groups = Utils.groupServicesByCategory(services)
+                .filter(g => !sections.length || sections.includes(g.category))
+                .sort((a, b) => {
+                    const ia = sections.indexOf(a.category);
+                    const ib = sections.indexOf(b.category);
+                    return (ia < 0 ? 999 : ia) - (ib < 0 ? 999 : ib);
+                });
+
+            const colLabels = `
+                <div class="menu-col-labels">
+                    <span>Service</span>
+                    <span class="c-dur">Duration</span>
+                    <span class="c-price">Price</span>
+                </div>`;
+
+            const rows = (list, addon) => list.map(s => `
+                <div class="menu-row ${addon ? 'addon' : ''}">
+                    <div class="m-info">
+                        <div class="m-name">${Utils.serviceDisplayNameHtml ? Utils.serviceDisplayNameHtml(s) : (Utils.serviceDisplayName ? Utils.serviceDisplayName(s) : s.name)}${s.popular ? ' · <span class="svc-popular">Popular</span>' : ''}</div>
+                        ${s.description ? `<div class="m-desc">${s.description}</div>` : ''}
+                    </div>
+                    <div class="m-dur">${s.duration ? Utils.formatDuration(s.duration) : '—'}</div>
+                    <div class="m-price">${s.price === 0 ? 'Free' : Utils.formatCurrency(s.price)}${s.priceNote || ''}</div>
+                </div>
+            `).join('');
+
+            const familyRows = (list) => {
+                if (Utils.servicesMenuHtml) {
+                    return Utils.servicesMenuHtml(list, s => rows([s], false));
+                }
+                return rows(Utils.sortServicesForMenu ? Utils.sortServicesForMenu(list) : list, false);
+            };
+
+            const escAttr = (v) => String(v).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+
+            container.innerHTML = groups.map(g => {
+                const mains = g.services.filter(s => !Utils.isServiceAddon(s));
+                const addons = g.services.filter(s => Utils.isServiceAddon(s));
+                const isOpen = openMenuCat === g.category;
+                const addonsOpen = !!openMenuAddons[g.category];
+                const addonsHtml = !addons.length ? '' : (
+                    addonsOpen
+                        ? `<button type="button" class="menu-addons-toggle" onclick="event.stopPropagation(); toggleMenuAddons('${escAttr(g.category)}')">
+                                <i class="fas fa-minus"></i> Hide add-ons (${addons.length})
+                           </button>
+                           <div class="menu-addons-label">Add-ons</div>
+                           ${rows(addons, true)}`
+                        : `<button type="button" class="menu-addons-toggle" onclick="event.stopPropagation(); toggleMenuAddons('${escAttr(g.category)}')">
+                                <i class="fas fa-plus"></i> Show add-ons (${addons.length})
+                           </button>`
+                );
+                return `
+                    <div class="menu-dropdown ${isOpen ? 'open' : ''}">
+                        <button type="button" class="menu-dropdown-toggle"
+                            aria-expanded="${isOpen ? 'true' : 'false'}"
+                            onclick="toggleMenuCat('${escAttr(g.category)}')">
+                            <h3>${g.category}</h3>
+                            <span class="count">${mains.length} services${addons.length ? ` · ${addons.length} add-ons` : ''}</span>
+                            <span class="chevron" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
+                        </button>
+                        <div class="menu-dropdown-panel">
+                            ${colLabels}
+                            ${familyRows(mains)}
+                            ${addonsHtml}
+                        </div>
+                    </div>`;
+            }).join('') + `
+                <div class="services-book-wrap">
+                    <a href="booking.html" class="btn btn-primary" style="padding:14px 28px;">
+                        <i class="fas fa-calendar-alt" aria-hidden="true"></i> Book an Appointment
+                    </a>
+                </div>`;
+        }
+
+        function renderStaff() {
+            // Meet the Team = technicians only (managers / admins / receptionists excluded unless also tech)
+            let staff = [];
+            if (typeof DataManager.getBookableStaff === 'function') {
+                staff = DataManager.getBookableStaff().filter(s => String(s.status || 'active').toLowerCase() === 'active');
+            } else if (typeof Utils !== 'undefined' && Utils.getBookableStaff) {
+                staff = Utils.getBookableStaff(DataManager.getStaff() || []).filter(s => String(s.status || 'active').toLowerCase() === 'active');
+            } else {
+                staff = (DataManager.getStaff() || []).filter(s =>
+                    String(s.status || 'active').toLowerCase() === 'active'
+                    && String(s.role || '').toLowerCase().includes('tech'));
+            }
+
+            const box = document.getElementById('staffContainer');
+            if (!box) return;
+            if (!staff.length) {
+                box.innerHTML = '<p style="text-align:center;color:var(--text-secondary);grid-column:1/-1;">Our technicians will appear here soon.</p>';
+                return;
+            }
+
+            box.innerHTML = staff.map(s => {
+                const servicesLabel = (typeof Utils !== 'undefined' && Utils.formatStaffServiceLabels)
+                    ? Utils.formatStaffServiceLabels(s)
+                    : ((s.serviceCategories && s.serviceCategories.length)
+                        ? s.serviceCategories.join(', ')
+                        : ((s.specialties && s.specialties.join(', ')) || 'All Services'));
+                const first = (s.name || 'Tech').split(' ')[0];
+                const initials = (typeof Utils !== 'undefined' && Utils.getInitials) ? Utils.getInitials(s.name) : String(s.name || '?').charAt(0).toUpperCase();
+                let schedHtml = '';
+                if (typeof Utils !== 'undefined' && Utils.formatStaffScheduleHtml) {
+                    const sched = Utils.formatStaffScheduleHtml(s);
+                    const workBlock = (sched.workLines || []).map(line =>
+                        `<div>${String(line).replace(/</g, '&lt;')}</div>`
+                    ).join('');
+                    const offBlock = sched.offLine
+                        ? `<div class="sched-off"><span class="sched-label">Off</span><br>${String(sched.offLine).replace(/</g, '&lt;')}</div>`
+                        : '';
+                    schedHtml = `
+                        <div class="staff-schedule">
+                            <div class="sched-label">Working</div>
+                            ${workBlock || '<div>See salon hours</div>'}
+                            ${offBlock}
+                        </div>`;
+                }
+                return `
+                <div class="staff-card-website">
+                    <div class="staff-photo">
+                        <span class="staff-initials">${initials}</span>
+                    </div>
+                    <div class="staff-info">
+                        <h3>${s.name}</h3>
+                        <div class="role">Technician</div>
+                        <div class="specialties">${servicesLabel}</div>
+                        ${schedHtml}
+                        <div style="margin-top:12px; color:var(--primary); font-size:1.05rem; letter-spacing:2px;" aria-label="Rating">
+                            ${'<i class="fas fa-star"></i>'.repeat(4 + (Math.abs(s.id || 0) % 2))}
+                        </div>
+                        <a href="booking.html?staff=${encodeURIComponent(s.id)}" class="btn btn-secondary" style="margin-top:16px; width:100%; text-decoration:none;">
+                            Book with ${first}
+                        </a>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function sendContact() {
+            const name = document.getElementById('contactName').value.trim();
+            const phoneInput = (document.getElementById('contactPhoneInput') || {}).value || '';
+            const phone = String(phoneInput).trim();
+            const email = document.getElementById('contactEmail').value.trim();
+            const message = document.getElementById('contactMessage').value.trim();
+
+            if (!name || !email || !message) {
+                UI.toast('Please fill in name, email, and message', 'error');
+                return;
+            }
+
+            if (!Utils.isValidEmail(email)) {
+                UI.toast('Please enter a valid email', 'error');
+                return;
+            }
+
+            DataManager.data.messages.push({
+                id: Date.now(),
+                name,
+                phone: phone || '',
+                email,
+                message,
+                date: Utils.today(),
+                time: Utils.now(),
+                read: false
+            });
+            DataManager.saveData();
+
+            UI.toast('Message sent! We\'ll get back to you soon.', 'success');
+
+            document.getElementById('contactName').value = '';
+            const phoneEl = document.getElementById('contactPhoneInput');
+            if (phoneEl) phoneEl.value = '';
+            document.getElementById('contactEmail').value = '';
+            document.getElementById('contactMessage').value = '';
+        }
+
+        // ===== UNB AI ASSISTANT =====
+        function toggleAIChat(forceOpen) {
+            const panel = document.getElementById('aiChatPanel');
+            if (forceOpen === true) panel.classList.add('active');
+            else if (forceOpen === false) panel.classList.remove('active');
+            else panel.classList.toggle('active');
+        }
+
+        function initUnbAiVoice() {
+            if (!window.UnbAiAssist) return;
+            UnbAiAssist.injectSharedCss();
+            const profile = UnbAiAssist.getPageProfile('website');
+            const welcome = document.getElementById('aiWelcomeMsg');
+            if (welcome && profile && profile.welcomeHtml) {
+                welcome.innerHTML = profile.welcomeHtml;
+            }
+            const input = document.getElementById('aiInput');
+            if (input && profile.placeholder) input.placeholder = profile.placeholder;
+            unbAiVoice = UnbAiAssist.wireChatVoice({
+                input: input,
+                voiceBtn: document.getElementById('voiceBtn'),
+                autoSpeak: true,
+                placeholder: (profile && profile.placeholder) || 'Ask me anything…',
+                onSend: sendAIMessage
+            });
+        }
+
+        async function sendAIMessage() {
+            const input = document.getElementById('aiInput');
+            const message = input.value.trim();
+            if (!message) return;
+            if (unbAiVoice) unbAiVoice.stopSpeak();
+
+            addMessage(message, 'user');
+            input.value = '';
+
+            const loadingId = 'loading-' + Date.now();
+            addMessage('Thinking...', 'loading', loadingId);
+
+            try {
+                const profile = (window.UnbAiAssist && UnbAiAssist.getPageProfile)
+                    ? UnbAiAssist.getPageProfile('website') : {};
+                const context = (window.UnbAiAssist && UnbAiAssist.buildSalonContext) ? UnbAiAssist.buildSalonContext(profile.contextExtra || '') : 'Urban Nail Bar nail salon — help with hours, address, services, booking.';
+
+                let response = null;
+                if (window.UnbAiAssist && UnbAiAssist.tryLocalFaq) {
+                    response = UnbAiAssist.tryLocalFaq(message);
+                }
+                if (!response && window.GeminiAI) {
+                    try {
+                        response = await GeminiAI.generateResponse(message, context);
+                    } catch (aiErr) {
+                        console.warn('AI proxy unavailable, using local help:', aiErr);
+                    }
+                }
+                if (!response) {
+                    response = (window.UnbAiAssist && UnbAiAssist.tryLocalFaq && UnbAiAssist.tryLocalFaq(message)) ||
+                        'I can help with <strong>hours</strong>, <strong>services</strong>, <strong>location</strong>, and <strong>booking</strong>. Try asking one of those, or tap Book Now.';
+                }
+                var loadingElDone = document.getElementById(loadingId);
+                if (loadingElDone) loadingElDone.parentNode.removeChild(loadingElDone);
+                addMessage(response, 'bot');
+                if (unbAiVoice) unbAiVoice.maybeAutoSpeak(response);
+            } catch (error) {
+                var loadingElErr = document.getElementById(loadingId);
+                if (loadingElErr) loadingElErr.parentNode.removeChild(loadingElErr);
+                const fallback = (window.UnbAiAssist && UnbAiAssist.tryLocalFaq && UnbAiAssist.tryLocalFaq(message)) ||
+                    'I\'m sorry — please try again, or contact us directly from the Contact section.';
+                addMessage(fallback, 'bot');
+                console.error('AI Error:', error);
+            }
+        }
+
+        function addMessage(text, type, id = null) {
+            const container = document.getElementById('aiChatMessages');
+            const message = document.createElement('div');
+            message.className = `ai-message ${type}`;
+            if (id) message.id = id;
+
+            if (type === 'bot') {
+                message.innerHTML = `<strong style="color:var(--primary); margin-right:6px;">UNB</strong>${text}`;
+            } else {
+                message.textContent = text;
+            }
+
+            container.appendChild(message);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Modal helpers
+        function showModal(id) { UI.showModal(id); }
+        function hideModal(id) { UI.hideModal(id); }
+    </script>
+</body>
+</html>
